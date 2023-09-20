@@ -972,7 +972,7 @@
             }
             return lazyType;
           }
-          function forwardRef43(render) {
+          function forwardRef44(render) {
             {
               if (render != null && render.$$typeof === REACT_MEMO_TYPE) {
                 error("forwardRef requires a render function but received a `memo` component. Instead of forwardRef(memo(...)), use memo(forwardRef(...)).");
@@ -1113,7 +1113,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo14(create, deps) {
+          function useMemo15(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1869,7 +1869,7 @@
           exports.createElement = createElement$1;
           exports.createFactory = createFactory;
           exports.createRef = createRef;
-          exports.forwardRef = forwardRef43;
+          exports.forwardRef = forwardRef44;
           exports.isValidElement = isValidElement2;
           exports.lazy = lazy;
           exports.memo = memo;
@@ -1884,7 +1884,7 @@
           exports.useImperativeHandle = useImperativeHandle2;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect2;
-          exports.useMemo = useMemo14;
+          exports.useMemo = useMemo15;
           exports.useReducer = useReducer4;
           exports.useRef = useRef17;
           exports.useState = useState14;
@@ -2383,9 +2383,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React66 = require_react();
+          var React68 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React66.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React68.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -3990,7 +3990,7 @@
             {
               if (props2.value == null) {
                 if (typeof props2.children === "object" && props2.children !== null) {
-                  React66.Children.forEach(props2.children, function(child) {
+                  React68.Children.forEach(props2.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12437,7 +12437,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React66.Component().refs;
+          var emptyRefsObject = new React68.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -23821,7 +23821,7 @@
         "use strict";
         var hasOwn2 = {}.hasOwnProperty;
         var nativeCodeString = "[native code]";
-        function classNames34() {
+        function classNames35() {
           var classes = [];
           for (var i = 0; i < arguments.length; i++) {
             var arg = arguments[i];
@@ -23832,7 +23832,7 @@
               classes.push(arg);
             } else if (Array.isArray(arg)) {
               if (arg.length) {
-                var inner = classNames34.apply(null, arg);
+                var inner = classNames35.apply(null, arg);
                 if (inner) {
                   classes.push(inner);
                 }
@@ -23852,14 +23852,14 @@
           return classes.join(" ");
         }
         if (typeof module !== "undefined" && module.exports) {
-          classNames34.default = classNames34;
-          module.exports = classNames34;
+          classNames35.default = classNames35;
+          module.exports = classNames35;
         } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
           define("classnames", [], function() {
-            return classNames34;
+            return classNames35;
           });
         } else {
-          window.classNames = classNames34;
+          window.classNames = classNames35;
         }
       })();
     }
@@ -23906,7 +23906,7 @@
       if (true) {
         (function() {
           "use strict";
-          var React66 = require_react();
+          var React68 = require_react();
           var REACT_ELEMENT_TYPE = Symbol.for("react.element");
           var REACT_PORTAL_TYPE = Symbol.for("react.portal");
           var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -23932,7 +23932,7 @@
             }
             return null;
           }
-          var ReactSharedInternals = React66.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React68.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -25614,13 +25614,13 @@
   });
 
   // src/index.tsx
-  var import_react65 = __toESM(require_react());
+  var import_react66 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // src/app.tsx
   var import_dino = __toESM(require_di());
   var import_immutability_helper = __toESM(require_immutability_helper());
-  var import_react64 = __toESM(require_react());
+  var import_react65 = __toESM(require_react());
 
   // node_modules/dexie/dist/modern/dexie.mjs
   var _global = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : global;
@@ -30405,7 +30405,7 @@
 
   // src/db.ts
   function createDb() {
-    const db = new Dexie$1("myDb");
+    const db = new Dexie$1("duelmeter");
     db.version(1).stores({
       results: "&id,first,win,myDeck,opDeck,point,timestamp",
       myDecks: "&id,&name",
@@ -36551,11 +36551,51 @@
     Toggle: NavbarToggle_default
   });
 
-  // node_modules/react-bootstrap/esm/Table.js
+  // node_modules/react-bootstrap/esm/Row.js
   var import_classnames33 = __toESM(require_classnames());
   var React60 = __toESM(require_react());
   var import_jsx_runtime58 = __toESM(require_jsx_runtime());
-  var Table2 = /* @__PURE__ */ React60.forwardRef(({
+  var Row = /* @__PURE__ */ React60.forwardRef(({
+    bsPrefix,
+    className,
+    // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
+    as: Component = "div",
+    ...props2
+  }, ref) => {
+    const decoratedBsPrefix = useBootstrapPrefix(bsPrefix, "row");
+    const breakpoints = useBootstrapBreakpoints();
+    const minBreakpoint = useBootstrapMinBreakpoint();
+    const sizePrefix = `${decoratedBsPrefix}-cols`;
+    const classes = [];
+    breakpoints.forEach((brkPoint) => {
+      const propValue = props2[brkPoint];
+      delete props2[brkPoint];
+      let cols;
+      if (propValue != null && typeof propValue === "object") {
+        ({
+          cols
+        } = propValue);
+      } else {
+        cols = propValue;
+      }
+      const infix = brkPoint !== minBreakpoint ? `-${brkPoint}` : "";
+      if (cols != null)
+        classes.push(`${sizePrefix}${infix}-${cols}`);
+    });
+    return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Component, {
+      ref,
+      ...props2,
+      className: (0, import_classnames33.default)(className, decoratedBsPrefix, ...classes)
+    });
+  });
+  Row.displayName = "Row";
+  var Row_default = Row;
+
+  // node_modules/react-bootstrap/esm/Table.js
+  var import_classnames34 = __toESM(require_classnames());
+  var React61 = __toESM(require_react());
+  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
+  var Table2 = /* @__PURE__ */ React61.forwardRef(({
     bsPrefix,
     className,
     striped,
@@ -36568,8 +36608,8 @@
     ...props2
   }, ref) => {
     const decoratedBsPrefix = useBootstrapPrefix(bsPrefix, "table");
-    const classes = (0, import_classnames33.default)(className, decoratedBsPrefix, variant && `${decoratedBsPrefix}-${variant}`, size2 && `${decoratedBsPrefix}-${size2}`, striped && `${decoratedBsPrefix}-${typeof striped === "string" ? `striped-${striped}` : "striped"}`, bordered && `${decoratedBsPrefix}-bordered`, borderless && `${decoratedBsPrefix}-borderless`, hover && `${decoratedBsPrefix}-hover`);
-    const table = /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("table", {
+    const classes = (0, import_classnames34.default)(className, decoratedBsPrefix, variant && `${decoratedBsPrefix}-${variant}`, size2 && `${decoratedBsPrefix}-${size2}`, striped && `${decoratedBsPrefix}-${typeof striped === "string" ? `striped-${striped}` : "striped"}`, bordered && `${decoratedBsPrefix}-bordered`, borderless && `${decoratedBsPrefix}-borderless`, hover && `${decoratedBsPrefix}-hover`);
+    const table = /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("table", {
       ...props2,
       className: classes,
       ref
@@ -36579,7 +36619,7 @@
       if (typeof responsive === "string") {
         responsiveClass = `${responsiveClass}-${responsive}`;
       }
-      return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("div", {
+      return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("div", {
         className: responsiveClass,
         children: table
       });
@@ -36595,13 +36635,13 @@
     const [decks, prefix, repo] = (0, import_react61.useMemo)(() => {
       if (deckModal === "my") {
         return [
-          Object.values(myDecks.byId).sort((a, b) => a.id.localeCompare(b.id)),
+          Object.values(myDecks.byId).sort((a, b) => a.updatedAt - b.updatedAt),
           "\u81EA\u5206\u306E",
           $di.get("myDeckRepo")
         ];
       } else {
         return [
-          Object.values(opDecks.byId).sort((a, b) => a.id.localeCompare(b.id)),
+          Object.values(opDecks.byId).sort((a, b) => a.updatedAt - b.updatedAt),
           "\u76F8\u624B\u306E",
           $di.get("opDeckRepo")
         ];
@@ -36616,7 +36656,7 @@
         }
       },
       /* @__PURE__ */ import_react61.default.createElement(Modal_default2.Header, { closeButton: true }, /* @__PURE__ */ import_react61.default.createElement(Modal_default2.Title, null, prefix, "\u30C7\u30C3\u30AD\u3092\u7DE8\u96C6")),
-      /* @__PURE__ */ import_react61.default.createElement(Modal_default2.Body, null, /* @__PURE__ */ import_react61.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react61.default.createElement("thead", null, /* @__PURE__ */ import_react61.default.createElement("tr", null, /* @__PURE__ */ import_react61.default.createElement("th", null, "\u30C7\u30C3\u30AD\u540D"), /* @__PURE__ */ import_react61.default.createElement("th", null))), /* @__PURE__ */ import_react61.default.createElement("tbody", null, decks.map((deck) => /* @__PURE__ */ import_react61.default.createElement("tr", null, /* @__PURE__ */ import_react61.default.createElement("td", null, deck.name), /* @__PURE__ */ import_react61.default.createElement("td", null, /* @__PURE__ */ import_react61.default.createElement(
+      /* @__PURE__ */ import_react61.default.createElement(Modal_default2.Body, null, /* @__PURE__ */ import_react61.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react61.default.createElement("thead", null, /* @__PURE__ */ import_react61.default.createElement("tr", null, /* @__PURE__ */ import_react61.default.createElement("th", null, "\u30C7\u30C3\u30AD\u540D"), /* @__PURE__ */ import_react61.default.createElement("th", null))), /* @__PURE__ */ import_react61.default.createElement("tbody", null, decks.map((deck) => /* @__PURE__ */ import_react61.default.createElement("tr", { key: deck.id }, /* @__PURE__ */ import_react61.default.createElement("td", null, deck.name), /* @__PURE__ */ import_react61.default.createElement("td", null, /* @__PURE__ */ import_react61.default.createElement(
         Button_default2,
         {
           variant: "danger",
@@ -36637,8 +36677,12 @@
       )), /* @__PURE__ */ import_react61.default.createElement("td", null, /* @__PURE__ */ import_react61.default.createElement(
         Button_default2,
         {
+          disabled: newDeck === "",
           onClick: () => {
-            repo.add({ name: newDeck }).then(() => {
+            repo.add({
+              name: newDeck,
+              updatedAt: Date.now()
+            }).then(() => {
               setNewDeck("");
             });
           }
@@ -36651,7 +36695,7 @@
   // src/header.tsx
   var import_react62 = __toESM(require_react());
   var Header = () => {
-    return /* @__PURE__ */ import_react62.default.createElement(Navbar_default, { bg: "dark", variant: "dark" }, /* @__PURE__ */ import_react62.default.createElement(Container_default, null, /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Brand, { href: "#home" }, "Duel Point"), /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Collapse, null, /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Text, null, /* @__PURE__ */ import_react62.default.createElement("a", { href: "#login" }, "Login")))));
+    return /* @__PURE__ */ import_react62.default.createElement(Navbar_default, { bg: "dark", variant: "dark", className: "mb-3" }, /* @__PURE__ */ import_react62.default.createElement(Container_default, null, /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Brand, { href: "#home" }, "Duel Meter"), /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Collapse, null, /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Text, null, /* @__PURE__ */ import_react62.default.createElement("a", { href: "#login" }, "Login")))));
   };
 
   // src/table.tsx
@@ -36677,22 +36721,67 @@
         }
       },
       "\u7DE8\u96C6"
-    )))), /* @__PURE__ */ import_react63.default.createElement("th", null, "\u30DD\u30A4\u30F3\u30C8"), /* @__PURE__ */ import_react63.default.createElement("th", null))), /* @__PURE__ */ import_react63.default.createElement("tbody", null, /* @__PURE__ */ import_react63.default.createElement(InputForm, null), results.map((result) => {
-      return /* @__PURE__ */ import_react63.default.createElement("tr", null, /* @__PURE__ */ import_react63.default.createElement("td", null, new Date(result.timestamp).toLocaleString()), /* @__PURE__ */ import_react63.default.createElement("td", null, result.first ? "\u5148\u884C" : "\u5F8C\u653B"), /* @__PURE__ */ import_react63.default.createElement("td", null, result.win ? "\u52DD\u3061" : "\u8CA0\u3051"), /* @__PURE__ */ import_react63.default.createElement("td", null, result.myDeck), /* @__PURE__ */ import_react63.default.createElement("td", null, result.opDeck), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement("span", { style: { color: result.point > 0 ? "blue" : "red" } }, result.point)), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Toggle, { variant: "success", id: "dropdown-basic" }, /* @__PURE__ */ import_react63.default.createElement("span", null, "...")), /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Item, { onClick: () => {
-      } }, "\u7DE8\u96C6"), /* @__PURE__ */ import_react63.default.createElement(
-        Dropdown_default2.Item,
-        {
-          onClick: () => {
-            if (confirm("\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F")) {
-              $di.get("duelResultRepo").delete(result.id);
-            }
-          }
-        },
-        "\u524A\u9664"
-      )))));
+    )))), /* @__PURE__ */ import_react63.default.createElement("th", null, "\u30DD\u30A4\u30F3\u30C8"), /* @__PURE__ */ import_react63.default.createElement("th", null))), /* @__PURE__ */ import_react63.default.createElement("tbody", null, /* @__PURE__ */ import_react63.default.createElement(
+      InputForm,
+      {
+        onSave: async (part) => {
+          await $di.get("duelResultRepo").add({
+            ...part,
+            timestamp: (/* @__PURE__ */ new Date()).getTime()
+          });
+        }
+      }
+    ), results.map((result) => {
+      return /* @__PURE__ */ import_react63.default.createElement(ResultRow, { key: result.id, result });
     })));
   };
-  var InputForm = () => {
+  var ResultRow = ({ result }) => {
+    const { $di } = useStore();
+    const [edit, setEdit] = import_react63.default.useState(false);
+    if (edit) {
+      return /* @__PURE__ */ import_react63.default.createElement(
+        InputForm,
+        {
+          result,
+          onSave: async (part) => {
+            $di.get("duelResultRepo").update({ ...result, ...part }).then(() => {
+              setEdit(false);
+            });
+          }
+        }
+      );
+    }
+    return /* @__PURE__ */ import_react63.default.createElement("tr", { key: result.id }, /* @__PURE__ */ import_react63.default.createElement("td", null, new Date(result.timestamp).toLocaleString()), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement("span", null, result.first ? "\u5148\u884C" : "\u5F8C\u653B")), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement("span", { style: result.win ? { color: "blue" } : { color: "red" } }, result.win ? "\u52DD\u3061" : "\u8CA0\u3051")), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+      "div",
+      {
+        style: {
+          display: "flex",
+          alignItems: "center"
+        }
+      },
+      result.myDeck
+    )), /* @__PURE__ */ import_react63.default.createElement("td", null, result.opDeck), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement("span", { style: { color: result.point > 0 ? "blue" : "red" } }, result.point)), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Toggle, { variant: "secondary" }, /* @__PURE__ */ import_react63.default.createElement("span", null, "...")), /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react63.default.createElement(
+      Dropdown_default2.Item,
+      {
+        onClick: () => {
+          setEdit(true);
+        }
+      },
+      "\u7DE8\u96C6"
+    ), /* @__PURE__ */ import_react63.default.createElement(
+      Dropdown_default2.Item,
+      {
+        onClick: () => {
+          if (confirm("\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F")) {
+            $di.get("duelResultRepo").delete(result.id);
+          }
+        }
+      },
+      "\u524A\u9664"
+    )))));
+  };
+  var kDefaultDeckName = "\u305D\u306E\u4ED6";
+  var InputForm = ({ result, onSave }) => {
     const { myDecks, opDecks, $di } = useStore();
     const [state, dispatch] = (0, import_react63.useReducer)(
       (state2, action) => {
@@ -36702,63 +36791,62 @@
         point: 1e3,
         win: true,
         first: true,
-        myDeck: "",
-        opDeck: ""
+        myDeck: kDefaultDeckName,
+        opDeck: kDefaultDeckName
       }
     );
+    import_react63.default.useEffect(() => {
+      if (result) {
+        const { point, win, first, myDeck, opDeck } = result;
+        dispatch({ point, win, first, myDeck, opDeck });
+      }
+    }, [result]);
     return /* @__PURE__ */ import_react63.default.createElement("tr", null, /* @__PURE__ */ import_react63.default.createElement("td", null), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
       Form_default.Select,
       {
         id: "select-first",
-        required: true,
-        "aria-label": "Default select example",
+        value: state.first ? "\u5148\u884C" : "\u5F8C\u653B",
         onChange: (e) => {
           dispatch({ first: e.target.value === "\u5148\u884C" });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { selected: state.first == null }, "\uFF08\u5148\u5F8C\uFF09"),
-      /* @__PURE__ */ import_react63.default.createElement("option", { selected: state.first }, "\u5148\u884C"),
-      /* @__PURE__ */ import_react63.default.createElement("option", { selected: state.first == false }, "\u5F8C\u653B")
+      /* @__PURE__ */ import_react63.default.createElement("option", { value: "\u5148\u884C" }, "\u5148\u884C"),
+      /* @__PURE__ */ import_react63.default.createElement("option", { value: "\u5F8C\u653B" }, "\u5F8C\u653B")
     )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
       Form_default.Select,
       {
         id: "select-win",
-        required: true,
-        "aria-label": "Default select example",
+        value: state.win ? "win" : "lose",
         onChange: (e) => {
-          const win = e.target.value && e.target.value === "win";
-          if (e.target.value === "win" || e.target.value === "lose") {
-            dispatch({
-              win: e.target.value === "win",
-              point: (state.point ?? 1e3) * (win ? 1 : -1)
-            });
-          } else {
-            dispatch({ win: void 0 });
-          }
+          const win = e.target.value === "win";
+          dispatch({
+            win,
+            point: state.point * (win ? 1 : -1)
+          });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { selected: state.win == null }, "\uFF08\u52DD\u6557\uFF09"),
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "win", selected: state.win }, "\u52DD\u3061"),
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "lose", selected: state.win == false }, "\u6557\u3051")
+      /* @__PURE__ */ import_react63.default.createElement("option", { value: "win" }, "\u52DD\u3061"),
+      /* @__PURE__ */ import_react63.default.createElement("option", { value: "lose" }, "\u6557\u3051")
     )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
       Form_default.Select,
       {
-        required: true,
+        value: state.myDeck,
         onChange: (e) => {
           dispatch({ myDeck: e.target.value });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "" }, "\u305D\u306E\u4ED6"),
-      Object.values(myDecks.byId).map((deck) => /* @__PURE__ */ import_react63.default.createElement("option", { value: deck.name }, deck.name))
+      /* @__PURE__ */ import_react63.default.createElement("option", { value: kDefaultDeckName }, kDefaultDeckName),
+      Object.values(myDecks.byId).map((deck) => /* @__PURE__ */ import_react63.default.createElement("option", { key: deck.name, value: deck.name }, deck.name))
     )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
       Form_default.Select,
       {
+        value: state.opDeck,
         onChange: (e) => {
           dispatch({ opDeck: e.target.value });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "\u305D\u306E\u4ED6" }, "\u305D\u306E\u4ED6"),
-      Object.values(opDecks.byId).map((deck) => /* @__PURE__ */ import_react63.default.createElement("option", { value: deck.name }, deck.name))
+      /* @__PURE__ */ import_react63.default.createElement("option", { value: kDefaultDeckName }, kDefaultDeckName),
+      Object.values(opDecks.byId).map((deck) => /* @__PURE__ */ import_react63.default.createElement("option", { key: deck.name, value: deck.name }, deck.name))
     )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
       Form_default.Control,
       {
@@ -36774,11 +36862,8 @@
       Button_default2,
       {
         disabled: state.first == null || state.win == null || state.point == null,
-        onClick: async () => {
-          await $di.get("duelResultRepo").add({
-            ...state,
-            timestamp: (/* @__PURE__ */ new Date()).getTime()
-          }).then(() => {
+        onClick: () => {
+          onSave(state).then(() => {
             dispatch({ point: 1e3, win: true, first: true, opDeck: "" });
           });
         }
@@ -36787,9 +36872,29 @@
     )));
   };
 
+  // src/stats.tsx
+  var import_react64 = __toESM(require_react());
+  var Stats = () => {
+    const { duelResults } = useStore();
+    const results = Object.values(duelResults.byId).sort(
+      (a2, b) => b.timestamp - a2.timestamp
+    );
+    const a = (0, import_react64.useMemo)(() => {
+      const totalCnt = results.length;
+      const winCnt = results.filter((r) => r.win).length;
+      const winRate = winCnt / totalCnt;
+      const duelsFirst = results.filter((r) => r.first);
+      const duelsSecond = results.filter((r) => !r.first);
+      const winRateFirst = duelsFirst.filter((r) => r.win).length / duelsFirst.length;
+      const winRateSecond = duelsSecond.filter((r) => r.win).length / duelsSecond.length;
+      return { winRate, winRateFirst, winRateSecond };
+    }, [results]);
+    return /* @__PURE__ */ import_react64.default.createElement(Container_default, null, /* @__PURE__ */ import_react64.default.createElement(Row_default, { className: "mb-3" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u958B\u59CB\u65E5" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "date" }))), /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u958B\u59CB\u6642\u523B" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "time" })))), /* @__PURE__ */ import_react64.default.createElement(Row_default, { className: "mb-3" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u7D42\u4E86\u65E5" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "date" }))), /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u7D42\u4E86\u6642\u523B" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "time" })))), /* @__PURE__ */ import_react64.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react64.default.createElement("tbody", null, /* @__PURE__ */ import_react64.default.createElement("tr", null, /* @__PURE__ */ import_react64.default.createElement("td", null, "\u52DD\u7387"), /* @__PURE__ */ import_react64.default.createElement("td", null, a.winRate.toFixed(3))), /* @__PURE__ */ import_react64.default.createElement("tr", null, /* @__PURE__ */ import_react64.default.createElement("td", null, "\u5148\u653B\u52DD\u7387"), /* @__PURE__ */ import_react64.default.createElement("td", null, a.winRateFirst.toFixed(3))), /* @__PURE__ */ import_react64.default.createElement("tr", null, /* @__PURE__ */ import_react64.default.createElement("td", null, "\u5F8C\u653B\u52DD\u7387"), /* @__PURE__ */ import_react64.default.createElement("td", null, a.winRateSecond.toFixed(3))))));
+  };
+
   // src/app.tsx
   var App = ({}) => {
-    const [props2, $reduce] = (0, import_react64.useReducer)(
+    const [props2, $reduce] = (0, import_react65.useReducer)(
       (state, action) => {
         return (0, import_immutability_helper.default)(state, action);
       },
@@ -36805,7 +36910,7 @@
         }
       }
     );
-    const $di = import_react64.default.useMemo(() => {
+    const $di = import_react65.default.useMemo(() => {
       const di = new import_dino.DI();
       di.set("db", createDb());
       di.set("myDeckRepo", new DeckRepository(di, "myDecks"));
@@ -36814,7 +36919,7 @@
       di.set("$reduce", $reduce);
       return di;
     }, [$reduce]);
-    (0, import_react64.useEffect)(() => {
+    (0, import_react65.useEffect)(() => {
       Promise.all([
         $di.get("duelResultRepo").load(),
         $di.get("myDeckRepo").load(),
@@ -36822,11 +36927,11 @@
       ]).then(() => {
       });
     }, []);
-    return /* @__PURE__ */ import_react64.default.createElement(Context2.Provider, { value: { ...props2, $di, $reduce } }, /* @__PURE__ */ import_react64.default.createElement("div", null, /* @__PURE__ */ import_react64.default.createElement(Header, null), /* @__PURE__ */ import_react64.default.createElement(ResultTable, null), /* @__PURE__ */ import_react64.default.createElement(DeckList, null)));
+    return /* @__PURE__ */ import_react65.default.createElement(Context2.Provider, { value: { ...props2, $di, $reduce } }, /* @__PURE__ */ import_react65.default.createElement(Header, null), /* @__PURE__ */ import_react65.default.createElement(Container_default, null, /* @__PURE__ */ import_react65.default.createElement(Row_default, null, /* @__PURE__ */ import_react65.default.createElement(Col_default, { xs: 9 }, /* @__PURE__ */ import_react65.default.createElement(ResultTable, null)), /* @__PURE__ */ import_react65.default.createElement(Col_default, { xs: 3 }, /* @__PURE__ */ import_react65.default.createElement(Stats, null)))), /* @__PURE__ */ import_react65.default.createElement(DeckList, null));
   };
-  var Context2 = import_react64.default.createContext(null);
+  var Context2 = import_react65.default.createContext(null);
   function useStore() {
-    const ctx = import_react64.default.useContext(Context2);
+    const ctx = import_react65.default.useContext(Context2);
     if (!ctx) {
       throw new Error("useStore must be used within a StoreProvider.");
     }
@@ -36837,7 +36942,7 @@
   addEventListener("DOMContentLoaded", () => {
     const root = document.getElementById("root");
     if (root) {
-      (0, import_client.createRoot)(root).render(/* @__PURE__ */ import_react65.default.createElement(App, null));
+      (0, import_client.createRoot)(root).render(/* @__PURE__ */ import_react66.default.createElement(App, null));
     }
   });
 })();

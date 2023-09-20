@@ -12,6 +12,8 @@ import { DeckList } from "./deck";
 import { Deps } from "./di";
 import { Header } from "./header";
 import { ResultTable } from "./table";
+import { Col, Container, Row } from "react-bootstrap";
+import { Stats } from "./stats";
 
 export const App: FC<{}> = ({}) => {
   const [props, $reduce] = useReducer(
@@ -48,11 +50,18 @@ export const App: FC<{}> = ({}) => {
   }, []);
   return (
     <Context.Provider value={{ ...props, $di, $reduce }}>
-      <div>
-        <Header />
-        <ResultTable />
-        <DeckList />
-      </div>
+      <Header />
+      <Container>
+        <Row>
+          <Col xs={9}>
+            <ResultTable />
+          </Col>
+          <Col xs={3}>
+            <Stats />
+          </Col>
+        </Row>
+      </Container>
+      <DeckList />
     </Context.Provider>
   );
 };

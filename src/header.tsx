@@ -3,9 +3,9 @@ import { Container, Navbar } from "react-bootstrap";
 
 export const Header = () => {
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="dark" variant="dark" className="mb-3">
       <Container>
-        <Navbar.Brand href="#home">Duel Point</Navbar.Brand>
+        <Navbar.Brand href="#home">Duel Meter</Navbar.Brand>
         <Navbar.Collapse>
           <Navbar.Text>
             <a href="#login">Login</a>

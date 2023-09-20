@@ -43,7 +43,7 @@ export const DeckList = () => {
           </thead>
           <tbody>
             {decks.map((deck) => (
-              <tr>
+              <tr key={deck.id}>
                 <td>{deck.name}</td>
                 <td>
                   <Button
@@ -69,6 +69,7 @@ export const DeckList = () => {
               </td>
               <td>
                 <Button
+                  disabled={newDeck === ""}
                   onClick={() => {
                     repo
                       .add({

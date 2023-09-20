@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { FC, useReducer } from "react";
 import { Button, Dropdown, Form, Table } from "react-bootstrap";
 import { useStore } from "./app";
 import { DuelResult } from "./db";
@@ -52,130 +52,181 @@ export const ResultTable = () => {
         </tr>
       </thead>
       <tbody>
-        <InputForm />
+        <InputForm
+          onSave={async (part) => {
+            await $di.get("duelResultRepo").add({
+              ...part,
+              timestamp: new Date().getTime(),
+            });
+          }}
+        />
         {results.map((result) => {
-          return (
-            <tr>
-              <td>{new Date(result.timestamp).toLocaleString()}</td>
-              <td>{result.first ? "先行" : "後攻"}</td>
-              <td>{result.win ? "勝ち" : "負け"}</td>
-              <td>{result.myDeck}</td>
-              <td>{result.opDeck}</td>
-              <td>
-                <span style={{ color: result.point > 0 ? "blue" : "red" }}>
-                  {result.point}
-                </span>
-              </td>
-              <td>
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    <span>...</span>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => {}}>編集</Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => {
-                        if (confirm("削除しますか？")) {
-                          $di.get("duelResultRepo").delete(result.id);
-                        }
-                      }}
-                    >
-                      削除
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </td>
-            </tr>
-          );
+          return <ResultRow key={result.id} result={result} />;
         })}
       </tbody>
     </Table>
   );
 };
 
-export const InputForm = () => {
+const ResultRow: FC<{ result: DuelResult }> = ({ result }) => {
+  const { $di } = useStore();
+  const [edit, setEdit] = React.useState(false);
+  if (edit) {
+    return (
+      <InputForm
+        result={result}
+        onSave={async (part) => {
+          $di
+            .get("duelResultRepo")
+            .update({ ...result, ...part })
+            .then(() => {
+              setEdit(false);
+            });
+        }}
+      />
+    );
+  }
+  return (
+    <tr key={result.id}>
+      <td>{new Date(result.timestamp).toLocaleString()}</td>
+      <td>{<span>{result.first ? "先行" : "後攻"}</span>}</td>
+      <td>
+        <span style={result.win ? { color: "blue" } : { color: "red" }}>
+          {result.win ? "勝ち" : "負け"}
+        </span>
+      </td>
+      <td>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {result.myDeck}
+        </div>
+      </td>
+      <td>{result.opDeck}</td>
+      <td>
+        <span style={{ color: result.point > 0 ? "blue" : "red" }}>
+          {result.point}
+        </span>
+      </td>
+      <td>
+        <Dropdown>
+          <Dropdown.Toggle variant="secondary">
+            <span>...</span>
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item
+              onClick={() => {
+                setEdit(true);
+              }}
+            >
+              編集
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                if (confirm("削除しますか？")) {
+                  $di.get("duelResultRepo").delete(result.id);
+                }
+              }}
+            >
+              削除
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </td>
+    </tr>
+  );
+};
+
+const kDefaultDeckName = "その他";
+type EditDuelResult = Pick<
+  DuelResult,
+  "first" | "win" | "point" | "myDeck" | "opDeck"
+>;
+export const InputForm: FC<{
+  result?: EditDuelResult;
+  onSave(part: EditDuelResult): Promise<void>;
+}> = ({ result, onSave }) => {
   const { myDecks, opDecks, $di } = useStore();
-  type State = Pick<
-    DuelResult,
-    "first" | "win" | "point" | "myDeck" | "opDeck"
-  >;
+
   const [state, dispatch] = useReducer(
-    (state: State, action: Partial<State>) => {
+    (state: EditDuelResult, action: Partial<EditDuelResult>) => {
       return { ...state, ...action };
     },
     {
       point: 1000,
       win: true,
       first: true,
-      myDeck: "",
-      opDeck: "",
+      myDeck: kDefaultDeckName,
+      opDeck: kDefaultDeckName,
     }
   );
+  React.useEffect(() => {
+    if (result) {
+      const { point, win, first, myDeck, opDeck } = result;
+      dispatch({ point, win, first, myDeck, opDeck });
+    }
+  }, [result]);
   return (
     <tr>
       <td></td>
       <td>
         <Form.Select
           id="select-first"
-          required
-          aria-label="Default select example"
+          value={state.first ? "先行" : "後攻"}
           onChange={(e) => {
             dispatch({ first: e.target.value === "先行" });
           }}
         >
-          <option selected={state.first == null}>（先後）</option>
-          <option selected={state.first}>先行</option>
-          <option selected={state.first == false}>後攻</option>
+          <option value="先行">先行</option>
+          <option value="後攻">後攻</option>
         </Form.Select>
       </td>
       <td>
         <Form.Select
           id="select-win"
-          required
-          aria-label="Default select example"
+          value={state.win ? "win" : "lose"}
           onChange={(e) => {
-            const win = e.target.value && e.target.value === "win";
-            if (e.target.value === "win" || e.target.value === "lose") {
-              dispatch({
-                win: e.target.value === "win",
-                point: (state.point ?? 1000) * (win ? 1 : -1),
-              });
-            } else {
-              dispatch({ win: undefined });
-            }
+            const win = e.target.value === "win";
+            dispatch({
+              win,
+              point: state.point * (win ? 1 : -1),
+            });
           }}
         >
-          <option selected={state.win == null}>（勝敗）</option>
-          <option value={"win"} selected={state.win}>
-            勝ち
-          </option>
-          <option value={"lose"} selected={state.win == false}>
-            敗け
-          </option>
+          <option value={"win"}>勝ち</option>
+          <option value={"lose"}>敗け</option>
         </Form.Select>
       </td>
       <td>
         <Form.Select
-          required
+          value={state.myDeck}
           onChange={(e) => {
             dispatch({ myDeck: e.target.value });
           }}
         >
-          <option value="">その他</option>
+          <option value={kDefaultDeckName}>{kDefaultDeckName}</option>
           {Object.values(myDecks.byId).map((deck) => (
-            <option value={deck.name}>{deck.name}</option>
+            <option key={deck.name} value={deck.name}>
+              {deck.name}
+            </option>
           ))}
         </Form.Select>
       </td>
       <td>
         <Form.Select
+          value={state.opDeck}
           onChange={(e) => {
             dispatch({ opDeck: e.target.value });
           }}
         >
-          <option value="その他">その他</option>
+          <option value={kDefaultDeckName}>{kDefaultDeckName}</option>
           {Object.values(opDecks.byId).map((deck) => (
-            <option value={deck.name}>{deck.name}</option>
+            <option key={deck.name} value={deck.name}>
+              {deck.name}
+            </option>
           ))}
         </Form.Select>
       </td>
@@ -195,16 +246,10 @@ export const InputForm = () => {
           disabled={
             state.first == null || state.win == null || state.point == null
           }
-          onClick={async () => {
-            await $di
-              .get("duelResultRepo")
-              .add({
-                ...state,
-                timestamp: new Date().getTime(),
-              })
-              .then(() => {
-                dispatch({ point: 1000, win: true, first: true, opDeck: "" });
-              });
+          onClick={() => {
+            onSave(state).then(() => {
+              dispatch({ point: 1000, win: true, first: true, opDeck: "" });
+            });
           }}
         >
           <span>保存</span>
