@@ -1,0 +1,11 @@
+# dependencies
+node_modules
+
+# logs
+*.log
+
+.next
+
+# Nuxt generate
+dist
+.idea
