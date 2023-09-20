@@ -9,3 +9,5 @@ node_modules
 # Nuxt generate
 dist
 .idea
+
+public/js

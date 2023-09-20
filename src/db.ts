@@ -17,13 +17,15 @@ export interface AppDB extends Dexie {
   myDecks: Dexie.Table<Deck, string>;
   opDecks: Dexie.Table<Deck, string>;
 }
+
 export type Deck = {
   id: string;
   name: string;
+  updatedAt: number;
 };
 
 export function createDb(): AppDB {
-  const db = new Dexie("myDb") as AppDB;
+  const db = new Dexie("duelmeter") as AppDB;
   db.version(1).stores({
     results: "&id,first,win,myDeck,opDeck,point,timestamp",
     myDecks: "&id,&name",

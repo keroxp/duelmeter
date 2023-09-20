@@ -8,13 +8,13 @@ export const DeckList = () => {
   const [decks, prefix, repo] = useMemo(() => {
     if (deckModal === "my") {
       return [
-        Object.values(myDecks.byId).sort((a, b) => a.id.localeCompare(b.id)),
+        Object.values(myDecks.byId).sort((a, b) => a.updatedAt - b.updatedAt),
         "自分の",
         $di.get("myDeckRepo"),
       ];
     } else {
       return [
-        Object.values(opDecks.byId).sort((a, b) => a.id.localeCompare(b.id)),
+        Object.values(opDecks.byId).sort((a, b) => a.updatedAt - b.updatedAt),
         "相手の",
         $di.get("opDeckRepo"),
       ];
@@ -70,9 +70,14 @@ export const DeckList = () => {
               <td>
                 <Button
                   onClick={() => {
-                    repo.add({ name: newDeck }).then(() => {
-                      setNewDeck("");
-                    });
+                    repo
+                      .add({
+                        name: newDeck,
+                        updatedAt: Date.now(),
+                      })
+                      .then(() => {
+                        setNewDeck("");
+                      });
                   }}
                 >
                   追加
