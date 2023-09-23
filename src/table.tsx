@@ -1,18 +1,26 @@
-import React, { FC, useReducer } from "react";
-import { Button, Dropdown, Form, Table } from "react-bootstrap";
+import React, { FC, useMemo, useReducer } from "react";
+import {
+  Button,
+  Col,
+  Dropdown,
+  FloatingLabel,
+  Form,
+  Row,
+  Table,
+} from "react-bootstrap";
 import { useStore } from "./app";
 import { DuelResult } from "./db";
+import { useFilteredRuselts, useOrex, usePatcher } from "./util";
 
 export const ResultTable = () => {
-  const { duelResults, $di, $reduce } = useStore();
-  const results = Object.values(duelResults.byId).sort(
-    (a, b) => b.timestamp - a.timestamp
-  );
+  const { $di, $reduce } = useStore();
+  const results = useFilteredRuselts();
   return (
     <Table striped bordered>
       <thead>
         <tr>
           <th>日時</th>
+          <th>大会</th>
           <th>先後</th>
           <th>勝敗</th>
           <th>
@@ -75,6 +83,7 @@ const ResultRow: FC<{ result: DuelResult }> = ({ result }) => {
     return (
       <InputForm
         result={result}
+        editDatetime={true}
         onSave={async (part) => {
           $di
             .get("duelResultRepo")
@@ -89,6 +98,7 @@ const ResultRow: FC<{ result: DuelResult }> = ({ result }) => {
   return (
     <tr key={result.id}>
       <td>{new Date(result.timestamp).toLocaleString()}</td>
+      <td>{result.tournament ?? ""}</td>
       <td>{<span>{result.first ? "先行" : "後攻"}</span>}</td>
       <td>
         <span style={result.win ? { color: "blue" } : { color: "red" }}>
@@ -143,35 +153,56 @@ const ResultRow: FC<{ result: DuelResult }> = ({ result }) => {
 const kDefaultDeckName = "その他";
 type EditDuelResult = Pick<
   DuelResult,
-  "first" | "win" | "point" | "myDeck" | "opDeck"
+  "first" | "win" | "point" | "myDeck" | "opDeck" | "timestamp" | "tournament"
 >;
 export const InputForm: FC<{
   result?: EditDuelResult;
+  editDatetime?: boolean;
   onSave(part: EditDuelResult): Promise<void>;
-}> = ({ result, onSave }) => {
+}> = ({ result, editDatetime, onSave }) => {
   const { myDecks, opDecks, $di } = useStore();
-
-  const [state, dispatch] = useReducer(
-    (state: EditDuelResult, action: Partial<EditDuelResult>) => {
-      return { ...state, ...action };
-    },
-    {
-      point: 1000,
-      win: true,
-      first: true,
-      myDeck: kDefaultDeckName,
-      opDeck: kDefaultDeckName,
-    }
-  );
+  const [state, dispatch] = usePatcher<EditDuelResult>({
+    point: 1000,
+    win: true,
+    first: true,
+    timestamp: new Date().getTime(),
+    myDeck: kDefaultDeckName,
+    opDeck: kDefaultDeckName,
+    tournament: "",
+  });
   React.useEffect(() => {
     if (result) {
-      const { point, win, first, myDeck, opDeck } = result;
-      dispatch({ point, win, first, myDeck, opDeck });
+      const { point, win, first, myDeck, opDeck, timestamp } = result;
+      dispatch({ point, win, first, myDeck, opDeck, timestamp });
     }
   }, [result]);
   return (
     <tr>
-      <td></td>
+      <td>
+        {editDatetime && (
+          <>
+            <Form.Control
+              type="datetime-local"
+              // no ms
+              value={new Date(state.timestamp).toISOString().slice(0, -8)}
+              onChange={(e) => {
+                dispatch({ timestamp: new Date(e.target.value).getTime() });
+              }}
+            ></Form.Control>
+          </>
+        )}
+      </td>
+      <td>
+        <Form.Control
+          type="text"
+          placeholder="大会名"
+          aria-label="大会名"
+          value={state.tournament}
+          onChange={(e) => {
+            dispatch({ tournament: e.target.value });
+          }}
+        ></Form.Control>
+      </td>
       <td>
         <Form.Select
           id="select-first"

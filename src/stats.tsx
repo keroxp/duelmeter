@@ -8,12 +8,11 @@ import {
   Table,
 } from "react-bootstrap";
 import { useStore } from "./app";
+import { useFilteredRuselts } from "./util";
 
 export const Stats = () => {
-  const { duelResults } = useStore();
-  const results = Object.values(duelResults.byId).sort(
-    (a, b) => b.timestamp - a.timestamp
-  );
+  const { filter, $reduce } = useStore();
+  const results = useFilteredRuselts();
   const a = useMemo(() => {
     const totalCnt = results.length;
     const winCnt = results.filter((r) => r.win).length;
@@ -28,30 +27,6 @@ export const Stats = () => {
   }, [results]);
   return (
     <Container>
-      <Row className="mb-3">
-        <Form.Group as={Col}>
-          <FloatingLabel controlId="floatingInput" label="開始日">
-            <Form.Control type="date" />
-          </FloatingLabel>
-        </Form.Group>
-        <Form.Group as={Col}>
-          <FloatingLabel controlId="floatingInput" label="開始時刻">
-            <Form.Control type="time" />
-          </FloatingLabel>
-        </Form.Group>
-      </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col}>
-          <FloatingLabel controlId="floatingInput" label="終了日">
-            <Form.Control type="date"></Form.Control>
-          </FloatingLabel>
-        </Form.Group>
-        <Form.Group as={Col}>
-          <FloatingLabel controlId="floatingInput" label="終了時刻">
-            <Form.Control type="time" />
-          </FloatingLabel>
-        </Form.Group>
-      </Row>
       <Table striped bordered>
         <tbody>
           <tr>

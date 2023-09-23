@@ -10,6 +10,7 @@ export type DuelResult = {
   myDeck: string;
   opDeck: string;
   timestamp: number;
+  tournament?: string;
 };
 
 export interface AppDB extends Dexie {
@@ -26,8 +27,8 @@ export type Deck = {
 
 export function createDb(): AppDB {
   const db = new Dexie("duelmeter") as AppDB;
-  db.version(1).stores({
-    results: "&id,first,win,myDeck,opDeck,point,timestamp",
+  db.version(2).stores({
+    results: "&id,first,win,myDeck,opDeck,point,timestamp,tournament",
     myDecks: "&id,&name",
     opDecks: "&id,&name",
   });

@@ -1,6 +1,7 @@
 import { DI } from "@keroxp/dino";
-import update, { Spec } from "immutability-helper";
-import React, { FC, useEffect, useReducer } from "react";
+import { Spec } from "immutability-helper";
+import React, { FC, useEffect } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import {
   Deck,
   DeckRepository,
@@ -11,27 +12,24 @@ import {
 import { DeckList } from "./deck";
 import { Deps } from "./di";
 import { Header } from "./header";
-import { ResultTable } from "./table";
-import { Col, Container, Row } from "react-bootstrap";
 import { Stats } from "./stats";
+import { ResultTable } from "./table";
+import { useOrex } from "./util";
+import { SearchForm } from "./search-form";
 
 export const App: FC<{}> = ({}) => {
-  const [props, $reduce] = useReducer(
-    (state: Store, action: Spec<Store>) => {
-      return update(state, action);
+  const [props, $reduce] = useOrex<Store, {}>({}, () => ({
+    filter: {},
+    duelResults: {
+      byId: {},
     },
-    {
-      duelResults: {
-        byId: {},
-      },
-      myDecks: {
-        byId: {},
-      },
-      opDecks: {
-        byId: {},
-      },
-    }
-  );
+    myDecks: {
+      byId: {},
+    },
+    opDecks: {
+      byId: {},
+    },
+  }));
   const $di = React.useMemo(() => {
     const di = new DI<Deps>();
     di.set("db", createDb());
@@ -52,13 +50,14 @@ export const App: FC<{}> = ({}) => {
     <Context.Provider value={{ ...props, $di, $reduce }}>
       <Header />
       <Container>
+        <SearchForm />
         <Row>
-          <Col xs={9}>
+          <Col>
             <ResultTable />
           </Col>
-          <Col xs={3}>
+          {/* <Col xs={3}>
             <Stats />
-          </Col>
+          </Col> */}
         </Row>
       </Container>
       <DeckList />
@@ -68,6 +67,13 @@ export const App: FC<{}> = ({}) => {
 
 export type Store = {
   deckModal?: "my" | "op";
+  filter: {
+    startDatetime?: string;
+    endDatetime?: string;
+    myDeck?: string;
+    opDeck?: string;
+    tournament?: string;
+  };
   myDecks: {
     byId: { [id: string]: Deck };
   };

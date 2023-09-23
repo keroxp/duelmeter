@@ -972,7 +972,7 @@
             }
             return lazyType;
           }
-          function forwardRef44(render) {
+          function forwardRef45(render) {
             {
               if (render != null && render.$$typeof === REACT_MEMO_TYPE) {
                 error("forwardRef requires a render function but received a `memo` component. Instead of forwardRef(memo(...)), use memo(forwardRef(...)).");
@@ -1113,7 +1113,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo15(create, deps) {
+          function useMemo17(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1869,7 +1869,7 @@
           exports.createElement = createElement$1;
           exports.createFactory = createFactory;
           exports.createRef = createRef;
-          exports.forwardRef = forwardRef44;
+          exports.forwardRef = forwardRef45;
           exports.isValidElement = isValidElement2;
           exports.lazy = lazy;
           exports.memo = memo;
@@ -1884,7 +1884,7 @@
           exports.useImperativeHandle = useImperativeHandle2;
           exports.useInsertionEffect = useInsertionEffect;
           exports.useLayoutEffect = useLayoutEffect2;
-          exports.useMemo = useMemo15;
+          exports.useMemo = useMemo17;
           exports.useReducer = useReducer4;
           exports.useRef = useRef17;
           exports.useState = useState14;
@@ -2383,9 +2383,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React68 = require_react();
+          var React69 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React68.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React69.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -3990,7 +3990,7 @@
             {
               if (props2.value == null) {
                 if (typeof props2.children === "object" && props2.children !== null) {
-                  React68.Children.forEach(props2.children, function(child) {
+                  React69.Children.forEach(props2.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12437,7 +12437,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React68.Component().refs;
+          var emptyRefsObject = new React69.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -23559,261 +23559,6 @@
     }
   });
 
-  // node_modules/immutability-helper/index.js
-  var require_immutability_helper = __commonJS({
-    "node_modules/immutability-helper/index.js"(exports, module) {
-      "use strict";
-      Object.defineProperty(exports, "__esModule", { value: true });
-      function stringifiable(obj) {
-        return typeof obj === "object" && !("toString" in obj) ? Object.prototype.toString.call(obj).slice(8, -1) : obj;
-      }
-      var isProduction = typeof process === "object" && false;
-      function invariant4(condition, message) {
-        if (!condition) {
-          if (isProduction) {
-            throw new Error("Invariant failed");
-          }
-          throw new Error(message());
-        }
-      }
-      exports.invariant = invariant4;
-      var hasOwnProperty = Object.prototype.hasOwnProperty;
-      var splice = Array.prototype.splice;
-      var toString2 = Object.prototype.toString;
-      function type2(obj) {
-        return toString2.call(obj).slice(8, -1);
-      }
-      var assign = Object.assign || /* istanbul ignore next */
-      function(target, source) {
-        getAllKeys(source).forEach(function(key) {
-          if (hasOwnProperty.call(source, key)) {
-            target[key] = source[key];
-          }
-        });
-        return target;
-      };
-      var getAllKeys = typeof Object.getOwnPropertySymbols === "function" ? function(obj) {
-        return Object.keys(obj).concat(Object.getOwnPropertySymbols(obj));
-      } : function(obj) {
-        return Object.keys(obj);
-      };
-      function copy(object) {
-        return Array.isArray(object) ? assign(object.constructor(object.length), object) : type2(object) === "Map" ? new Map(object) : type2(object) === "Set" ? new Set(object) : object && typeof object === "object" ? assign(Object.create(Object.getPrototypeOf(object)), object) : object;
-      }
-      var Context3 = (
-        /** @class */
-        function() {
-          function Context4() {
-            this.commands = assign({}, defaultCommands);
-            this.update = this.update.bind(this);
-            this.update.extend = this.extend = this.extend.bind(this);
-            this.update.isEquals = function(x, y) {
-              return x === y;
-            };
-            this.update.newContext = function() {
-              return new Context4().update;
-            };
-          }
-          Object.defineProperty(Context4.prototype, "isEquals", {
-            get: function() {
-              return this.update.isEquals;
-            },
-            set: function(value) {
-              this.update.isEquals = value;
-            },
-            enumerable: true,
-            configurable: true
-          });
-          Context4.prototype.extend = function(directive, fn2) {
-            this.commands[directive] = fn2;
-          };
-          Context4.prototype.update = function(object, $spec) {
-            var _this = this;
-            var spec = typeof $spec === "function" ? { $apply: $spec } : $spec;
-            if (!(Array.isArray(object) && Array.isArray(spec))) {
-              invariant4(!Array.isArray(spec), function() {
-                return "update(): You provided an invalid spec to update(). The spec may not contain an array except as the value of $set, $push, $unshift, $splice or any custom command allowing an array value.";
-              });
-            }
-            invariant4(typeof spec === "object" && spec !== null, function() {
-              return "update(): You provided an invalid spec to update(). The spec and every included key path must be plain objects containing one of the " + ("following commands: " + Object.keys(_this.commands).join(", ") + ".");
-            });
-            var nextObject = object;
-            getAllKeys(spec).forEach(function(key) {
-              if (hasOwnProperty.call(_this.commands, key)) {
-                var objectWasNextObject = object === nextObject;
-                nextObject = _this.commands[key](spec[key], nextObject, spec, object);
-                if (objectWasNextObject && _this.isEquals(nextObject, object)) {
-                  nextObject = object;
-                }
-              } else {
-                var nextValueForKey = type2(object) === "Map" ? _this.update(object.get(key), spec[key]) : _this.update(object[key], spec[key]);
-                var nextObjectValue = type2(nextObject) === "Map" ? nextObject.get(key) : nextObject[key];
-                if (!_this.isEquals(nextValueForKey, nextObjectValue) || typeof nextValueForKey === "undefined" && !hasOwnProperty.call(object, key)) {
-                  if (nextObject === object) {
-                    nextObject = copy(object);
-                  }
-                  if (type2(nextObject) === "Map") {
-                    nextObject.set(key, nextValueForKey);
-                  } else {
-                    nextObject[key] = nextValueForKey;
-                  }
-                }
-              }
-            });
-            return nextObject;
-          };
-          return Context4;
-        }()
-      );
-      exports.Context = Context3;
-      var defaultCommands = {
-        $push: function(value, nextObject, spec) {
-          invariantPushAndUnshift(nextObject, spec, "$push");
-          return value.length ? nextObject.concat(value) : nextObject;
-        },
-        $unshift: function(value, nextObject, spec) {
-          invariantPushAndUnshift(nextObject, spec, "$unshift");
-          return value.length ? value.concat(nextObject) : nextObject;
-        },
-        $splice: function(value, nextObject, spec, originalObject) {
-          invariantSplices(nextObject, spec);
-          value.forEach(function(args) {
-            invariantSplice(args);
-            if (nextObject === originalObject && args.length) {
-              nextObject = copy(originalObject);
-            }
-            splice.apply(nextObject, args);
-          });
-          return nextObject;
-        },
-        $set: function(value, _nextObject, spec) {
-          invariantSet(spec);
-          return value;
-        },
-        $toggle: function(targets, nextObject) {
-          invariantSpecArray(targets, "$toggle");
-          var nextObjectCopy = targets.length ? copy(nextObject) : nextObject;
-          targets.forEach(function(target) {
-            nextObjectCopy[target] = !nextObject[target];
-          });
-          return nextObjectCopy;
-        },
-        $unset: function(value, nextObject, _spec, originalObject) {
-          invariantSpecArray(value, "$unset");
-          value.forEach(function(key) {
-            if (Object.hasOwnProperty.call(nextObject, key)) {
-              if (nextObject === originalObject) {
-                nextObject = copy(originalObject);
-              }
-              delete nextObject[key];
-            }
-          });
-          return nextObject;
-        },
-        $add: function(values, nextObject, _spec, originalObject) {
-          invariantMapOrSet(nextObject, "$add");
-          invariantSpecArray(values, "$add");
-          if (type2(nextObject) === "Map") {
-            values.forEach(function(_a) {
-              var key = _a[0], value = _a[1];
-              if (nextObject === originalObject && nextObject.get(key) !== value) {
-                nextObject = copy(originalObject);
-              }
-              nextObject.set(key, value);
-            });
-          } else {
-            values.forEach(function(value) {
-              if (nextObject === originalObject && !nextObject.has(value)) {
-                nextObject = copy(originalObject);
-              }
-              nextObject.add(value);
-            });
-          }
-          return nextObject;
-        },
-        $remove: function(value, nextObject, _spec, originalObject) {
-          invariantMapOrSet(nextObject, "$remove");
-          invariantSpecArray(value, "$remove");
-          value.forEach(function(key) {
-            if (nextObject === originalObject && nextObject.has(key)) {
-              nextObject = copy(originalObject);
-            }
-            nextObject.delete(key);
-          });
-          return nextObject;
-        },
-        $merge: function(value, nextObject, _spec, originalObject) {
-          invariantMerge(nextObject, value);
-          getAllKeys(value).forEach(function(key) {
-            if (value[key] !== nextObject[key]) {
-              if (nextObject === originalObject) {
-                nextObject = copy(originalObject);
-              }
-              nextObject[key] = value[key];
-            }
-          });
-          return nextObject;
-        },
-        $apply: function(value, original) {
-          invariantApply(value);
-          return value(original);
-        }
-      };
-      var defaultContext = new Context3();
-      exports.isEquals = defaultContext.update.isEquals;
-      exports.extend = defaultContext.extend;
-      exports.default = defaultContext.update;
-      exports.default.default = module.exports = assign(exports.default, exports);
-      function invariantPushAndUnshift(value, spec, command) {
-        invariant4(Array.isArray(value), function() {
-          return "update(): expected target of " + stringifiable(command) + " to be an array; got " + stringifiable(value) + ".";
-        });
-        invariantSpecArray(spec[command], command);
-      }
-      function invariantSpecArray(spec, command) {
-        invariant4(Array.isArray(spec), function() {
-          return "update(): expected spec of " + stringifiable(command) + " to be an array; got " + stringifiable(spec) + ". Did you forget to wrap your parameter in an array?";
-        });
-      }
-      function invariantSplices(value, spec) {
-        invariant4(Array.isArray(value), function() {
-          return "Expected $splice target to be an array; got " + stringifiable(value);
-        });
-        invariantSplice(spec.$splice);
-      }
-      function invariantSplice(value) {
-        invariant4(Array.isArray(value), function() {
-          return "update(): expected spec of $splice to be an array of arrays; got " + stringifiable(value) + ". Did you forget to wrap your parameters in an array?";
-        });
-      }
-      function invariantApply(fn2) {
-        invariant4(typeof fn2 === "function", function() {
-          return "update(): expected spec of $apply to be a function; got " + stringifiable(fn2) + ".";
-        });
-      }
-      function invariantSet(spec) {
-        invariant4(Object.keys(spec).length === 1, function() {
-          return "Cannot have more than one key in an object with $set";
-        });
-      }
-      function invariantMerge(target, specValue) {
-        invariant4(specValue && typeof specValue === "object", function() {
-          return "update(): $merge expects a spec of type 'object'; got " + stringifiable(specValue);
-        });
-        invariant4(target && typeof target === "object", function() {
-          return "update(): $merge expects a target of type 'object'; got " + stringifiable(target);
-        });
-      }
-      function invariantMapOrSet(target, command) {
-        var typeOfTarget = type2(target);
-        invariant4(typeOfTarget === "Map" || typeOfTarget === "Set", function() {
-          return "update(): " + stringifiable(command) + " expects a target of type Set or Map; got " + stringifiable(typeOfTarget);
-        });
-      }
-    }
-  });
-
   // node_modules/classnames/index.js
   var require_classnames = __commonJS({
     "node_modules/classnames/index.js"(exports, module) {
@@ -23821,7 +23566,7 @@
         "use strict";
         var hasOwn2 = {}.hasOwnProperty;
         var nativeCodeString = "[native code]";
-        function classNames35() {
+        function classNames36() {
           var classes = [];
           for (var i = 0; i < arguments.length; i++) {
             var arg = arguments[i];
@@ -23832,7 +23577,7 @@
               classes.push(arg);
             } else if (Array.isArray(arg)) {
               if (arg.length) {
-                var inner = classNames35.apply(null, arg);
+                var inner = classNames36.apply(null, arg);
                 if (inner) {
                   classes.push(inner);
                 }
@@ -23852,14 +23597,14 @@
           return classes.join(" ");
         }
         if (typeof module !== "undefined" && module.exports) {
-          classNames35.default = classNames35;
-          module.exports = classNames35;
+          classNames36.default = classNames36;
+          module.exports = classNames36;
         } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
           define("classnames", [], function() {
-            return classNames35;
+            return classNames36;
           });
         } else {
-          window.classNames = classNames35;
+          window.classNames = classNames36;
         }
       })();
     }
@@ -23906,7 +23651,7 @@
       if (true) {
         (function() {
           "use strict";
-          var React68 = require_react();
+          var React69 = require_react();
           var REACT_ELEMENT_TYPE = Symbol.for("react.element");
           var REACT_PORTAL_TYPE = Symbol.for("react.portal");
           var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -23932,7 +23677,7 @@
             }
             return null;
           }
-          var ReactSharedInternals = React68.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React69.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -25613,4901 +25358,268 @@
     }
   });
 
+  // node_modules/immutability-helper/index.js
+  var require_immutability_helper = __commonJS({
+    "node_modules/immutability-helper/index.js"(exports, module) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      function stringifiable(obj) {
+        return typeof obj === "object" && !("toString" in obj) ? Object.prototype.toString.call(obj).slice(8, -1) : obj;
+      }
+      var isProduction = typeof process === "object" && false;
+      function invariant4(condition, message) {
+        if (!condition) {
+          if (isProduction) {
+            throw new Error("Invariant failed");
+          }
+          throw new Error(message());
+        }
+      }
+      exports.invariant = invariant4;
+      var hasOwnProperty = Object.prototype.hasOwnProperty;
+      var splice = Array.prototype.splice;
+      var toString2 = Object.prototype.toString;
+      function type2(obj) {
+        return toString2.call(obj).slice(8, -1);
+      }
+      var assign = Object.assign || /* istanbul ignore next */
+      function(target, source) {
+        getAllKeys(source).forEach(function(key) {
+          if (hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        });
+        return target;
+      };
+      var getAllKeys = typeof Object.getOwnPropertySymbols === "function" ? function(obj) {
+        return Object.keys(obj).concat(Object.getOwnPropertySymbols(obj));
+      } : function(obj) {
+        return Object.keys(obj);
+      };
+      function copy(object) {
+        return Array.isArray(object) ? assign(object.constructor(object.length), object) : type2(object) === "Map" ? new Map(object) : type2(object) === "Set" ? new Set(object) : object && typeof object === "object" ? assign(Object.create(Object.getPrototypeOf(object)), object) : object;
+      }
+      var Context3 = (
+        /** @class */
+        function() {
+          function Context4() {
+            this.commands = assign({}, defaultCommands);
+            this.update = this.update.bind(this);
+            this.update.extend = this.extend = this.extend.bind(this);
+            this.update.isEquals = function(x, y) {
+              return x === y;
+            };
+            this.update.newContext = function() {
+              return new Context4().update;
+            };
+          }
+          Object.defineProperty(Context4.prototype, "isEquals", {
+            get: function() {
+              return this.update.isEquals;
+            },
+            set: function(value) {
+              this.update.isEquals = value;
+            },
+            enumerable: true,
+            configurable: true
+          });
+          Context4.prototype.extend = function(directive, fn2) {
+            this.commands[directive] = fn2;
+          };
+          Context4.prototype.update = function(object, $spec) {
+            var _this = this;
+            var spec = typeof $spec === "function" ? { $apply: $spec } : $spec;
+            if (!(Array.isArray(object) && Array.isArray(spec))) {
+              invariant4(!Array.isArray(spec), function() {
+                return "update(): You provided an invalid spec to update(). The spec may not contain an array except as the value of $set, $push, $unshift, $splice or any custom command allowing an array value.";
+              });
+            }
+            invariant4(typeof spec === "object" && spec !== null, function() {
+              return "update(): You provided an invalid spec to update(). The spec and every included key path must be plain objects containing one of the " + ("following commands: " + Object.keys(_this.commands).join(", ") + ".");
+            });
+            var nextObject = object;
+            getAllKeys(spec).forEach(function(key) {
+              if (hasOwnProperty.call(_this.commands, key)) {
+                var objectWasNextObject = object === nextObject;
+                nextObject = _this.commands[key](spec[key], nextObject, spec, object);
+                if (objectWasNextObject && _this.isEquals(nextObject, object)) {
+                  nextObject = object;
+                }
+              } else {
+                var nextValueForKey = type2(object) === "Map" ? _this.update(object.get(key), spec[key]) : _this.update(object[key], spec[key]);
+                var nextObjectValue = type2(nextObject) === "Map" ? nextObject.get(key) : nextObject[key];
+                if (!_this.isEquals(nextValueForKey, nextObjectValue) || typeof nextValueForKey === "undefined" && !hasOwnProperty.call(object, key)) {
+                  if (nextObject === object) {
+                    nextObject = copy(object);
+                  }
+                  if (type2(nextObject) === "Map") {
+                    nextObject.set(key, nextValueForKey);
+                  } else {
+                    nextObject[key] = nextValueForKey;
+                  }
+                }
+              }
+            });
+            return nextObject;
+          };
+          return Context4;
+        }()
+      );
+      exports.Context = Context3;
+      var defaultCommands = {
+        $push: function(value, nextObject, spec) {
+          invariantPushAndUnshift(nextObject, spec, "$push");
+          return value.length ? nextObject.concat(value) : nextObject;
+        },
+        $unshift: function(value, nextObject, spec) {
+          invariantPushAndUnshift(nextObject, spec, "$unshift");
+          return value.length ? value.concat(nextObject) : nextObject;
+        },
+        $splice: function(value, nextObject, spec, originalObject) {
+          invariantSplices(nextObject, spec);
+          value.forEach(function(args) {
+            invariantSplice(args);
+            if (nextObject === originalObject && args.length) {
+              nextObject = copy(originalObject);
+            }
+            splice.apply(nextObject, args);
+          });
+          return nextObject;
+        },
+        $set: function(value, _nextObject, spec) {
+          invariantSet(spec);
+          return value;
+        },
+        $toggle: function(targets, nextObject) {
+          invariantSpecArray(targets, "$toggle");
+          var nextObjectCopy = targets.length ? copy(nextObject) : nextObject;
+          targets.forEach(function(target) {
+            nextObjectCopy[target] = !nextObject[target];
+          });
+          return nextObjectCopy;
+        },
+        $unset: function(value, nextObject, _spec, originalObject) {
+          invariantSpecArray(value, "$unset");
+          value.forEach(function(key) {
+            if (Object.hasOwnProperty.call(nextObject, key)) {
+              if (nextObject === originalObject) {
+                nextObject = copy(originalObject);
+              }
+              delete nextObject[key];
+            }
+          });
+          return nextObject;
+        },
+        $add: function(values, nextObject, _spec, originalObject) {
+          invariantMapOrSet(nextObject, "$add");
+          invariantSpecArray(values, "$add");
+          if (type2(nextObject) === "Map") {
+            values.forEach(function(_a) {
+              var key = _a[0], value = _a[1];
+              if (nextObject === originalObject && nextObject.get(key) !== value) {
+                nextObject = copy(originalObject);
+              }
+              nextObject.set(key, value);
+            });
+          } else {
+            values.forEach(function(value) {
+              if (nextObject === originalObject && !nextObject.has(value)) {
+                nextObject = copy(originalObject);
+              }
+              nextObject.add(value);
+            });
+          }
+          return nextObject;
+        },
+        $remove: function(value, nextObject, _spec, originalObject) {
+          invariantMapOrSet(nextObject, "$remove");
+          invariantSpecArray(value, "$remove");
+          value.forEach(function(key) {
+            if (nextObject === originalObject && nextObject.has(key)) {
+              nextObject = copy(originalObject);
+            }
+            nextObject.delete(key);
+          });
+          return nextObject;
+        },
+        $merge: function(value, nextObject, _spec, originalObject) {
+          invariantMerge(nextObject, value);
+          getAllKeys(value).forEach(function(key) {
+            if (value[key] !== nextObject[key]) {
+              if (nextObject === originalObject) {
+                nextObject = copy(originalObject);
+              }
+              nextObject[key] = value[key];
+            }
+          });
+          return nextObject;
+        },
+        $apply: function(value, original) {
+          invariantApply(value);
+          return value(original);
+        }
+      };
+      var defaultContext = new Context3();
+      exports.isEquals = defaultContext.update.isEquals;
+      exports.extend = defaultContext.extend;
+      exports.default = defaultContext.update;
+      exports.default.default = module.exports = assign(exports.default, exports);
+      function invariantPushAndUnshift(value, spec, command) {
+        invariant4(Array.isArray(value), function() {
+          return "update(): expected target of " + stringifiable(command) + " to be an array; got " + stringifiable(value) + ".";
+        });
+        invariantSpecArray(spec[command], command);
+      }
+      function invariantSpecArray(spec, command) {
+        invariant4(Array.isArray(spec), function() {
+          return "update(): expected spec of " + stringifiable(command) + " to be an array; got " + stringifiable(spec) + ". Did you forget to wrap your parameter in an array?";
+        });
+      }
+      function invariantSplices(value, spec) {
+        invariant4(Array.isArray(value), function() {
+          return "Expected $splice target to be an array; got " + stringifiable(value);
+        });
+        invariantSplice(spec.$splice);
+      }
+      function invariantSplice(value) {
+        invariant4(Array.isArray(value), function() {
+          return "update(): expected spec of $splice to be an array of arrays; got " + stringifiable(value) + ". Did you forget to wrap your parameters in an array?";
+        });
+      }
+      function invariantApply(fn2) {
+        invariant4(typeof fn2 === "function", function() {
+          return "update(): expected spec of $apply to be a function; got " + stringifiable(fn2) + ".";
+        });
+      }
+      function invariantSet(spec) {
+        invariant4(Object.keys(spec).length === 1, function() {
+          return "Cannot have more than one key in an object with $set";
+        });
+      }
+      function invariantMerge(target, specValue) {
+        invariant4(specValue && typeof specValue === "object", function() {
+          return "update(): $merge expects a spec of type 'object'; got " + stringifiable(specValue);
+        });
+        invariant4(target && typeof target === "object", function() {
+          return "update(): $merge expects a target of type 'object'; got " + stringifiable(target);
+        });
+      }
+      function invariantMapOrSet(target, command) {
+        var typeOfTarget = type2(target);
+        invariant4(typeOfTarget === "Map" || typeOfTarget === "Set", function() {
+          return "update(): " + stringifiable(command) + " expects a target of type Set or Map; got " + stringifiable(typeOfTarget);
+        });
+      }
+    }
+  });
+
   // src/index.tsx
-  var import_react66 = __toESM(require_react());
+  var import_react68 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // src/app.tsx
   var import_dino = __toESM(require_di());
-  var import_immutability_helper = __toESM(require_immutability_helper());
-  var import_react65 = __toESM(require_react());
-
-  // node_modules/dexie/dist/modern/dexie.mjs
-  var _global = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : global;
-  var keys = Object.keys;
-  var isArray = Array.isArray;
-  if (typeof Promise !== "undefined" && !_global.Promise) {
-    _global.Promise = Promise;
-  }
-  function extend(obj, extension) {
-    if (typeof extension !== "object")
-      return obj;
-    keys(extension).forEach(function(key) {
-      obj[key] = extension[key];
-    });
-    return obj;
-  }
-  var getProto = Object.getPrototypeOf;
-  var _hasOwn = {}.hasOwnProperty;
-  function hasOwn(obj, prop) {
-    return _hasOwn.call(obj, prop);
-  }
-  function props(proto, extension) {
-    if (typeof extension === "function")
-      extension = extension(getProto(proto));
-    (typeof Reflect === "undefined" ? keys : Reflect.ownKeys)(extension).forEach((key) => {
-      setProp(proto, key, extension[key]);
-    });
-  }
-  var defineProperty = Object.defineProperty;
-  function setProp(obj, prop, functionOrGetSet, options) {
-    defineProperty(obj, prop, extend(functionOrGetSet && hasOwn(functionOrGetSet, "get") && typeof functionOrGetSet.get === "function" ? { get: functionOrGetSet.get, set: functionOrGetSet.set, configurable: true } : { value: functionOrGetSet, configurable: true, writable: true }, options));
-  }
-  function derive(Child) {
-    return {
-      from: function(Parent) {
-        Child.prototype = Object.create(Parent.prototype);
-        setProp(Child.prototype, "constructor", Child);
-        return {
-          extend: props.bind(null, Child.prototype)
-        };
-      }
-    };
-  }
-  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-  function getPropertyDescriptor(obj, prop) {
-    const pd = getOwnPropertyDescriptor(obj, prop);
-    let proto;
-    return pd || (proto = getProto(obj)) && getPropertyDescriptor(proto, prop);
-  }
-  var _slice = [].slice;
-  function slice(args, start2, end2) {
-    return _slice.call(args, start2, end2);
-  }
-  function override(origFunc, overridedFactory) {
-    return overridedFactory(origFunc);
-  }
-  function assert(b) {
-    if (!b)
-      throw new Error("Assertion Failed");
-  }
-  function asap$1(fn2) {
-    if (_global.setImmediate)
-      setImmediate(fn2);
-    else
-      setTimeout(fn2, 0);
-  }
-  function arrayToObject(array, extractor) {
-    return array.reduce((result, item, i) => {
-      var nameAndValue = extractor(item, i);
-      if (nameAndValue)
-        result[nameAndValue[0]] = nameAndValue[1];
-      return result;
-    }, {});
-  }
-  function tryCatch(fn2, onerror, args) {
-    try {
-      fn2.apply(null, args);
-    } catch (ex) {
-      onerror && onerror(ex);
-    }
-  }
-  function getByKeyPath(obj, keyPath) {
-    if (hasOwn(obj, keyPath))
-      return obj[keyPath];
-    if (!keyPath)
-      return obj;
-    if (typeof keyPath !== "string") {
-      var rv = [];
-      for (var i = 0, l = keyPath.length; i < l; ++i) {
-        var val = getByKeyPath(obj, keyPath[i]);
-        rv.push(val);
-      }
-      return rv;
-    }
-    var period = keyPath.indexOf(".");
-    if (period !== -1) {
-      var innerObj = obj[keyPath.substr(0, period)];
-      return innerObj === void 0 ? void 0 : getByKeyPath(innerObj, keyPath.substr(period + 1));
-    }
-    return void 0;
-  }
-  function setByKeyPath(obj, keyPath, value) {
-    if (!obj || keyPath === void 0)
-      return;
-    if ("isFrozen" in Object && Object.isFrozen(obj))
-      return;
-    if (typeof keyPath !== "string" && "length" in keyPath) {
-      assert(typeof value !== "string" && "length" in value);
-      for (var i = 0, l = keyPath.length; i < l; ++i) {
-        setByKeyPath(obj, keyPath[i], value[i]);
-      }
-    } else {
-      var period = keyPath.indexOf(".");
-      if (period !== -1) {
-        var currentKeyPath = keyPath.substr(0, period);
-        var remainingKeyPath = keyPath.substr(period + 1);
-        if (remainingKeyPath === "")
-          if (value === void 0) {
-            if (isArray(obj) && !isNaN(parseInt(currentKeyPath)))
-              obj.splice(currentKeyPath, 1);
-            else
-              delete obj[currentKeyPath];
-          } else
-            obj[currentKeyPath] = value;
-        else {
-          var innerObj = obj[currentKeyPath];
-          if (!innerObj || !hasOwn(obj, currentKeyPath))
-            innerObj = obj[currentKeyPath] = {};
-          setByKeyPath(innerObj, remainingKeyPath, value);
-        }
-      } else {
-        if (value === void 0) {
-          if (isArray(obj) && !isNaN(parseInt(keyPath)))
-            obj.splice(keyPath, 1);
-          else
-            delete obj[keyPath];
-        } else
-          obj[keyPath] = value;
-      }
-    }
-  }
-  function delByKeyPath(obj, keyPath) {
-    if (typeof keyPath === "string")
-      setByKeyPath(obj, keyPath, void 0);
-    else if ("length" in keyPath)
-      [].map.call(keyPath, function(kp) {
-        setByKeyPath(obj, kp, void 0);
-      });
-  }
-  function shallowClone(obj) {
-    var rv = {};
-    for (var m in obj) {
-      if (hasOwn(obj, m))
-        rv[m] = obj[m];
-    }
-    return rv;
-  }
-  var concat = [].concat;
-  function flatten(a) {
-    return concat.apply([], a);
-  }
-  var intrinsicTypeNames = "Boolean,String,Date,RegExp,Blob,File,FileList,FileSystemFileHandle,ArrayBuffer,DataView,Uint8ClampedArray,ImageBitmap,ImageData,Map,Set,CryptoKey".split(",").concat(flatten([8, 16, 32, 64].map((num) => ["Int", "Uint", "Float"].map((t) => t + num + "Array")))).filter((t) => _global[t]);
-  var intrinsicTypes = intrinsicTypeNames.map((t) => _global[t]);
-  arrayToObject(intrinsicTypeNames, (x) => [x, true]);
-  var circularRefs = null;
-  function deepClone(any) {
-    circularRefs = typeof WeakMap !== "undefined" && /* @__PURE__ */ new WeakMap();
-    const rv = innerDeepClone(any);
-    circularRefs = null;
-    return rv;
-  }
-  function innerDeepClone(any) {
-    if (!any || typeof any !== "object")
-      return any;
-    let rv = circularRefs && circularRefs.get(any);
-    if (rv)
-      return rv;
-    if (isArray(any)) {
-      rv = [];
-      circularRefs && circularRefs.set(any, rv);
-      for (var i = 0, l = any.length; i < l; ++i) {
-        rv.push(innerDeepClone(any[i]));
-      }
-    } else if (intrinsicTypes.indexOf(any.constructor) >= 0) {
-      rv = any;
-    } else {
-      const proto = getProto(any);
-      rv = proto === Object.prototype ? {} : Object.create(proto);
-      circularRefs && circularRefs.set(any, rv);
-      for (var prop in any) {
-        if (hasOwn(any, prop)) {
-          rv[prop] = innerDeepClone(any[prop]);
-        }
-      }
-    }
-    return rv;
-  }
-  var { toString } = {};
-  function toStringTag(o) {
-    return toString.call(o).slice(8, -1);
-  }
-  var iteratorSymbol = typeof Symbol !== "undefined" ? Symbol.iterator : "@@iterator";
-  var getIteratorOf = typeof iteratorSymbol === "symbol" ? function(x) {
-    var i;
-    return x != null && (i = x[iteratorSymbol]) && i.apply(x);
-  } : function() {
-    return null;
-  };
-  var NO_CHAR_ARRAY = {};
-  function getArrayOf(arrayLike) {
-    var i, a, x, it;
-    if (arguments.length === 1) {
-      if (isArray(arrayLike))
-        return arrayLike.slice();
-      if (this === NO_CHAR_ARRAY && typeof arrayLike === "string")
-        return [arrayLike];
-      if (it = getIteratorOf(arrayLike)) {
-        a = [];
-        while (x = it.next(), !x.done)
-          a.push(x.value);
-        return a;
-      }
-      if (arrayLike == null)
-        return [arrayLike];
-      i = arrayLike.length;
-      if (typeof i === "number") {
-        a = new Array(i);
-        while (i--)
-          a[i] = arrayLike[i];
-        return a;
-      }
-      return [arrayLike];
-    }
-    i = arguments.length;
-    a = new Array(i);
-    while (i--)
-      a[i] = arguments[i];
-    return a;
-  }
-  var isAsyncFunction = typeof Symbol !== "undefined" ? (fn2) => fn2[Symbol.toStringTag] === "AsyncFunction" : () => false;
-  var debug = typeof location !== "undefined" && /^(http|https):\/\/(localhost|127\.0\.0\.1)/.test(location.href);
-  function setDebug(value, filter) {
-    debug = value;
-    libraryFilter = filter;
-  }
-  var libraryFilter = () => true;
-  var NEEDS_THROW_FOR_STACK = !new Error("").stack;
-  function getErrorWithStack() {
-    if (NEEDS_THROW_FOR_STACK)
-      try {
-        getErrorWithStack.arguments;
-        throw new Error();
-      } catch (e) {
-        return e;
-      }
-    return new Error();
-  }
-  function prettyStack(exception, numIgnoredFrames) {
-    var stack = exception.stack;
-    if (!stack)
-      return "";
-    numIgnoredFrames = numIgnoredFrames || 0;
-    if (stack.indexOf(exception.name) === 0)
-      numIgnoredFrames += (exception.name + exception.message).split("\n").length;
-    return stack.split("\n").slice(numIgnoredFrames).filter(libraryFilter).map((frame) => "\n" + frame).join("");
-  }
-  var dexieErrorNames = [
-    "Modify",
-    "Bulk",
-    "OpenFailed",
-    "VersionChange",
-    "Schema",
-    "Upgrade",
-    "InvalidTable",
-    "MissingAPI",
-    "NoSuchDatabase",
-    "InvalidArgument",
-    "SubTransaction",
-    "Unsupported",
-    "Internal",
-    "DatabaseClosed",
-    "PrematureCommit",
-    "ForeignAwait"
-  ];
-  var idbDomErrorNames = [
-    "Unknown",
-    "Constraint",
-    "Data",
-    "TransactionInactive",
-    "ReadOnly",
-    "Version",
-    "NotFound",
-    "InvalidState",
-    "InvalidAccess",
-    "Abort",
-    "Timeout",
-    "QuotaExceeded",
-    "Syntax",
-    "DataClone"
-  ];
-  var errorList = dexieErrorNames.concat(idbDomErrorNames);
-  var defaultTexts = {
-    VersionChanged: "Database version changed by other database connection",
-    DatabaseClosed: "Database has been closed",
-    Abort: "Transaction aborted",
-    TransactionInactive: "Transaction has already completed or failed",
-    MissingAPI: "IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb"
-  };
-  function DexieError(name, msg) {
-    this._e = getErrorWithStack();
-    this.name = name;
-    this.message = msg;
-  }
-  derive(DexieError).from(Error).extend({
-    stack: {
-      get: function() {
-        return this._stack || (this._stack = this.name + ": " + this.message + prettyStack(this._e, 2));
-      }
-    },
-    toString: function() {
-      return this.name + ": " + this.message;
-    }
-  });
-  function getMultiErrorMessage(msg, failures) {
-    return msg + ". Errors: " + Object.keys(failures).map((key) => failures[key].toString()).filter((v, i, s) => s.indexOf(v) === i).join("\n");
-  }
-  function ModifyError(msg, failures, successCount, failedKeys) {
-    this._e = getErrorWithStack();
-    this.failures = failures;
-    this.failedKeys = failedKeys;
-    this.successCount = successCount;
-    this.message = getMultiErrorMessage(msg, failures);
-  }
-  derive(ModifyError).from(DexieError);
-  function BulkError(msg, failures) {
-    this._e = getErrorWithStack();
-    this.name = "BulkError";
-    this.failures = Object.keys(failures).map((pos) => failures[pos]);
-    this.failuresByPos = failures;
-    this.message = getMultiErrorMessage(msg, failures);
-  }
-  derive(BulkError).from(DexieError);
-  var errnames = errorList.reduce((obj, name) => (obj[name] = name + "Error", obj), {});
-  var BaseException = DexieError;
-  var exceptions = errorList.reduce((obj, name) => {
-    var fullName = name + "Error";
-    function DexieError2(msgOrInner, inner) {
-      this._e = getErrorWithStack();
-      this.name = fullName;
-      if (!msgOrInner) {
-        this.message = defaultTexts[name] || fullName;
-        this.inner = null;
-      } else if (typeof msgOrInner === "string") {
-        this.message = `${msgOrInner}${!inner ? "" : "\n " + inner}`;
-        this.inner = inner || null;
-      } else if (typeof msgOrInner === "object") {
-        this.message = `${msgOrInner.name} ${msgOrInner.message}`;
-        this.inner = msgOrInner;
-      }
-    }
-    derive(DexieError2).from(BaseException);
-    obj[name] = DexieError2;
-    return obj;
-  }, {});
-  exceptions.Syntax = SyntaxError;
-  exceptions.Type = TypeError;
-  exceptions.Range = RangeError;
-  var exceptionMap = idbDomErrorNames.reduce((obj, name) => {
-    obj[name + "Error"] = exceptions[name];
-    return obj;
-  }, {});
-  function mapError(domError, message) {
-    if (!domError || domError instanceof DexieError || domError instanceof TypeError || domError instanceof SyntaxError || !domError.name || !exceptionMap[domError.name])
-      return domError;
-    var rv = new exceptionMap[domError.name](message || domError.message, domError);
-    if ("stack" in domError) {
-      setProp(rv, "stack", { get: function() {
-        return this.inner.stack;
-      } });
-    }
-    return rv;
-  }
-  var fullNameExceptions = errorList.reduce((obj, name) => {
-    if (["Syntax", "Type", "Range"].indexOf(name) === -1)
-      obj[name + "Error"] = exceptions[name];
-    return obj;
-  }, {});
-  fullNameExceptions.ModifyError = ModifyError;
-  fullNameExceptions.DexieError = DexieError;
-  fullNameExceptions.BulkError = BulkError;
-  function nop() {
-  }
-  function mirror(val) {
-    return val;
-  }
-  function pureFunctionChain(f1, f2) {
-    if (f1 == null || f1 === mirror)
-      return f2;
-    return function(val) {
-      return f2(f1(val));
-    };
-  }
-  function callBoth(on1, on2) {
-    return function() {
-      on1.apply(this, arguments);
-      on2.apply(this, arguments);
-    };
-  }
-  function hookCreatingChain(f1, f2) {
-    if (f1 === nop)
-      return f2;
-    return function() {
-      var res = f1.apply(this, arguments);
-      if (res !== void 0)
-        arguments[0] = res;
-      var onsuccess = this.onsuccess, onerror = this.onerror;
-      this.onsuccess = null;
-      this.onerror = null;
-      var res2 = f2.apply(this, arguments);
-      if (onsuccess)
-        this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
-      if (onerror)
-        this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
-      return res2 !== void 0 ? res2 : res;
-    };
-  }
-  function hookDeletingChain(f1, f2) {
-    if (f1 === nop)
-      return f2;
-    return function() {
-      f1.apply(this, arguments);
-      var onsuccess = this.onsuccess, onerror = this.onerror;
-      this.onsuccess = this.onerror = null;
-      f2.apply(this, arguments);
-      if (onsuccess)
-        this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
-      if (onerror)
-        this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
-    };
-  }
-  function hookUpdatingChain(f1, f2) {
-    if (f1 === nop)
-      return f2;
-    return function(modifications) {
-      var res = f1.apply(this, arguments);
-      extend(modifications, res);
-      var onsuccess = this.onsuccess, onerror = this.onerror;
-      this.onsuccess = null;
-      this.onerror = null;
-      var res2 = f2.apply(this, arguments);
-      if (onsuccess)
-        this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
-      if (onerror)
-        this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
-      return res === void 0 ? res2 === void 0 ? void 0 : res2 : extend(res, res2);
-    };
-  }
-  function reverseStoppableEventChain(f1, f2) {
-    if (f1 === nop)
-      return f2;
-    return function() {
-      if (f2.apply(this, arguments) === false)
-        return false;
-      return f1.apply(this, arguments);
-    };
-  }
-  function promisableChain(f1, f2) {
-    if (f1 === nop)
-      return f2;
-    return function() {
-      var res = f1.apply(this, arguments);
-      if (res && typeof res.then === "function") {
-        var thiz = this, i = arguments.length, args = new Array(i);
-        while (i--)
-          args[i] = arguments[i];
-        return res.then(function() {
-          return f2.apply(thiz, args);
-        });
-      }
-      return f2.apply(this, arguments);
-    };
-  }
-  var INTERNAL = {};
-  var LONG_STACKS_CLIP_LIMIT = 100;
-  var MAX_LONG_STACKS = 20;
-  var ZONE_ECHO_LIMIT = 100;
-  var [resolvedNativePromise, nativePromiseProto, resolvedGlobalPromise] = typeof Promise === "undefined" ? [] : (() => {
-    let globalP = Promise.resolve();
-    if (typeof crypto === "undefined" || !crypto.subtle)
-      return [globalP, getProto(globalP), globalP];
-    const nativeP = crypto.subtle.digest("SHA-512", new Uint8Array([0]));
-    return [
-      nativeP,
-      getProto(nativeP),
-      globalP
-    ];
-  })();
-  var nativePromiseThen = nativePromiseProto && nativePromiseProto.then;
-  var NativePromise = resolvedNativePromise && resolvedNativePromise.constructor;
-  var patchGlobalPromise = !!resolvedGlobalPromise;
-  var stack_being_generated = false;
-  var schedulePhysicalTick = resolvedGlobalPromise ? () => {
-    resolvedGlobalPromise.then(physicalTick);
-  } : _global.setImmediate ? setImmediate.bind(null, physicalTick) : _global.MutationObserver ? () => {
-    var hiddenDiv = document.createElement("div");
-    new MutationObserver(() => {
-      physicalTick();
-      hiddenDiv = null;
-    }).observe(hiddenDiv, { attributes: true });
-    hiddenDiv.setAttribute("i", "1");
-  } : () => {
-    setTimeout(physicalTick, 0);
-  };
-  var asap = function(callback, args) {
-    microtickQueue.push([callback, args]);
-    if (needsNewPhysicalTick) {
-      schedulePhysicalTick();
-      needsNewPhysicalTick = false;
-    }
-  };
-  var isOutsideMicroTick = true;
-  var needsNewPhysicalTick = true;
-  var unhandledErrors = [];
-  var rejectingErrors = [];
-  var currentFulfiller = null;
-  var rejectionMapper = mirror;
-  var globalPSD = {
-    id: "global",
-    global: true,
-    ref: 0,
-    unhandleds: [],
-    onunhandled: globalError,
-    pgp: false,
-    env: {},
-    finalize: function() {
-      this.unhandleds.forEach((uh) => {
-        try {
-          globalError(uh[0], uh[1]);
-        } catch (e) {
-        }
-      });
-    }
-  };
-  var PSD = globalPSD;
-  var microtickQueue = [];
-  var numScheduledCalls = 0;
-  var tickFinalizers = [];
-  function DexiePromise(fn2) {
-    if (typeof this !== "object")
-      throw new TypeError("Promises must be constructed via new");
-    this._listeners = [];
-    this.onuncatched = nop;
-    this._lib = false;
-    var psd = this._PSD = PSD;
-    if (debug) {
-      this._stackHolder = getErrorWithStack();
-      this._prev = null;
-      this._numPrev = 0;
-    }
-    if (typeof fn2 !== "function") {
-      if (fn2 !== INTERNAL)
-        throw new TypeError("Not a function");
-      this._state = arguments[1];
-      this._value = arguments[2];
-      if (this._state === false)
-        handleRejection(this, this._value);
-      return;
-    }
-    this._state = null;
-    this._value = null;
-    ++psd.ref;
-    executePromiseTask(this, fn2);
-  }
-  var thenProp = {
-    get: function() {
-      var psd = PSD, microTaskId = totalEchoes;
-      function then(onFulfilled, onRejected) {
-        var possibleAwait = !psd.global && (psd !== PSD || microTaskId !== totalEchoes);
-        const cleanup = possibleAwait && !decrementExpectedAwaits();
-        var rv = new DexiePromise((resolve, reject) => {
-          propagateToListener(this, new Listener(nativeAwaitCompatibleWrap(onFulfilled, psd, possibleAwait, cleanup), nativeAwaitCompatibleWrap(onRejected, psd, possibleAwait, cleanup), resolve, reject, psd));
-        });
-        debug && linkToPreviousPromise(rv, this);
-        return rv;
-      }
-      then.prototype = INTERNAL;
-      return then;
-    },
-    set: function(value) {
-      setProp(this, "then", value && value.prototype === INTERNAL ? thenProp : {
-        get: function() {
-          return value;
-        },
-        set: thenProp.set
-      });
-    }
-  };
-  props(DexiePromise.prototype, {
-    then: thenProp,
-    _then: function(onFulfilled, onRejected) {
-      propagateToListener(this, new Listener(null, null, onFulfilled, onRejected, PSD));
-    },
-    catch: function(onRejected) {
-      if (arguments.length === 1)
-        return this.then(null, onRejected);
-      var type2 = arguments[0], handler = arguments[1];
-      return typeof type2 === "function" ? this.then(null, (err) => err instanceof type2 ? handler(err) : PromiseReject(err)) : this.then(null, (err) => err && err.name === type2 ? handler(err) : PromiseReject(err));
-    },
-    finally: function(onFinally) {
-      return this.then((value) => {
-        onFinally();
-        return value;
-      }, (err) => {
-        onFinally();
-        return PromiseReject(err);
-      });
-    },
-    stack: {
-      get: function() {
-        if (this._stack)
-          return this._stack;
-        try {
-          stack_being_generated = true;
-          var stacks = getStack(this, [], MAX_LONG_STACKS);
-          var stack = stacks.join("\nFrom previous: ");
-          if (this._state !== null)
-            this._stack = stack;
-          return stack;
-        } finally {
-          stack_being_generated = false;
-        }
-      }
-    },
-    timeout: function(ms, msg) {
-      return ms < Infinity ? new DexiePromise((resolve, reject) => {
-        var handle = setTimeout(() => reject(new exceptions.Timeout(msg)), ms);
-        this.then(resolve, reject).finally(clearTimeout.bind(null, handle));
-      }) : this;
-    }
-  });
-  if (typeof Symbol !== "undefined" && Symbol.toStringTag)
-    setProp(DexiePromise.prototype, Symbol.toStringTag, "Dexie.Promise");
-  globalPSD.env = snapShot();
-  function Listener(onFulfilled, onRejected, resolve, reject, zone) {
-    this.onFulfilled = typeof onFulfilled === "function" ? onFulfilled : null;
-    this.onRejected = typeof onRejected === "function" ? onRejected : null;
-    this.resolve = resolve;
-    this.reject = reject;
-    this.psd = zone;
-  }
-  props(DexiePromise, {
-    all: function() {
-      var values = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
-      return new DexiePromise(function(resolve, reject) {
-        if (values.length === 0)
-          resolve([]);
-        var remaining = values.length;
-        values.forEach((a, i) => DexiePromise.resolve(a).then((x) => {
-          values[i] = x;
-          if (!--remaining)
-            resolve(values);
-        }, reject));
-      });
-    },
-    resolve: (value) => {
-      if (value instanceof DexiePromise)
-        return value;
-      if (value && typeof value.then === "function")
-        return new DexiePromise((resolve, reject) => {
-          value.then(resolve, reject);
-        });
-      var rv = new DexiePromise(INTERNAL, true, value);
-      linkToPreviousPromise(rv, currentFulfiller);
-      return rv;
-    },
-    reject: PromiseReject,
-    race: function() {
-      var values = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
-      return new DexiePromise((resolve, reject) => {
-        values.map((value) => DexiePromise.resolve(value).then(resolve, reject));
-      });
-    },
-    PSD: {
-      get: () => PSD,
-      set: (value) => PSD = value
-    },
-    totalEchoes: { get: () => totalEchoes },
-    newPSD: newScope,
-    usePSD,
-    scheduler: {
-      get: () => asap,
-      set: (value) => {
-        asap = value;
-      }
-    },
-    rejectionMapper: {
-      get: () => rejectionMapper,
-      set: (value) => {
-        rejectionMapper = value;
-      }
-    },
-    follow: (fn2, zoneProps) => {
-      return new DexiePromise((resolve, reject) => {
-        return newScope((resolve2, reject2) => {
-          var psd = PSD;
-          psd.unhandleds = [];
-          psd.onunhandled = reject2;
-          psd.finalize = callBoth(function() {
-            run_at_end_of_this_or_next_physical_tick(() => {
-              this.unhandleds.length === 0 ? resolve2() : reject2(this.unhandleds[0]);
-            });
-          }, psd.finalize);
-          fn2();
-        }, zoneProps, resolve, reject);
-      });
-    }
-  });
-  if (NativePromise) {
-    if (NativePromise.allSettled)
-      setProp(DexiePromise, "allSettled", function() {
-        const possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
-        return new DexiePromise((resolve) => {
-          if (possiblePromises.length === 0)
-            resolve([]);
-          let remaining = possiblePromises.length;
-          const results = new Array(remaining);
-          possiblePromises.forEach((p, i) => DexiePromise.resolve(p).then((value) => results[i] = { status: "fulfilled", value }, (reason) => results[i] = { status: "rejected", reason }).then(() => --remaining || resolve(results)));
-        });
-      });
-    if (NativePromise.any && typeof AggregateError !== "undefined")
-      setProp(DexiePromise, "any", function() {
-        const possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
-        return new DexiePromise((resolve, reject) => {
-          if (possiblePromises.length === 0)
-            reject(new AggregateError([]));
-          let remaining = possiblePromises.length;
-          const failures = new Array(remaining);
-          possiblePromises.forEach((p, i) => DexiePromise.resolve(p).then((value) => resolve(value), (failure) => {
-            failures[i] = failure;
-            if (!--remaining)
-              reject(new AggregateError(failures));
-          }));
-        });
-      });
-  }
-  function executePromiseTask(promise, fn2) {
-    try {
-      fn2((value) => {
-        if (promise._state !== null)
-          return;
-        if (value === promise)
-          throw new TypeError("A promise cannot be resolved with itself.");
-        var shouldExecuteTick = promise._lib && beginMicroTickScope();
-        if (value && typeof value.then === "function") {
-          executePromiseTask(promise, (resolve, reject) => {
-            value instanceof DexiePromise ? value._then(resolve, reject) : value.then(resolve, reject);
-          });
-        } else {
-          promise._state = true;
-          promise._value = value;
-          propagateAllListeners(promise);
-        }
-        if (shouldExecuteTick)
-          endMicroTickScope();
-      }, handleRejection.bind(null, promise));
-    } catch (ex) {
-      handleRejection(promise, ex);
-    }
-  }
-  function handleRejection(promise, reason) {
-    rejectingErrors.push(reason);
-    if (promise._state !== null)
-      return;
-    var shouldExecuteTick = promise._lib && beginMicroTickScope();
-    reason = rejectionMapper(reason);
-    promise._state = false;
-    promise._value = reason;
-    debug && reason !== null && typeof reason === "object" && !reason._promise && tryCatch(() => {
-      var origProp = getPropertyDescriptor(reason, "stack");
-      reason._promise = promise;
-      setProp(reason, "stack", {
-        get: () => stack_being_generated ? origProp && (origProp.get ? origProp.get.apply(reason) : origProp.value) : promise.stack
-      });
-    });
-    addPossiblyUnhandledError(promise);
-    propagateAllListeners(promise);
-    if (shouldExecuteTick)
-      endMicroTickScope();
-  }
-  function propagateAllListeners(promise) {
-    var listeners = promise._listeners;
-    promise._listeners = [];
-    for (var i = 0, len = listeners.length; i < len; ++i) {
-      propagateToListener(promise, listeners[i]);
-    }
-    var psd = promise._PSD;
-    --psd.ref || psd.finalize();
-    if (numScheduledCalls === 0) {
-      ++numScheduledCalls;
-      asap(() => {
-        if (--numScheduledCalls === 0)
-          finalizePhysicalTick();
-      }, []);
-    }
-  }
-  function propagateToListener(promise, listener) {
-    if (promise._state === null) {
-      promise._listeners.push(listener);
-      return;
-    }
-    var cb = promise._state ? listener.onFulfilled : listener.onRejected;
-    if (cb === null) {
-      return (promise._state ? listener.resolve : listener.reject)(promise._value);
-    }
-    ++listener.psd.ref;
-    ++numScheduledCalls;
-    asap(callListener, [cb, promise, listener]);
-  }
-  function callListener(cb, promise, listener) {
-    try {
-      currentFulfiller = promise;
-      var ret, value = promise._value;
-      if (promise._state) {
-        ret = cb(value);
-      } else {
-        if (rejectingErrors.length)
-          rejectingErrors = [];
-        ret = cb(value);
-        if (rejectingErrors.indexOf(value) === -1)
-          markErrorAsHandled(promise);
-      }
-      listener.resolve(ret);
-    } catch (e) {
-      listener.reject(e);
-    } finally {
-      currentFulfiller = null;
-      if (--numScheduledCalls === 0)
-        finalizePhysicalTick();
-      --listener.psd.ref || listener.psd.finalize();
-    }
-  }
-  function getStack(promise, stacks, limit) {
-    if (stacks.length === limit)
-      return stacks;
-    var stack = "";
-    if (promise._state === false) {
-      var failure = promise._value, errorName, message;
-      if (failure != null) {
-        errorName = failure.name || "Error";
-        message = failure.message || failure;
-        stack = prettyStack(failure, 0);
-      } else {
-        errorName = failure;
-        message = "";
-      }
-      stacks.push(errorName + (message ? ": " + message : "") + stack);
-    }
-    if (debug) {
-      stack = prettyStack(promise._stackHolder, 2);
-      if (stack && stacks.indexOf(stack) === -1)
-        stacks.push(stack);
-      if (promise._prev)
-        getStack(promise._prev, stacks, limit);
-    }
-    return stacks;
-  }
-  function linkToPreviousPromise(promise, prev) {
-    var numPrev = prev ? prev._numPrev + 1 : 0;
-    if (numPrev < LONG_STACKS_CLIP_LIMIT) {
-      promise._prev = prev;
-      promise._numPrev = numPrev;
-    }
-  }
-  function physicalTick() {
-    beginMicroTickScope() && endMicroTickScope();
-  }
-  function beginMicroTickScope() {
-    var wasRootExec = isOutsideMicroTick;
-    isOutsideMicroTick = false;
-    needsNewPhysicalTick = false;
-    return wasRootExec;
-  }
-  function endMicroTickScope() {
-    var callbacks, i, l;
-    do {
-      while (microtickQueue.length > 0) {
-        callbacks = microtickQueue;
-        microtickQueue = [];
-        l = callbacks.length;
-        for (i = 0; i < l; ++i) {
-          var item = callbacks[i];
-          item[0].apply(null, item[1]);
-        }
-      }
-    } while (microtickQueue.length > 0);
-    isOutsideMicroTick = true;
-    needsNewPhysicalTick = true;
-  }
-  function finalizePhysicalTick() {
-    var unhandledErrs = unhandledErrors;
-    unhandledErrors = [];
-    unhandledErrs.forEach((p) => {
-      p._PSD.onunhandled.call(null, p._value, p);
-    });
-    var finalizers = tickFinalizers.slice(0);
-    var i = finalizers.length;
-    while (i)
-      finalizers[--i]();
-  }
-  function run_at_end_of_this_or_next_physical_tick(fn2) {
-    function finalizer() {
-      fn2();
-      tickFinalizers.splice(tickFinalizers.indexOf(finalizer), 1);
-    }
-    tickFinalizers.push(finalizer);
-    ++numScheduledCalls;
-    asap(() => {
-      if (--numScheduledCalls === 0)
-        finalizePhysicalTick();
-    }, []);
-  }
-  function addPossiblyUnhandledError(promise) {
-    if (!unhandledErrors.some((p) => p._value === promise._value))
-      unhandledErrors.push(promise);
-  }
-  function markErrorAsHandled(promise) {
-    var i = unhandledErrors.length;
-    while (i)
-      if (unhandledErrors[--i]._value === promise._value) {
-        unhandledErrors.splice(i, 1);
-        return;
-      }
-  }
-  function PromiseReject(reason) {
-    return new DexiePromise(INTERNAL, false, reason);
-  }
-  function wrap(fn2, errorCatcher) {
-    var psd = PSD;
-    return function() {
-      var wasRootExec = beginMicroTickScope(), outerScope = PSD;
-      try {
-        switchToZone(psd, true);
-        return fn2.apply(this, arguments);
-      } catch (e) {
-        errorCatcher && errorCatcher(e);
-      } finally {
-        switchToZone(outerScope, false);
-        if (wasRootExec)
-          endMicroTickScope();
-      }
-    };
-  }
-  var task = { awaits: 0, echoes: 0, id: 0 };
-  var taskCounter = 0;
-  var zoneStack = [];
-  var zoneEchoes = 0;
-  var totalEchoes = 0;
-  var zone_id_counter = 0;
-  function newScope(fn2, props2, a1, a2) {
-    var parent = PSD, psd = Object.create(parent);
-    psd.parent = parent;
-    psd.ref = 0;
-    psd.global = false;
-    psd.id = ++zone_id_counter;
-    var globalEnv = globalPSD.env;
-    psd.env = patchGlobalPromise ? {
-      Promise: DexiePromise,
-      PromiseProp: { value: DexiePromise, configurable: true, writable: true },
-      all: DexiePromise.all,
-      race: DexiePromise.race,
-      allSettled: DexiePromise.allSettled,
-      any: DexiePromise.any,
-      resolve: DexiePromise.resolve,
-      reject: DexiePromise.reject,
-      nthen: getPatchedPromiseThen(globalEnv.nthen, psd),
-      gthen: getPatchedPromiseThen(globalEnv.gthen, psd)
-    } : {};
-    if (props2)
-      extend(psd, props2);
-    ++parent.ref;
-    psd.finalize = function() {
-      --this.parent.ref || this.parent.finalize();
-    };
-    var rv = usePSD(psd, fn2, a1, a2);
-    if (psd.ref === 0)
-      psd.finalize();
-    return rv;
-  }
-  function incrementExpectedAwaits() {
-    if (!task.id)
-      task.id = ++taskCounter;
-    ++task.awaits;
-    task.echoes += ZONE_ECHO_LIMIT;
-    return task.id;
-  }
-  function decrementExpectedAwaits() {
-    if (!task.awaits)
-      return false;
-    if (--task.awaits === 0)
-      task.id = 0;
-    task.echoes = task.awaits * ZONE_ECHO_LIMIT;
-    return true;
-  }
-  if (("" + nativePromiseThen).indexOf("[native code]") === -1) {
-    incrementExpectedAwaits = decrementExpectedAwaits = nop;
-  }
-  function onPossibleParallellAsync(possiblePromise) {
-    if (task.echoes && possiblePromise && possiblePromise.constructor === NativePromise) {
-      incrementExpectedAwaits();
-      return possiblePromise.then((x) => {
-        decrementExpectedAwaits();
-        return x;
-      }, (e) => {
-        decrementExpectedAwaits();
-        return rejection(e);
-      });
-    }
-    return possiblePromise;
-  }
-  function zoneEnterEcho(targetZone) {
-    ++totalEchoes;
-    if (!task.echoes || --task.echoes === 0) {
-      task.echoes = task.id = 0;
-    }
-    zoneStack.push(PSD);
-    switchToZone(targetZone, true);
-  }
-  function zoneLeaveEcho() {
-    var zone = zoneStack[zoneStack.length - 1];
-    zoneStack.pop();
-    switchToZone(zone, false);
-  }
-  function switchToZone(targetZone, bEnteringZone) {
-    var currentZone = PSD;
-    if (bEnteringZone ? task.echoes && (!zoneEchoes++ || targetZone !== PSD) : zoneEchoes && (!--zoneEchoes || targetZone !== PSD)) {
-      enqueueNativeMicroTask(bEnteringZone ? zoneEnterEcho.bind(null, targetZone) : zoneLeaveEcho);
-    }
-    if (targetZone === PSD)
-      return;
-    PSD = targetZone;
-    if (currentZone === globalPSD)
-      globalPSD.env = snapShot();
-    if (patchGlobalPromise) {
-      var GlobalPromise = globalPSD.env.Promise;
-      var targetEnv = targetZone.env;
-      nativePromiseProto.then = targetEnv.nthen;
-      GlobalPromise.prototype.then = targetEnv.gthen;
-      if (currentZone.global || targetZone.global) {
-        Object.defineProperty(_global, "Promise", targetEnv.PromiseProp);
-        GlobalPromise.all = targetEnv.all;
-        GlobalPromise.race = targetEnv.race;
-        GlobalPromise.resolve = targetEnv.resolve;
-        GlobalPromise.reject = targetEnv.reject;
-        if (targetEnv.allSettled)
-          GlobalPromise.allSettled = targetEnv.allSettled;
-        if (targetEnv.any)
-          GlobalPromise.any = targetEnv.any;
-      }
-    }
-  }
-  function snapShot() {
-    var GlobalPromise = _global.Promise;
-    return patchGlobalPromise ? {
-      Promise: GlobalPromise,
-      PromiseProp: Object.getOwnPropertyDescriptor(_global, "Promise"),
-      all: GlobalPromise.all,
-      race: GlobalPromise.race,
-      allSettled: GlobalPromise.allSettled,
-      any: GlobalPromise.any,
-      resolve: GlobalPromise.resolve,
-      reject: GlobalPromise.reject,
-      nthen: nativePromiseProto.then,
-      gthen: GlobalPromise.prototype.then
-    } : {};
-  }
-  function usePSD(psd, fn2, a1, a2, a3) {
-    var outerScope = PSD;
-    try {
-      switchToZone(psd, true);
-      return fn2(a1, a2, a3);
-    } finally {
-      switchToZone(outerScope, false);
-    }
-  }
-  function enqueueNativeMicroTask(job) {
-    nativePromiseThen.call(resolvedNativePromise, job);
-  }
-  function nativeAwaitCompatibleWrap(fn2, zone, possibleAwait, cleanup) {
-    return typeof fn2 !== "function" ? fn2 : function() {
-      var outerZone = PSD;
-      if (possibleAwait)
-        incrementExpectedAwaits();
-      switchToZone(zone, true);
-      try {
-        return fn2.apply(this, arguments);
-      } finally {
-        switchToZone(outerZone, false);
-        if (cleanup)
-          enqueueNativeMicroTask(decrementExpectedAwaits);
-      }
-    };
-  }
-  function getPatchedPromiseThen(origThen, zone) {
-    return function(onResolved, onRejected) {
-      return origThen.call(this, nativeAwaitCompatibleWrap(onResolved, zone), nativeAwaitCompatibleWrap(onRejected, zone));
-    };
-  }
-  var UNHANDLEDREJECTION = "unhandledrejection";
-  function globalError(err, promise) {
-    var rv;
-    try {
-      rv = promise.onuncatched(err);
-    } catch (e) {
-    }
-    if (rv !== false)
-      try {
-        var event, eventData = { promise, reason: err };
-        if (_global.document && document.createEvent) {
-          event = document.createEvent("Event");
-          event.initEvent(UNHANDLEDREJECTION, true, true);
-          extend(event, eventData);
-        } else if (_global.CustomEvent) {
-          event = new CustomEvent(UNHANDLEDREJECTION, { detail: eventData });
-          extend(event, eventData);
-        }
-        if (event && _global.dispatchEvent) {
-          dispatchEvent(event);
-          if (!_global.PromiseRejectionEvent && _global.onunhandledrejection)
-            try {
-              _global.onunhandledrejection(event);
-            } catch (_) {
-            }
-        }
-        if (debug && event && !event.defaultPrevented) {
-          console.warn(`Unhandled rejection: ${err.stack || err}`);
-        }
-      } catch (e) {
-      }
-  }
-  var rejection = DexiePromise.reject;
-  function tempTransaction(db, mode, storeNames, fn2) {
-    if (!db.idbdb || !db._state.openComplete && (!PSD.letThrough && !db._vip)) {
-      if (db._state.openComplete) {
-        return rejection(new exceptions.DatabaseClosed(db._state.dbOpenError));
-      }
-      if (!db._state.isBeingOpened) {
-        if (!db._options.autoOpen)
-          return rejection(new exceptions.DatabaseClosed());
-        db.open().catch(nop);
-      }
-      return db._state.dbReadyPromise.then(() => tempTransaction(db, mode, storeNames, fn2));
-    } else {
-      var trans = db._createTransaction(mode, storeNames, db._dbSchema);
-      try {
-        trans.create();
-        db._state.PR1398_maxLoop = 3;
-      } catch (ex) {
-        if (ex.name === errnames.InvalidState && db.isOpen() && --db._state.PR1398_maxLoop > 0) {
-          console.warn("Dexie: Need to reopen db");
-          db._close();
-          return db.open().then(() => tempTransaction(db, mode, storeNames, fn2));
-        }
-        return rejection(ex);
-      }
-      return trans._promise(mode, (resolve, reject) => {
-        return newScope(() => {
-          PSD.trans = trans;
-          return fn2(resolve, reject, trans);
-        });
-      }).then((result) => {
-        return trans._completion.then(() => result);
-      });
-    }
-  }
-  var DEXIE_VERSION = "3.2.4";
-  var maxString = String.fromCharCode(65535);
-  var minKey = -Infinity;
-  var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
-  var STRING_EXPECTED = "String expected.";
-  var connections = [];
-  var isIEOrEdge = typeof navigator !== "undefined" && /(MSIE|Trident|Edge)/.test(navigator.userAgent);
-  var hasIEDeleteObjectStoreBug = isIEOrEdge;
-  var hangsOnDeleteLargeKeyRange = isIEOrEdge;
-  var dexieStackFrameFilter = (frame) => !/(dexie\.js|dexie\.min\.js)/.test(frame);
-  var DBNAMES_DB = "__dbnames";
-  var READONLY = "readonly";
-  var READWRITE = "readwrite";
-  function combine(filter1, filter2) {
-    return filter1 ? filter2 ? function() {
-      return filter1.apply(this, arguments) && filter2.apply(this, arguments);
-    } : filter1 : filter2;
-  }
-  var AnyRange = {
-    type: 3,
-    lower: -Infinity,
-    lowerOpen: false,
-    upper: [[]],
-    upperOpen: false
-  };
-  function workaroundForUndefinedPrimKey(keyPath) {
-    return typeof keyPath === "string" && !/\./.test(keyPath) ? (obj) => {
-      if (obj[keyPath] === void 0 && keyPath in obj) {
-        obj = deepClone(obj);
-        delete obj[keyPath];
-      }
-      return obj;
-    } : (obj) => obj;
-  }
-  var Table = class {
-    _trans(mode, fn2, writeLocked) {
-      const trans = this._tx || PSD.trans;
-      const tableName = this.name;
-      function checkTableInTransaction(resolve, reject, trans2) {
-        if (!trans2.schema[tableName])
-          throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
-        return fn2(trans2.idbtrans, trans2);
-      }
-      const wasRootExec = beginMicroTickScope();
-      try {
-        return trans && trans.db === this.db ? trans === PSD.trans ? trans._promise(mode, checkTableInTransaction, writeLocked) : newScope(() => trans._promise(mode, checkTableInTransaction, writeLocked), { trans, transless: PSD.transless || PSD }) : tempTransaction(this.db, mode, [this.name], checkTableInTransaction);
-      } finally {
-        if (wasRootExec)
-          endMicroTickScope();
-      }
-    }
-    get(keyOrCrit, cb) {
-      if (keyOrCrit && keyOrCrit.constructor === Object)
-        return this.where(keyOrCrit).first(cb);
-      return this._trans("readonly", (trans) => {
-        return this.core.get({ trans, key: keyOrCrit }).then((res) => this.hook.reading.fire(res));
-      }).then(cb);
-    }
-    where(indexOrCrit) {
-      if (typeof indexOrCrit === "string")
-        return new this.db.WhereClause(this, indexOrCrit);
-      if (isArray(indexOrCrit))
-        return new this.db.WhereClause(this, `[${indexOrCrit.join("+")}]`);
-      const keyPaths = keys(indexOrCrit);
-      if (keyPaths.length === 1)
-        return this.where(keyPaths[0]).equals(indexOrCrit[keyPaths[0]]);
-      const compoundIndex = this.schema.indexes.concat(this.schema.primKey).filter((ix) => ix.compound && keyPaths.every((keyPath) => ix.keyPath.indexOf(keyPath) >= 0) && ix.keyPath.every((keyPath) => keyPaths.indexOf(keyPath) >= 0))[0];
-      if (compoundIndex && this.db._maxKey !== maxString)
-        return this.where(compoundIndex.name).equals(compoundIndex.keyPath.map((kp) => indexOrCrit[kp]));
-      if (!compoundIndex && debug)
-        console.warn(`The query ${JSON.stringify(indexOrCrit)} on ${this.name} would benefit of a compound index [${keyPaths.join("+")}]`);
-      const { idxByName } = this.schema;
-      const idb = this.db._deps.indexedDB;
-      function equals(a, b) {
-        try {
-          return idb.cmp(a, b) === 0;
-        } catch (e) {
-          return false;
-        }
-      }
-      const [idx, filterFunction] = keyPaths.reduce(([prevIndex, prevFilterFn], keyPath) => {
-        const index = idxByName[keyPath];
-        const value = indexOrCrit[keyPath];
-        return [
-          prevIndex || index,
-          prevIndex || !index ? combine(prevFilterFn, index && index.multi ? (x) => {
-            const prop = getByKeyPath(x, keyPath);
-            return isArray(prop) && prop.some((item) => equals(value, item));
-          } : (x) => equals(value, getByKeyPath(x, keyPath))) : prevFilterFn
-        ];
-      }, [null, null]);
-      return idx ? this.where(idx.name).equals(indexOrCrit[idx.keyPath]).filter(filterFunction) : compoundIndex ? this.filter(filterFunction) : this.where(keyPaths).equals("");
-    }
-    filter(filterFunction) {
-      return this.toCollection().and(filterFunction);
-    }
-    count(thenShortcut) {
-      return this.toCollection().count(thenShortcut);
-    }
-    offset(offset2) {
-      return this.toCollection().offset(offset2);
-    }
-    limit(numRows) {
-      return this.toCollection().limit(numRows);
-    }
-    each(callback) {
-      return this.toCollection().each(callback);
-    }
-    toArray(thenShortcut) {
-      return this.toCollection().toArray(thenShortcut);
-    }
-    toCollection() {
-      return new this.db.Collection(new this.db.WhereClause(this));
-    }
-    orderBy(index) {
-      return new this.db.Collection(new this.db.WhereClause(this, isArray(index) ? `[${index.join("+")}]` : index));
-    }
-    reverse() {
-      return this.toCollection().reverse();
-    }
-    mapToClass(constructor) {
-      this.schema.mappedClass = constructor;
-      const readHook = (obj) => {
-        if (!obj)
-          return obj;
-        const res = Object.create(constructor.prototype);
-        for (var m in obj)
-          if (hasOwn(obj, m))
-            try {
-              res[m] = obj[m];
-            } catch (_) {
-            }
-        return res;
-      };
-      if (this.schema.readHook) {
-        this.hook.reading.unsubscribe(this.schema.readHook);
-      }
-      this.schema.readHook = readHook;
-      this.hook("reading", readHook);
-      return constructor;
-    }
-    defineClass() {
-      function Class(content) {
-        extend(this, content);
-      }
-      return this.mapToClass(Class);
-    }
-    add(obj, key) {
-      const { auto: auto2, keyPath } = this.schema.primKey;
-      let objToAdd = obj;
-      if (keyPath && auto2) {
-        objToAdd = workaroundForUndefinedPrimKey(keyPath)(obj);
-      }
-      return this._trans("readwrite", (trans) => {
-        return this.core.mutate({ trans, type: "add", keys: key != null ? [key] : null, values: [objToAdd] });
-      }).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult).then((lastResult) => {
-        if (keyPath) {
-          try {
-            setByKeyPath(obj, keyPath, lastResult);
-          } catch (_) {
-          }
-        }
-        return lastResult;
-      });
-    }
-    update(keyOrObject, modifications) {
-      if (typeof keyOrObject === "object" && !isArray(keyOrObject)) {
-        const key = getByKeyPath(keyOrObject, this.schema.primKey.keyPath);
-        if (key === void 0)
-          return rejection(new exceptions.InvalidArgument("Given object does not contain its primary key"));
-        try {
-          if (typeof modifications !== "function") {
-            keys(modifications).forEach((keyPath) => {
-              setByKeyPath(keyOrObject, keyPath, modifications[keyPath]);
-            });
-          } else {
-            modifications(keyOrObject, { value: keyOrObject, primKey: key });
-          }
-        } catch (_a) {
-        }
-        return this.where(":id").equals(key).modify(modifications);
-      } else {
-        return this.where(":id").equals(keyOrObject).modify(modifications);
-      }
-    }
-    put(obj, key) {
-      const { auto: auto2, keyPath } = this.schema.primKey;
-      let objToAdd = obj;
-      if (keyPath && auto2) {
-        objToAdd = workaroundForUndefinedPrimKey(keyPath)(obj);
-      }
-      return this._trans("readwrite", (trans) => this.core.mutate({ trans, type: "put", values: [objToAdd], keys: key != null ? [key] : null })).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult).then((lastResult) => {
-        if (keyPath) {
-          try {
-            setByKeyPath(obj, keyPath, lastResult);
-          } catch (_) {
-          }
-        }
-        return lastResult;
-      });
-    }
-    delete(key) {
-      return this._trans("readwrite", (trans) => this.core.mutate({ trans, type: "delete", keys: [key] })).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : void 0);
-    }
-    clear() {
-      return this._trans("readwrite", (trans) => this.core.mutate({ trans, type: "deleteRange", range: AnyRange })).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : void 0);
-    }
-    bulkGet(keys2) {
-      return this._trans("readonly", (trans) => {
-        return this.core.getMany({
-          keys: keys2,
-          trans
-        }).then((result) => result.map((res) => this.hook.reading.fire(res)));
-      });
-    }
-    bulkAdd(objects, keysOrOptions, options) {
-      const keys2 = Array.isArray(keysOrOptions) ? keysOrOptions : void 0;
-      options = options || (keys2 ? void 0 : keysOrOptions);
-      const wantResults = options ? options.allKeys : void 0;
-      return this._trans("readwrite", (trans) => {
-        const { auto: auto2, keyPath } = this.schema.primKey;
-        if (keyPath && keys2)
-          throw new exceptions.InvalidArgument("bulkAdd(): keys argument invalid on tables with inbound keys");
-        if (keys2 && keys2.length !== objects.length)
-          throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
-        const numObjects = objects.length;
-        let objectsToAdd = keyPath && auto2 ? objects.map(workaroundForUndefinedPrimKey(keyPath)) : objects;
-        return this.core.mutate({ trans, type: "add", keys: keys2, values: objectsToAdd, wantResults }).then(({ numFailures, results, lastResult, failures }) => {
-          const result = wantResults ? results : lastResult;
-          if (numFailures === 0)
-            return result;
-          throw new BulkError(`${this.name}.bulkAdd(): ${numFailures} of ${numObjects} operations failed`, failures);
-        });
-      });
-    }
-    bulkPut(objects, keysOrOptions, options) {
-      const keys2 = Array.isArray(keysOrOptions) ? keysOrOptions : void 0;
-      options = options || (keys2 ? void 0 : keysOrOptions);
-      const wantResults = options ? options.allKeys : void 0;
-      return this._trans("readwrite", (trans) => {
-        const { auto: auto2, keyPath } = this.schema.primKey;
-        if (keyPath && keys2)
-          throw new exceptions.InvalidArgument("bulkPut(): keys argument invalid on tables with inbound keys");
-        if (keys2 && keys2.length !== objects.length)
-          throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
-        const numObjects = objects.length;
-        let objectsToPut = keyPath && auto2 ? objects.map(workaroundForUndefinedPrimKey(keyPath)) : objects;
-        return this.core.mutate({ trans, type: "put", keys: keys2, values: objectsToPut, wantResults }).then(({ numFailures, results, lastResult, failures }) => {
-          const result = wantResults ? results : lastResult;
-          if (numFailures === 0)
-            return result;
-          throw new BulkError(`${this.name}.bulkPut(): ${numFailures} of ${numObjects} operations failed`, failures);
-        });
-      });
-    }
-    bulkDelete(keys2) {
-      const numKeys = keys2.length;
-      return this._trans("readwrite", (trans) => {
-        return this.core.mutate({ trans, type: "delete", keys: keys2 });
-      }).then(({ numFailures, lastResult, failures }) => {
-        if (numFailures === 0)
-          return lastResult;
-        throw new BulkError(`${this.name}.bulkDelete(): ${numFailures} of ${numKeys} operations failed`, failures);
-      });
-    }
-  };
-  function Events(ctx) {
-    var evs = {};
-    var rv = function(eventName, subscriber) {
-      if (subscriber) {
-        var i2 = arguments.length, args = new Array(i2 - 1);
-        while (--i2)
-          args[i2 - 1] = arguments[i2];
-        evs[eventName].subscribe.apply(null, args);
-        return ctx;
-      } else if (typeof eventName === "string") {
-        return evs[eventName];
-      }
-    };
-    rv.addEventType = add;
-    for (var i = 1, l = arguments.length; i < l; ++i) {
-      add(arguments[i]);
-    }
-    return rv;
-    function add(eventName, chainFunction, defaultFunction) {
-      if (typeof eventName === "object")
-        return addConfiguredEvents(eventName);
-      if (!chainFunction)
-        chainFunction = reverseStoppableEventChain;
-      if (!defaultFunction)
-        defaultFunction = nop;
-      var context3 = {
-        subscribers: [],
-        fire: defaultFunction,
-        subscribe: function(cb) {
-          if (context3.subscribers.indexOf(cb) === -1) {
-            context3.subscribers.push(cb);
-            context3.fire = chainFunction(context3.fire, cb);
-          }
-        },
-        unsubscribe: function(cb) {
-          context3.subscribers = context3.subscribers.filter(function(fn2) {
-            return fn2 !== cb;
-          });
-          context3.fire = context3.subscribers.reduce(chainFunction, defaultFunction);
-        }
-      };
-      evs[eventName] = rv[eventName] = context3;
-      return context3;
-    }
-    function addConfiguredEvents(cfg) {
-      keys(cfg).forEach(function(eventName) {
-        var args = cfg[eventName];
-        if (isArray(args)) {
-          add(eventName, cfg[eventName][0], cfg[eventName][1]);
-        } else if (args === "asap") {
-          var context3 = add(eventName, mirror, function fire() {
-            var i2 = arguments.length, args2 = new Array(i2);
-            while (i2--)
-              args2[i2] = arguments[i2];
-            context3.subscribers.forEach(function(fn2) {
-              asap$1(function fireEvent() {
-                fn2.apply(null, args2);
-              });
-            });
-          });
-        } else
-          throw new exceptions.InvalidArgument("Invalid event config");
-      });
-    }
-  }
-  function makeClassConstructor(prototype, constructor) {
-    derive(constructor).from({ prototype });
-    return constructor;
-  }
-  function createTableConstructor(db) {
-    return makeClassConstructor(Table.prototype, function Table3(name, tableSchema, trans) {
-      this.db = db;
-      this._tx = trans;
-      this.name = name;
-      this.schema = tableSchema;
-      this.hook = db._allTables[name] ? db._allTables[name].hook : Events(null, {
-        "creating": [hookCreatingChain, nop],
-        "reading": [pureFunctionChain, mirror],
-        "updating": [hookUpdatingChain, nop],
-        "deleting": [hookDeletingChain, nop]
-      });
-    });
-  }
-  function isPlainKeyRange(ctx, ignoreLimitFilter) {
-    return !(ctx.filter || ctx.algorithm || ctx.or) && (ignoreLimitFilter ? ctx.justLimit : !ctx.replayFilter);
-  }
-  function addFilter(ctx, fn2) {
-    ctx.filter = combine(ctx.filter, fn2);
-  }
-  function addReplayFilter(ctx, factory, isLimitFilter) {
-    var curr = ctx.replayFilter;
-    ctx.replayFilter = curr ? () => combine(curr(), factory()) : factory;
-    ctx.justLimit = isLimitFilter && !curr;
-  }
-  function addMatchFilter(ctx, fn2) {
-    ctx.isMatch = combine(ctx.isMatch, fn2);
-  }
-  function getIndexOrStore(ctx, coreSchema) {
-    if (ctx.isPrimKey)
-      return coreSchema.primaryKey;
-    const index = coreSchema.getIndexByKeyPath(ctx.index);
-    if (!index)
-      throw new exceptions.Schema("KeyPath " + ctx.index + " on object store " + coreSchema.name + " is not indexed");
-    return index;
-  }
-  function openCursor(ctx, coreTable, trans) {
-    const index = getIndexOrStore(ctx, coreTable.schema);
-    return coreTable.openCursor({
-      trans,
-      values: !ctx.keysOnly,
-      reverse: ctx.dir === "prev",
-      unique: !!ctx.unique,
-      query: {
-        index,
-        range: ctx.range
-      }
-    });
-  }
-  function iter(ctx, fn2, coreTrans, coreTable) {
-    const filter = ctx.replayFilter ? combine(ctx.filter, ctx.replayFilter()) : ctx.filter;
-    if (!ctx.or) {
-      return iterate(openCursor(ctx, coreTable, coreTrans), combine(ctx.algorithm, filter), fn2, !ctx.keysOnly && ctx.valueMapper);
-    } else {
-      const set = {};
-      const union = (item, cursor, advance) => {
-        if (!filter || filter(cursor, advance, (result) => cursor.stop(result), (err) => cursor.fail(err))) {
-          var primaryKey = cursor.primaryKey;
-          var key = "" + primaryKey;
-          if (key === "[object ArrayBuffer]")
-            key = "" + new Uint8Array(primaryKey);
-          if (!hasOwn(set, key)) {
-            set[key] = true;
-            fn2(item, cursor, advance);
-          }
-        }
-      };
-      return Promise.all([
-        ctx.or._iterate(union, coreTrans),
-        iterate(openCursor(ctx, coreTable, coreTrans), ctx.algorithm, union, !ctx.keysOnly && ctx.valueMapper)
-      ]);
-    }
-  }
-  function iterate(cursorPromise, filter, fn2, valueMapper) {
-    var mappedFn = valueMapper ? (x, c, a) => fn2(valueMapper(x), c, a) : fn2;
-    var wrappedFn = wrap(mappedFn);
-    return cursorPromise.then((cursor) => {
-      if (cursor) {
-        return cursor.start(() => {
-          var c = () => cursor.continue();
-          if (!filter || filter(cursor, (advancer) => c = advancer, (val) => {
-            cursor.stop(val);
-            c = nop;
-          }, (e) => {
-            cursor.fail(e);
-            c = nop;
-          }))
-            wrappedFn(cursor.value, cursor, (advancer) => c = advancer);
-          c();
-        });
-      }
-    });
-  }
-  function cmp(a, b) {
-    try {
-      const ta = type(a);
-      const tb = type(b);
-      if (ta !== tb) {
-        if (ta === "Array")
-          return 1;
-        if (tb === "Array")
-          return -1;
-        if (ta === "binary")
-          return 1;
-        if (tb === "binary")
-          return -1;
-        if (ta === "string")
-          return 1;
-        if (tb === "string")
-          return -1;
-        if (ta === "Date")
-          return 1;
-        if (tb !== "Date")
-          return NaN;
-        return -1;
-      }
-      switch (ta) {
-        case "number":
-        case "Date":
-        case "string":
-          return a > b ? 1 : a < b ? -1 : 0;
-        case "binary": {
-          return compareUint8Arrays(getUint8Array(a), getUint8Array(b));
-        }
-        case "Array":
-          return compareArrays(a, b);
-      }
-    } catch (_a) {
-    }
-    return NaN;
-  }
-  function compareArrays(a, b) {
-    const al = a.length;
-    const bl = b.length;
-    const l = al < bl ? al : bl;
-    for (let i = 0; i < l; ++i) {
-      const res = cmp(a[i], b[i]);
-      if (res !== 0)
-        return res;
-    }
-    return al === bl ? 0 : al < bl ? -1 : 1;
-  }
-  function compareUint8Arrays(a, b) {
-    const al = a.length;
-    const bl = b.length;
-    const l = al < bl ? al : bl;
-    for (let i = 0; i < l; ++i) {
-      if (a[i] !== b[i])
-        return a[i] < b[i] ? -1 : 1;
-    }
-    return al === bl ? 0 : al < bl ? -1 : 1;
-  }
-  function type(x) {
-    const t = typeof x;
-    if (t !== "object")
-      return t;
-    if (ArrayBuffer.isView(x))
-      return "binary";
-    const tsTag = toStringTag(x);
-    return tsTag === "ArrayBuffer" ? "binary" : tsTag;
-  }
-  function getUint8Array(a) {
-    if (a instanceof Uint8Array)
-      return a;
-    if (ArrayBuffer.isView(a))
-      return new Uint8Array(a.buffer, a.byteOffset, a.byteLength);
-    return new Uint8Array(a);
-  }
-  var Collection = class {
-    _read(fn2, cb) {
-      var ctx = this._ctx;
-      return ctx.error ? ctx.table._trans(null, rejection.bind(null, ctx.error)) : ctx.table._trans("readonly", fn2).then(cb);
-    }
-    _write(fn2) {
-      var ctx = this._ctx;
-      return ctx.error ? ctx.table._trans(null, rejection.bind(null, ctx.error)) : ctx.table._trans("readwrite", fn2, "locked");
-    }
-    _addAlgorithm(fn2) {
-      var ctx = this._ctx;
-      ctx.algorithm = combine(ctx.algorithm, fn2);
-    }
-    _iterate(fn2, coreTrans) {
-      return iter(this._ctx, fn2, coreTrans, this._ctx.table.core);
-    }
-    clone(props2) {
-      var rv = Object.create(this.constructor.prototype), ctx = Object.create(this._ctx);
-      if (props2)
-        extend(ctx, props2);
-      rv._ctx = ctx;
-      return rv;
-    }
-    raw() {
-      this._ctx.valueMapper = null;
-      return this;
-    }
-    each(fn2) {
-      var ctx = this._ctx;
-      return this._read((trans) => iter(ctx, fn2, trans, ctx.table.core));
-    }
-    count(cb) {
-      return this._read((trans) => {
-        const ctx = this._ctx;
-        const coreTable = ctx.table.core;
-        if (isPlainKeyRange(ctx, true)) {
-          return coreTable.count({
-            trans,
-            query: {
-              index: getIndexOrStore(ctx, coreTable.schema),
-              range: ctx.range
-            }
-          }).then((count2) => Math.min(count2, ctx.limit));
-        } else {
-          var count = 0;
-          return iter(ctx, () => {
-            ++count;
-            return false;
-          }, trans, coreTable).then(() => count);
-        }
-      }).then(cb);
-    }
-    sortBy(keyPath, cb) {
-      const parts = keyPath.split(".").reverse(), lastPart = parts[0], lastIndex = parts.length - 1;
-      function getval(obj, i) {
-        if (i)
-          return getval(obj[parts[i]], i - 1);
-        return obj[lastPart];
-      }
-      var order2 = this._ctx.dir === "next" ? 1 : -1;
-      function sorter(a, b) {
-        var aVal = getval(a, lastIndex), bVal = getval(b, lastIndex);
-        return aVal < bVal ? -order2 : aVal > bVal ? order2 : 0;
-      }
-      return this.toArray(function(a) {
-        return a.sort(sorter);
-      }).then(cb);
-    }
-    toArray(cb) {
-      return this._read((trans) => {
-        var ctx = this._ctx;
-        if (ctx.dir === "next" && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
-          const { valueMapper } = ctx;
-          const index = getIndexOrStore(ctx, ctx.table.core.schema);
-          return ctx.table.core.query({
-            trans,
-            limit: ctx.limit,
-            values: true,
-            query: {
-              index,
-              range: ctx.range
-            }
-          }).then(({ result }) => valueMapper ? result.map(valueMapper) : result);
-        } else {
-          const a = [];
-          return iter(ctx, (item) => a.push(item), trans, ctx.table.core).then(() => a);
-        }
-      }, cb);
-    }
-    offset(offset2) {
-      var ctx = this._ctx;
-      if (offset2 <= 0)
-        return this;
-      ctx.offset += offset2;
-      if (isPlainKeyRange(ctx)) {
-        addReplayFilter(ctx, () => {
-          var offsetLeft = offset2;
-          return (cursor, advance) => {
-            if (offsetLeft === 0)
-              return true;
-            if (offsetLeft === 1) {
-              --offsetLeft;
-              return false;
-            }
-            advance(() => {
-              cursor.advance(offsetLeft);
-              offsetLeft = 0;
-            });
-            return false;
-          };
-        });
-      } else {
-        addReplayFilter(ctx, () => {
-          var offsetLeft = offset2;
-          return () => --offsetLeft < 0;
-        });
-      }
-      return this;
-    }
-    limit(numRows) {
-      this._ctx.limit = Math.min(this._ctx.limit, numRows);
-      addReplayFilter(this._ctx, () => {
-        var rowsLeft = numRows;
-        return function(cursor, advance, resolve) {
-          if (--rowsLeft <= 0)
-            advance(resolve);
-          return rowsLeft >= 0;
-        };
-      }, true);
-      return this;
-    }
-    until(filterFunction, bIncludeStopEntry) {
-      addFilter(this._ctx, function(cursor, advance, resolve) {
-        if (filterFunction(cursor.value)) {
-          advance(resolve);
-          return bIncludeStopEntry;
-        } else {
-          return true;
-        }
-      });
-      return this;
-    }
-    first(cb) {
-      return this.limit(1).toArray(function(a) {
-        return a[0];
-      }).then(cb);
-    }
-    last(cb) {
-      return this.reverse().first(cb);
-    }
-    filter(filterFunction) {
-      addFilter(this._ctx, function(cursor) {
-        return filterFunction(cursor.value);
-      });
-      addMatchFilter(this._ctx, filterFunction);
-      return this;
-    }
-    and(filter) {
-      return this.filter(filter);
-    }
-    or(indexName) {
-      return new this.db.WhereClause(this._ctx.table, indexName, this);
-    }
-    reverse() {
-      this._ctx.dir = this._ctx.dir === "prev" ? "next" : "prev";
-      if (this._ondirectionchange)
-        this._ondirectionchange(this._ctx.dir);
-      return this;
-    }
-    desc() {
-      return this.reverse();
-    }
-    eachKey(cb) {
-      var ctx = this._ctx;
-      ctx.keysOnly = !ctx.isMatch;
-      return this.each(function(val, cursor) {
-        cb(cursor.key, cursor);
-      });
-    }
-    eachUniqueKey(cb) {
-      this._ctx.unique = "unique";
-      return this.eachKey(cb);
-    }
-    eachPrimaryKey(cb) {
-      var ctx = this._ctx;
-      ctx.keysOnly = !ctx.isMatch;
-      return this.each(function(val, cursor) {
-        cb(cursor.primaryKey, cursor);
-      });
-    }
-    keys(cb) {
-      var ctx = this._ctx;
-      ctx.keysOnly = !ctx.isMatch;
-      var a = [];
-      return this.each(function(item, cursor) {
-        a.push(cursor.key);
-      }).then(function() {
-        return a;
-      }).then(cb);
-    }
-    primaryKeys(cb) {
-      var ctx = this._ctx;
-      if (ctx.dir === "next" && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
-        return this._read((trans) => {
-          var index = getIndexOrStore(ctx, ctx.table.core.schema);
-          return ctx.table.core.query({
-            trans,
-            values: false,
-            limit: ctx.limit,
-            query: {
-              index,
-              range: ctx.range
-            }
-          });
-        }).then(({ result }) => result).then(cb);
-      }
-      ctx.keysOnly = !ctx.isMatch;
-      var a = [];
-      return this.each(function(item, cursor) {
-        a.push(cursor.primaryKey);
-      }).then(function() {
-        return a;
-      }).then(cb);
-    }
-    uniqueKeys(cb) {
-      this._ctx.unique = "unique";
-      return this.keys(cb);
-    }
-    firstKey(cb) {
-      return this.limit(1).keys(function(a) {
-        return a[0];
-      }).then(cb);
-    }
-    lastKey(cb) {
-      return this.reverse().firstKey(cb);
-    }
-    distinct() {
-      var ctx = this._ctx, idx = ctx.index && ctx.table.schema.idxByName[ctx.index];
-      if (!idx || !idx.multi)
-        return this;
-      var set = {};
-      addFilter(this._ctx, function(cursor) {
-        var strKey = cursor.primaryKey.toString();
-        var found = hasOwn(set, strKey);
-        set[strKey] = true;
-        return !found;
-      });
-      return this;
-    }
-    modify(changes) {
-      var ctx = this._ctx;
-      return this._write((trans) => {
-        var modifyer;
-        if (typeof changes === "function") {
-          modifyer = changes;
-        } else {
-          var keyPaths = keys(changes);
-          var numKeys = keyPaths.length;
-          modifyer = function(item) {
-            var anythingModified = false;
-            for (var i = 0; i < numKeys; ++i) {
-              var keyPath = keyPaths[i], val = changes[keyPath];
-              if (getByKeyPath(item, keyPath) !== val) {
-                setByKeyPath(item, keyPath, val);
-                anythingModified = true;
-              }
-            }
-            return anythingModified;
-          };
-        }
-        const coreTable = ctx.table.core;
-        const { outbound, extractKey } = coreTable.schema.primaryKey;
-        const limit = this.db._options.modifyChunkSize || 200;
-        const totalFailures = [];
-        let successCount = 0;
-        const failedKeys = [];
-        const applyMutateResult = (expectedCount, res) => {
-          const { failures, numFailures } = res;
-          successCount += expectedCount - numFailures;
-          for (let pos of keys(failures)) {
-            totalFailures.push(failures[pos]);
-          }
-        };
-        return this.clone().primaryKeys().then((keys2) => {
-          const nextChunk = (offset2) => {
-            const count = Math.min(limit, keys2.length - offset2);
-            return coreTable.getMany({
-              trans,
-              keys: keys2.slice(offset2, offset2 + count),
-              cache: "immutable"
-            }).then((values) => {
-              const addValues = [];
-              const putValues = [];
-              const putKeys = outbound ? [] : null;
-              const deleteKeys = [];
-              for (let i = 0; i < count; ++i) {
-                const origValue = values[i];
-                const ctx2 = {
-                  value: deepClone(origValue),
-                  primKey: keys2[offset2 + i]
-                };
-                if (modifyer.call(ctx2, ctx2.value, ctx2) !== false) {
-                  if (ctx2.value == null) {
-                    deleteKeys.push(keys2[offset2 + i]);
-                  } else if (!outbound && cmp(extractKey(origValue), extractKey(ctx2.value)) !== 0) {
-                    deleteKeys.push(keys2[offset2 + i]);
-                    addValues.push(ctx2.value);
-                  } else {
-                    putValues.push(ctx2.value);
-                    if (outbound)
-                      putKeys.push(keys2[offset2 + i]);
-                  }
-                }
-              }
-              const criteria = isPlainKeyRange(ctx) && ctx.limit === Infinity && (typeof changes !== "function" || changes === deleteCallback) && {
-                index: ctx.index,
-                range: ctx.range
-              };
-              return Promise.resolve(addValues.length > 0 && coreTable.mutate({ trans, type: "add", values: addValues }).then((res) => {
-                for (let pos in res.failures) {
-                  deleteKeys.splice(parseInt(pos), 1);
-                }
-                applyMutateResult(addValues.length, res);
-              })).then(() => (putValues.length > 0 || criteria && typeof changes === "object") && coreTable.mutate({
-                trans,
-                type: "put",
-                keys: putKeys,
-                values: putValues,
-                criteria,
-                changeSpec: typeof changes !== "function" && changes
-              }).then((res) => applyMutateResult(putValues.length, res))).then(() => (deleteKeys.length > 0 || criteria && changes === deleteCallback) && coreTable.mutate({
-                trans,
-                type: "delete",
-                keys: deleteKeys,
-                criteria
-              }).then((res) => applyMutateResult(deleteKeys.length, res))).then(() => {
-                return keys2.length > offset2 + count && nextChunk(offset2 + limit);
-              });
-            });
-          };
-          return nextChunk(0).then(() => {
-            if (totalFailures.length > 0)
-              throw new ModifyError("Error modifying one or more objects", totalFailures, successCount, failedKeys);
-            return keys2.length;
-          });
-        });
-      });
-    }
-    delete() {
-      var ctx = this._ctx, range = ctx.range;
-      if (isPlainKeyRange(ctx) && (ctx.isPrimKey && !hangsOnDeleteLargeKeyRange || range.type === 3)) {
-        return this._write((trans) => {
-          const { primaryKey } = ctx.table.core.schema;
-          const coreRange = range;
-          return ctx.table.core.count({ trans, query: { index: primaryKey, range: coreRange } }).then((count) => {
-            return ctx.table.core.mutate({ trans, type: "deleteRange", range: coreRange }).then(({ failures, lastResult, results, numFailures }) => {
-              if (numFailures)
-                throw new ModifyError("Could not delete some values", Object.keys(failures).map((pos) => failures[pos]), count - numFailures);
-              return count - numFailures;
-            });
-          });
-        });
-      }
-      return this.modify(deleteCallback);
-    }
-  };
-  var deleteCallback = (value, ctx) => ctx.value = null;
-  function createCollectionConstructor(db) {
-    return makeClassConstructor(Collection.prototype, function Collection2(whereClause, keyRangeGenerator) {
-      this.db = db;
-      let keyRange = AnyRange, error = null;
-      if (keyRangeGenerator)
-        try {
-          keyRange = keyRangeGenerator();
-        } catch (ex) {
-          error = ex;
-        }
-      const whereCtx = whereClause._ctx;
-      const table = whereCtx.table;
-      const readingHook = table.hook.reading.fire;
-      this._ctx = {
-        table,
-        index: whereCtx.index,
-        isPrimKey: !whereCtx.index || table.schema.primKey.keyPath && whereCtx.index === table.schema.primKey.name,
-        range: keyRange,
-        keysOnly: false,
-        dir: "next",
-        unique: "",
-        algorithm: null,
-        filter: null,
-        replayFilter: null,
-        justLimit: true,
-        isMatch: null,
-        offset: 0,
-        limit: Infinity,
-        error,
-        or: whereCtx.or,
-        valueMapper: readingHook !== mirror ? readingHook : null
-      };
-    });
-  }
-  function simpleCompare(a, b) {
-    return a < b ? -1 : a === b ? 0 : 1;
-  }
-  function simpleCompareReverse(a, b) {
-    return a > b ? -1 : a === b ? 0 : 1;
-  }
-  function fail(collectionOrWhereClause, err, T) {
-    var collection = collectionOrWhereClause instanceof WhereClause ? new collectionOrWhereClause.Collection(collectionOrWhereClause) : collectionOrWhereClause;
-    collection._ctx.error = T ? new T(err) : new TypeError(err);
-    return collection;
-  }
-  function emptyCollection(whereClause) {
-    return new whereClause.Collection(whereClause, () => rangeEqual("")).limit(0);
-  }
-  function upperFactory(dir) {
-    return dir === "next" ? (s) => s.toUpperCase() : (s) => s.toLowerCase();
-  }
-  function lowerFactory(dir) {
-    return dir === "next" ? (s) => s.toLowerCase() : (s) => s.toUpperCase();
-  }
-  function nextCasing(key, lowerKey, upperNeedle, lowerNeedle, cmp2, dir) {
-    var length = Math.min(key.length, lowerNeedle.length);
-    var llp = -1;
-    for (var i = 0; i < length; ++i) {
-      var lwrKeyChar = lowerKey[i];
-      if (lwrKeyChar !== lowerNeedle[i]) {
-        if (cmp2(key[i], upperNeedle[i]) < 0)
-          return key.substr(0, i) + upperNeedle[i] + upperNeedle.substr(i + 1);
-        if (cmp2(key[i], lowerNeedle[i]) < 0)
-          return key.substr(0, i) + lowerNeedle[i] + upperNeedle.substr(i + 1);
-        if (llp >= 0)
-          return key.substr(0, llp) + lowerKey[llp] + upperNeedle.substr(llp + 1);
-        return null;
-      }
-      if (cmp2(key[i], lwrKeyChar) < 0)
-        llp = i;
-    }
-    if (length < lowerNeedle.length && dir === "next")
-      return key + upperNeedle.substr(key.length);
-    if (length < key.length && dir === "prev")
-      return key.substr(0, upperNeedle.length);
-    return llp < 0 ? null : key.substr(0, llp) + lowerNeedle[llp] + upperNeedle.substr(llp + 1);
-  }
-  function addIgnoreCaseAlgorithm(whereClause, match, needles, suffix) {
-    var upper, lower, compare, upperNeedles, lowerNeedles, direction, nextKeySuffix, needlesLen = needles.length;
-    if (!needles.every((s) => typeof s === "string")) {
-      return fail(whereClause, STRING_EXPECTED);
-    }
-    function initDirection(dir) {
-      upper = upperFactory(dir);
-      lower = lowerFactory(dir);
-      compare = dir === "next" ? simpleCompare : simpleCompareReverse;
-      var needleBounds = needles.map(function(needle) {
-        return { lower: lower(needle), upper: upper(needle) };
-      }).sort(function(a, b) {
-        return compare(a.lower, b.lower);
-      });
-      upperNeedles = needleBounds.map(function(nb) {
-        return nb.upper;
-      });
-      lowerNeedles = needleBounds.map(function(nb) {
-        return nb.lower;
-      });
-      direction = dir;
-      nextKeySuffix = dir === "next" ? "" : suffix;
-    }
-    initDirection("next");
-    var c = new whereClause.Collection(whereClause, () => createRange(upperNeedles[0], lowerNeedles[needlesLen - 1] + suffix));
-    c._ondirectionchange = function(direction2) {
-      initDirection(direction2);
-    };
-    var firstPossibleNeedle = 0;
-    c._addAlgorithm(function(cursor, advance, resolve) {
-      var key = cursor.key;
-      if (typeof key !== "string")
-        return false;
-      var lowerKey = lower(key);
-      if (match(lowerKey, lowerNeedles, firstPossibleNeedle)) {
-        return true;
-      } else {
-        var lowestPossibleCasing = null;
-        for (var i = firstPossibleNeedle; i < needlesLen; ++i) {
-          var casing = nextCasing(key, lowerKey, upperNeedles[i], lowerNeedles[i], compare, direction);
-          if (casing === null && lowestPossibleCasing === null)
-            firstPossibleNeedle = i + 1;
-          else if (lowestPossibleCasing === null || compare(lowestPossibleCasing, casing) > 0) {
-            lowestPossibleCasing = casing;
-          }
-        }
-        if (lowestPossibleCasing !== null) {
-          advance(function() {
-            cursor.continue(lowestPossibleCasing + nextKeySuffix);
-          });
-        } else {
-          advance(resolve);
-        }
-        return false;
-      }
-    });
-    return c;
-  }
-  function createRange(lower, upper, lowerOpen, upperOpen) {
-    return {
-      type: 2,
-      lower,
-      upper,
-      lowerOpen,
-      upperOpen
-    };
-  }
-  function rangeEqual(value) {
-    return {
-      type: 1,
-      lower: value,
-      upper: value
-    };
-  }
-  var WhereClause = class {
-    get Collection() {
-      return this._ctx.table.db.Collection;
-    }
-    between(lower, upper, includeLower, includeUpper) {
-      includeLower = includeLower !== false;
-      includeUpper = includeUpper === true;
-      try {
-        if (this._cmp(lower, upper) > 0 || this._cmp(lower, upper) === 0 && (includeLower || includeUpper) && !(includeLower && includeUpper))
-          return emptyCollection(this);
-        return new this.Collection(this, () => createRange(lower, upper, !includeLower, !includeUpper));
-      } catch (e) {
-        return fail(this, INVALID_KEY_ARGUMENT);
-      }
-    }
-    equals(value) {
-      if (value == null)
-        return fail(this, INVALID_KEY_ARGUMENT);
-      return new this.Collection(this, () => rangeEqual(value));
-    }
-    above(value) {
-      if (value == null)
-        return fail(this, INVALID_KEY_ARGUMENT);
-      return new this.Collection(this, () => createRange(value, void 0, true));
-    }
-    aboveOrEqual(value) {
-      if (value == null)
-        return fail(this, INVALID_KEY_ARGUMENT);
-      return new this.Collection(this, () => createRange(value, void 0, false));
-    }
-    below(value) {
-      if (value == null)
-        return fail(this, INVALID_KEY_ARGUMENT);
-      return new this.Collection(this, () => createRange(void 0, value, false, true));
-    }
-    belowOrEqual(value) {
-      if (value == null)
-        return fail(this, INVALID_KEY_ARGUMENT);
-      return new this.Collection(this, () => createRange(void 0, value));
-    }
-    startsWith(str) {
-      if (typeof str !== "string")
-        return fail(this, STRING_EXPECTED);
-      return this.between(str, str + maxString, true, true);
-    }
-    startsWithIgnoreCase(str) {
-      if (str === "")
-        return this.startsWith(str);
-      return addIgnoreCaseAlgorithm(this, (x, a) => x.indexOf(a[0]) === 0, [str], maxString);
-    }
-    equalsIgnoreCase(str) {
-      return addIgnoreCaseAlgorithm(this, (x, a) => x === a[0], [str], "");
-    }
-    anyOfIgnoreCase() {
-      var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
-      if (set.length === 0)
-        return emptyCollection(this);
-      return addIgnoreCaseAlgorithm(this, (x, a) => a.indexOf(x) !== -1, set, "");
-    }
-    startsWithAnyOfIgnoreCase() {
-      var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
-      if (set.length === 0)
-        return emptyCollection(this);
-      return addIgnoreCaseAlgorithm(this, (x, a) => a.some((n) => x.indexOf(n) === 0), set, maxString);
-    }
-    anyOf() {
-      const set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
-      let compare = this._cmp;
-      try {
-        set.sort(compare);
-      } catch (e) {
-        return fail(this, INVALID_KEY_ARGUMENT);
-      }
-      if (set.length === 0)
-        return emptyCollection(this);
-      const c = new this.Collection(this, () => createRange(set[0], set[set.length - 1]));
-      c._ondirectionchange = (direction) => {
-        compare = direction === "next" ? this._ascending : this._descending;
-        set.sort(compare);
-      };
-      let i = 0;
-      c._addAlgorithm((cursor, advance, resolve) => {
-        const key = cursor.key;
-        while (compare(key, set[i]) > 0) {
-          ++i;
-          if (i === set.length) {
-            advance(resolve);
-            return false;
-          }
-        }
-        if (compare(key, set[i]) === 0) {
-          return true;
-        } else {
-          advance(() => {
-            cursor.continue(set[i]);
-          });
-          return false;
-        }
-      });
-      return c;
-    }
-    notEqual(value) {
-      return this.inAnyRange([[minKey, value], [value, this.db._maxKey]], { includeLowers: false, includeUppers: false });
-    }
-    noneOf() {
-      const set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
-      if (set.length === 0)
-        return new this.Collection(this);
-      try {
-        set.sort(this._ascending);
-      } catch (e) {
-        return fail(this, INVALID_KEY_ARGUMENT);
-      }
-      const ranges = set.reduce((res, val) => res ? res.concat([[res[res.length - 1][1], val]]) : [[minKey, val]], null);
-      ranges.push([set[set.length - 1], this.db._maxKey]);
-      return this.inAnyRange(ranges, { includeLowers: false, includeUppers: false });
-    }
-    inAnyRange(ranges, options) {
-      const cmp2 = this._cmp, ascending = this._ascending, descending = this._descending, min2 = this._min, max2 = this._max;
-      if (ranges.length === 0)
-        return emptyCollection(this);
-      if (!ranges.every((range) => range[0] !== void 0 && range[1] !== void 0 && ascending(range[0], range[1]) <= 0)) {
-        return fail(this, "First argument to inAnyRange() must be an Array of two-value Arrays [lower,upper] where upper must not be lower than lower", exceptions.InvalidArgument);
-      }
-      const includeLowers = !options || options.includeLowers !== false;
-      const includeUppers = options && options.includeUppers === true;
-      function addRange2(ranges2, newRange) {
-        let i = 0, l = ranges2.length;
-        for (; i < l; ++i) {
-          const range = ranges2[i];
-          if (cmp2(newRange[0], range[1]) < 0 && cmp2(newRange[1], range[0]) > 0) {
-            range[0] = min2(range[0], newRange[0]);
-            range[1] = max2(range[1], newRange[1]);
-            break;
-          }
-        }
-        if (i === l)
-          ranges2.push(newRange);
-        return ranges2;
-      }
-      let sortDirection = ascending;
-      function rangeSorter(a, b) {
-        return sortDirection(a[0], b[0]);
-      }
-      let set;
-      try {
-        set = ranges.reduce(addRange2, []);
-        set.sort(rangeSorter);
-      } catch (ex) {
-        return fail(this, INVALID_KEY_ARGUMENT);
-      }
-      let rangePos = 0;
-      const keyIsBeyondCurrentEntry = includeUppers ? (key) => ascending(key, set[rangePos][1]) > 0 : (key) => ascending(key, set[rangePos][1]) >= 0;
-      const keyIsBeforeCurrentEntry = includeLowers ? (key) => descending(key, set[rangePos][0]) > 0 : (key) => descending(key, set[rangePos][0]) >= 0;
-      function keyWithinCurrentRange(key) {
-        return !keyIsBeyondCurrentEntry(key) && !keyIsBeforeCurrentEntry(key);
-      }
-      let checkKey = keyIsBeyondCurrentEntry;
-      const c = new this.Collection(this, () => createRange(set[0][0], set[set.length - 1][1], !includeLowers, !includeUppers));
-      c._ondirectionchange = (direction) => {
-        if (direction === "next") {
-          checkKey = keyIsBeyondCurrentEntry;
-          sortDirection = ascending;
-        } else {
-          checkKey = keyIsBeforeCurrentEntry;
-          sortDirection = descending;
-        }
-        set.sort(rangeSorter);
-      };
-      c._addAlgorithm((cursor, advance, resolve) => {
-        var key = cursor.key;
-        while (checkKey(key)) {
-          ++rangePos;
-          if (rangePos === set.length) {
-            advance(resolve);
-            return false;
-          }
-        }
-        if (keyWithinCurrentRange(key)) {
-          return true;
-        } else if (this._cmp(key, set[rangePos][1]) === 0 || this._cmp(key, set[rangePos][0]) === 0) {
-          return false;
-        } else {
-          advance(() => {
-            if (sortDirection === ascending)
-              cursor.continue(set[rangePos][0]);
-            else
-              cursor.continue(set[rangePos][1]);
-          });
-          return false;
-        }
-      });
-      return c;
-    }
-    startsWithAnyOf() {
-      const set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
-      if (!set.every((s) => typeof s === "string")) {
-        return fail(this, "startsWithAnyOf() only works with strings");
-      }
-      if (set.length === 0)
-        return emptyCollection(this);
-      return this.inAnyRange(set.map((str) => [str, str + maxString]));
-    }
-  };
-  function createWhereClauseConstructor(db) {
-    return makeClassConstructor(WhereClause.prototype, function WhereClause2(table, index, orCollection) {
-      this.db = db;
-      this._ctx = {
-        table,
-        index: index === ":id" ? null : index,
-        or: orCollection
-      };
-      const indexedDB2 = db._deps.indexedDB;
-      if (!indexedDB2)
-        throw new exceptions.MissingAPI();
-      this._cmp = this._ascending = indexedDB2.cmp.bind(indexedDB2);
-      this._descending = (a, b) => indexedDB2.cmp(b, a);
-      this._max = (a, b) => indexedDB2.cmp(a, b) > 0 ? a : b;
-      this._min = (a, b) => indexedDB2.cmp(a, b) < 0 ? a : b;
-      this._IDBKeyRange = db._deps.IDBKeyRange;
-    });
-  }
-  function eventRejectHandler(reject) {
-    return wrap(function(event) {
-      preventDefault(event);
-      reject(event.target.error);
-      return false;
-    });
-  }
-  function preventDefault(event) {
-    if (event.stopPropagation)
-      event.stopPropagation();
-    if (event.preventDefault)
-      event.preventDefault();
-  }
-  var DEXIE_STORAGE_MUTATED_EVENT_NAME = "storagemutated";
-  var STORAGE_MUTATED_DOM_EVENT_NAME = "x-storagemutated-1";
-  var globalEvents = Events(null, DEXIE_STORAGE_MUTATED_EVENT_NAME);
-  var Transaction = class {
-    _lock() {
-      assert(!PSD.global);
-      ++this._reculock;
-      if (this._reculock === 1 && !PSD.global)
-        PSD.lockOwnerFor = this;
-      return this;
-    }
-    _unlock() {
-      assert(!PSD.global);
-      if (--this._reculock === 0) {
-        if (!PSD.global)
-          PSD.lockOwnerFor = null;
-        while (this._blockedFuncs.length > 0 && !this._locked()) {
-          var fnAndPSD = this._blockedFuncs.shift();
-          try {
-            usePSD(fnAndPSD[1], fnAndPSD[0]);
-          } catch (e) {
-          }
-        }
-      }
-      return this;
-    }
-    _locked() {
-      return this._reculock && PSD.lockOwnerFor !== this;
-    }
-    create(idbtrans) {
-      if (!this.mode)
-        return this;
-      const idbdb = this.db.idbdb;
-      const dbOpenError = this.db._state.dbOpenError;
-      assert(!this.idbtrans);
-      if (!idbtrans && !idbdb) {
-        switch (dbOpenError && dbOpenError.name) {
-          case "DatabaseClosedError":
-            throw new exceptions.DatabaseClosed(dbOpenError);
-          case "MissingAPIError":
-            throw new exceptions.MissingAPI(dbOpenError.message, dbOpenError);
-          default:
-            throw new exceptions.OpenFailed(dbOpenError);
-        }
-      }
-      if (!this.active)
-        throw new exceptions.TransactionInactive();
-      assert(this._completion._state === null);
-      idbtrans = this.idbtrans = idbtrans || (this.db.core ? this.db.core.transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability }) : idbdb.transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability }));
-      idbtrans.onerror = wrap((ev) => {
-        preventDefault(ev);
-        this._reject(idbtrans.error);
-      });
-      idbtrans.onabort = wrap((ev) => {
-        preventDefault(ev);
-        this.active && this._reject(new exceptions.Abort(idbtrans.error));
-        this.active = false;
-        this.on("abort").fire(ev);
-      });
-      idbtrans.oncomplete = wrap(() => {
-        this.active = false;
-        this._resolve();
-        if ("mutatedParts" in idbtrans) {
-          globalEvents.storagemutated.fire(idbtrans["mutatedParts"]);
-        }
-      });
-      return this;
-    }
-    _promise(mode, fn2, bWriteLock) {
-      if (mode === "readwrite" && this.mode !== "readwrite")
-        return rejection(new exceptions.ReadOnly("Transaction is readonly"));
-      if (!this.active)
-        return rejection(new exceptions.TransactionInactive());
-      if (this._locked()) {
-        return new DexiePromise((resolve, reject) => {
-          this._blockedFuncs.push([() => {
-            this._promise(mode, fn2, bWriteLock).then(resolve, reject);
-          }, PSD]);
-        });
-      } else if (bWriteLock) {
-        return newScope(() => {
-          var p2 = new DexiePromise((resolve, reject) => {
-            this._lock();
-            const rv = fn2(resolve, reject, this);
-            if (rv && rv.then)
-              rv.then(resolve, reject);
-          });
-          p2.finally(() => this._unlock());
-          p2._lib = true;
-          return p2;
-        });
-      } else {
-        var p = new DexiePromise((resolve, reject) => {
-          var rv = fn2(resolve, reject, this);
-          if (rv && rv.then)
-            rv.then(resolve, reject);
-        });
-        p._lib = true;
-        return p;
-      }
-    }
-    _root() {
-      return this.parent ? this.parent._root() : this;
-    }
-    waitFor(promiseLike) {
-      var root = this._root();
-      const promise = DexiePromise.resolve(promiseLike);
-      if (root._waitingFor) {
-        root._waitingFor = root._waitingFor.then(() => promise);
-      } else {
-        root._waitingFor = promise;
-        root._waitingQueue = [];
-        var store = root.idbtrans.objectStore(root.storeNames[0]);
-        (function spin() {
-          ++root._spinCount;
-          while (root._waitingQueue.length)
-            root._waitingQueue.shift()();
-          if (root._waitingFor)
-            store.get(-Infinity).onsuccess = spin;
-        })();
-      }
-      var currentWaitPromise = root._waitingFor;
-      return new DexiePromise((resolve, reject) => {
-        promise.then((res) => root._waitingQueue.push(wrap(resolve.bind(null, res))), (err) => root._waitingQueue.push(wrap(reject.bind(null, err)))).finally(() => {
-          if (root._waitingFor === currentWaitPromise) {
-            root._waitingFor = null;
-          }
-        });
-      });
-    }
-    abort() {
-      if (this.active) {
-        this.active = false;
-        if (this.idbtrans)
-          this.idbtrans.abort();
-        this._reject(new exceptions.Abort());
-      }
-    }
-    table(tableName) {
-      const memoizedTables = this._memoizedTables || (this._memoizedTables = {});
-      if (hasOwn(memoizedTables, tableName))
-        return memoizedTables[tableName];
-      const tableSchema = this.schema[tableName];
-      if (!tableSchema) {
-        throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
-      }
-      const transactionBoundTable = new this.db.Table(tableName, tableSchema, this);
-      transactionBoundTable.core = this.db.core.table(tableName);
-      memoizedTables[tableName] = transactionBoundTable;
-      return transactionBoundTable;
-    }
-  };
-  function createTransactionConstructor(db) {
-    return makeClassConstructor(Transaction.prototype, function Transaction2(mode, storeNames, dbschema, chromeTransactionDurability, parent) {
-      this.db = db;
-      this.mode = mode;
-      this.storeNames = storeNames;
-      this.schema = dbschema;
-      this.chromeTransactionDurability = chromeTransactionDurability;
-      this.idbtrans = null;
-      this.on = Events(this, "complete", "error", "abort");
-      this.parent = parent || null;
-      this.active = true;
-      this._reculock = 0;
-      this._blockedFuncs = [];
-      this._resolve = null;
-      this._reject = null;
-      this._waitingFor = null;
-      this._waitingQueue = null;
-      this._spinCount = 0;
-      this._completion = new DexiePromise((resolve, reject) => {
-        this._resolve = resolve;
-        this._reject = reject;
-      });
-      this._completion.then(() => {
-        this.active = false;
-        this.on.complete.fire();
-      }, (e) => {
-        var wasActive = this.active;
-        this.active = false;
-        this.on.error.fire(e);
-        this.parent ? this.parent._reject(e) : wasActive && this.idbtrans && this.idbtrans.abort();
-        return rejection(e);
-      });
-    });
-  }
-  function createIndexSpec(name, keyPath, unique, multi, auto2, compound, isPrimKey) {
-    return {
-      name,
-      keyPath,
-      unique,
-      multi,
-      auto: auto2,
-      compound,
-      src: (unique && !isPrimKey ? "&" : "") + (multi ? "*" : "") + (auto2 ? "++" : "") + nameFromKeyPath(keyPath)
-    };
-  }
-  function nameFromKeyPath(keyPath) {
-    return typeof keyPath === "string" ? keyPath : keyPath ? "[" + [].join.call(keyPath, "+") + "]" : "";
-  }
-  function createTableSchema(name, primKey, indexes) {
-    return {
-      name,
-      primKey,
-      indexes,
-      mappedClass: null,
-      idxByName: arrayToObject(indexes, (index) => [index.name, index])
-    };
-  }
-  function safariMultiStoreFix(storeNames) {
-    return storeNames.length === 1 ? storeNames[0] : storeNames;
-  }
-  var getMaxKey = (IdbKeyRange) => {
-    try {
-      IdbKeyRange.only([[]]);
-      getMaxKey = () => [[]];
-      return [[]];
-    } catch (e) {
-      getMaxKey = () => maxString;
-      return maxString;
-    }
-  };
-  function getKeyExtractor(keyPath) {
-    if (keyPath == null) {
-      return () => void 0;
-    } else if (typeof keyPath === "string") {
-      return getSinglePathKeyExtractor(keyPath);
-    } else {
-      return (obj) => getByKeyPath(obj, keyPath);
-    }
-  }
-  function getSinglePathKeyExtractor(keyPath) {
-    const split = keyPath.split(".");
-    if (split.length === 1) {
-      return (obj) => obj[keyPath];
-    } else {
-      return (obj) => getByKeyPath(obj, keyPath);
-    }
-  }
-  function arrayify(arrayLike) {
-    return [].slice.call(arrayLike);
-  }
-  var _id_counter = 0;
-  function getKeyPathAlias(keyPath) {
-    return keyPath == null ? ":id" : typeof keyPath === "string" ? keyPath : `[${keyPath.join("+")}]`;
-  }
-  function createDBCore(db, IdbKeyRange, tmpTrans) {
-    function extractSchema(db2, trans) {
-      const tables2 = arrayify(db2.objectStoreNames);
-      return {
-        schema: {
-          name: db2.name,
-          tables: tables2.map((table) => trans.objectStore(table)).map((store) => {
-            const { keyPath, autoIncrement } = store;
-            const compound = isArray(keyPath);
-            const outbound = keyPath == null;
-            const indexByKeyPath = {};
-            const result = {
-              name: store.name,
-              primaryKey: {
-                name: null,
-                isPrimaryKey: true,
-                outbound,
-                compound,
-                keyPath,
-                autoIncrement,
-                unique: true,
-                extractKey: getKeyExtractor(keyPath)
-              },
-              indexes: arrayify(store.indexNames).map((indexName) => store.index(indexName)).map((index) => {
-                const { name, unique, multiEntry, keyPath: keyPath2 } = index;
-                const compound2 = isArray(keyPath2);
-                const result2 = {
-                  name,
-                  compound: compound2,
-                  keyPath: keyPath2,
-                  unique,
-                  multiEntry,
-                  extractKey: getKeyExtractor(keyPath2)
-                };
-                indexByKeyPath[getKeyPathAlias(keyPath2)] = result2;
-                return result2;
-              }),
-              getIndexByKeyPath: (keyPath2) => indexByKeyPath[getKeyPathAlias(keyPath2)]
-            };
-            indexByKeyPath[":id"] = result.primaryKey;
-            if (keyPath != null) {
-              indexByKeyPath[getKeyPathAlias(keyPath)] = result.primaryKey;
-            }
-            return result;
-          })
-        },
-        hasGetAll: tables2.length > 0 && "getAll" in trans.objectStore(tables2[0]) && !(typeof navigator !== "undefined" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604)
-      };
-    }
-    function makeIDBKeyRange(range) {
-      if (range.type === 3)
-        return null;
-      if (range.type === 4)
-        throw new Error("Cannot convert never type to IDBKeyRange");
-      const { lower, upper, lowerOpen, upperOpen } = range;
-      const idbRange = lower === void 0 ? upper === void 0 ? null : IdbKeyRange.upperBound(upper, !!upperOpen) : upper === void 0 ? IdbKeyRange.lowerBound(lower, !!lowerOpen) : IdbKeyRange.bound(lower, upper, !!lowerOpen, !!upperOpen);
-      return idbRange;
-    }
-    function createDbCoreTable(tableSchema) {
-      const tableName = tableSchema.name;
-      function mutate({ trans, type: type2, keys: keys2, values, range }) {
-        return new Promise((resolve, reject) => {
-          resolve = wrap(resolve);
-          const store = trans.objectStore(tableName);
-          const outbound = store.keyPath == null;
-          const isAddOrPut = type2 === "put" || type2 === "add";
-          if (!isAddOrPut && type2 !== "delete" && type2 !== "deleteRange")
-            throw new Error("Invalid operation type: " + type2);
-          const { length } = keys2 || values || { length: 1 };
-          if (keys2 && values && keys2.length !== values.length) {
-            throw new Error("Given keys array must have same length as given values array.");
-          }
-          if (length === 0)
-            return resolve({ numFailures: 0, failures: {}, results: [], lastResult: void 0 });
-          let req;
-          const reqs = [];
-          const failures = [];
-          let numFailures = 0;
-          const errorHandler = (event) => {
-            ++numFailures;
-            preventDefault(event);
-          };
-          if (type2 === "deleteRange") {
-            if (range.type === 4)
-              return resolve({ numFailures, failures, results: [], lastResult: void 0 });
-            if (range.type === 3)
-              reqs.push(req = store.clear());
-            else
-              reqs.push(req = store.delete(makeIDBKeyRange(range)));
-          } else {
-            const [args1, args2] = isAddOrPut ? outbound ? [values, keys2] : [values, null] : [keys2, null];
-            if (isAddOrPut) {
-              for (let i = 0; i < length; ++i) {
-                reqs.push(req = args2 && args2[i] !== void 0 ? store[type2](args1[i], args2[i]) : store[type2](args1[i]));
-                req.onerror = errorHandler;
-              }
-            } else {
-              for (let i = 0; i < length; ++i) {
-                reqs.push(req = store[type2](args1[i]));
-                req.onerror = errorHandler;
-              }
-            }
-          }
-          const done = (event) => {
-            const lastResult = event.target.result;
-            reqs.forEach((req2, i) => req2.error != null && (failures[i] = req2.error));
-            resolve({
-              numFailures,
-              failures,
-              results: type2 === "delete" ? keys2 : reqs.map((req2) => req2.result),
-              lastResult
-            });
-          };
-          req.onerror = (event) => {
-            errorHandler(event);
-            done(event);
-          };
-          req.onsuccess = done;
-        });
-      }
-      function openCursor2({ trans, values, query: query2, reverse, unique }) {
-        return new Promise((resolve, reject) => {
-          resolve = wrap(resolve);
-          const { index, range } = query2;
-          const store = trans.objectStore(tableName);
-          const source = index.isPrimaryKey ? store : store.index(index.name);
-          const direction = reverse ? unique ? "prevunique" : "prev" : unique ? "nextunique" : "next";
-          const req = values || !("openKeyCursor" in source) ? source.openCursor(makeIDBKeyRange(range), direction) : source.openKeyCursor(makeIDBKeyRange(range), direction);
-          req.onerror = eventRejectHandler(reject);
-          req.onsuccess = wrap((ev) => {
-            const cursor = req.result;
-            if (!cursor) {
-              resolve(null);
-              return;
-            }
-            cursor.___id = ++_id_counter;
-            cursor.done = false;
-            const _cursorContinue = cursor.continue.bind(cursor);
-            let _cursorContinuePrimaryKey = cursor.continuePrimaryKey;
-            if (_cursorContinuePrimaryKey)
-              _cursorContinuePrimaryKey = _cursorContinuePrimaryKey.bind(cursor);
-            const _cursorAdvance = cursor.advance.bind(cursor);
-            const doThrowCursorIsNotStarted = () => {
-              throw new Error("Cursor not started");
-            };
-            const doThrowCursorIsStopped = () => {
-              throw new Error("Cursor not stopped");
-            };
-            cursor.trans = trans;
-            cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsNotStarted;
-            cursor.fail = wrap(reject);
-            cursor.next = function() {
-              let gotOne = 1;
-              return this.start(() => gotOne-- ? this.continue() : this.stop()).then(() => this);
-            };
-            cursor.start = (callback) => {
-              const iterationPromise = new Promise((resolveIteration, rejectIteration) => {
-                resolveIteration = wrap(resolveIteration);
-                req.onerror = eventRejectHandler(rejectIteration);
-                cursor.fail = rejectIteration;
-                cursor.stop = (value) => {
-                  cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsStopped;
-                  resolveIteration(value);
-                };
-              });
-              const guardedCallback = () => {
-                if (req.result) {
-                  try {
-                    callback();
-                  } catch (err) {
-                    cursor.fail(err);
-                  }
-                } else {
-                  cursor.done = true;
-                  cursor.start = () => {
-                    throw new Error("Cursor behind last entry");
-                  };
-                  cursor.stop();
-                }
-              };
-              req.onsuccess = wrap((ev2) => {
-                req.onsuccess = guardedCallback;
-                guardedCallback();
-              });
-              cursor.continue = _cursorContinue;
-              cursor.continuePrimaryKey = _cursorContinuePrimaryKey;
-              cursor.advance = _cursorAdvance;
-              guardedCallback();
-              return iterationPromise;
-            };
-            resolve(cursor);
-          }, reject);
-        });
-      }
-      function query(hasGetAll2) {
-        return (request) => {
-          return new Promise((resolve, reject) => {
-            resolve = wrap(resolve);
-            const { trans, values, limit, query: query2 } = request;
-            const nonInfinitLimit = limit === Infinity ? void 0 : limit;
-            const { index, range } = query2;
-            const store = trans.objectStore(tableName);
-            const source = index.isPrimaryKey ? store : store.index(index.name);
-            const idbKeyRange = makeIDBKeyRange(range);
-            if (limit === 0)
-              return resolve({ result: [] });
-            if (hasGetAll2) {
-              const req = values ? source.getAll(idbKeyRange, nonInfinitLimit) : source.getAllKeys(idbKeyRange, nonInfinitLimit);
-              req.onsuccess = (event) => resolve({ result: event.target.result });
-              req.onerror = eventRejectHandler(reject);
-            } else {
-              let count = 0;
-              const req = values || !("openKeyCursor" in source) ? source.openCursor(idbKeyRange) : source.openKeyCursor(idbKeyRange);
-              const result = [];
-              req.onsuccess = (event) => {
-                const cursor = req.result;
-                if (!cursor)
-                  return resolve({ result });
-                result.push(values ? cursor.value : cursor.primaryKey);
-                if (++count === limit)
-                  return resolve({ result });
-                cursor.continue();
-              };
-              req.onerror = eventRejectHandler(reject);
-            }
-          });
-        };
-      }
-      return {
-        name: tableName,
-        schema: tableSchema,
-        mutate,
-        getMany({ trans, keys: keys2 }) {
-          return new Promise((resolve, reject) => {
-            resolve = wrap(resolve);
-            const store = trans.objectStore(tableName);
-            const length = keys2.length;
-            const result = new Array(length);
-            let keyCount = 0;
-            let callbackCount = 0;
-            let req;
-            const successHandler = (event) => {
-              const req2 = event.target;
-              if ((result[req2._pos] = req2.result) != null)
-                ;
-              if (++callbackCount === keyCount)
-                resolve(result);
-            };
-            const errorHandler = eventRejectHandler(reject);
-            for (let i = 0; i < length; ++i) {
-              const key = keys2[i];
-              if (key != null) {
-                req = store.get(keys2[i]);
-                req._pos = i;
-                req.onsuccess = successHandler;
-                req.onerror = errorHandler;
-                ++keyCount;
-              }
-            }
-            if (keyCount === 0)
-              resolve(result);
-          });
-        },
-        get({ trans, key }) {
-          return new Promise((resolve, reject) => {
-            resolve = wrap(resolve);
-            const store = trans.objectStore(tableName);
-            const req = store.get(key);
-            req.onsuccess = (event) => resolve(event.target.result);
-            req.onerror = eventRejectHandler(reject);
-          });
-        },
-        query: query(hasGetAll),
-        openCursor: openCursor2,
-        count({ query: query2, trans }) {
-          const { index, range } = query2;
-          return new Promise((resolve, reject) => {
-            const store = trans.objectStore(tableName);
-            const source = index.isPrimaryKey ? store : store.index(index.name);
-            const idbKeyRange = makeIDBKeyRange(range);
-            const req = idbKeyRange ? source.count(idbKeyRange) : source.count();
-            req.onsuccess = wrap((ev) => resolve(ev.target.result));
-            req.onerror = eventRejectHandler(reject);
-          });
-        }
-      };
-    }
-    const { schema, hasGetAll } = extractSchema(db, tmpTrans);
-    const tables = schema.tables.map((tableSchema) => createDbCoreTable(tableSchema));
-    const tableMap = {};
-    tables.forEach((table) => tableMap[table.name] = table);
-    return {
-      stack: "dbcore",
-      transaction: db.transaction.bind(db),
-      table(name) {
-        const result = tableMap[name];
-        if (!result)
-          throw new Error(`Table '${name}' not found`);
-        return tableMap[name];
-      },
-      MIN_KEY: -Infinity,
-      MAX_KEY: getMaxKey(IdbKeyRange),
-      schema
-    };
-  }
-  function createMiddlewareStack(stackImpl, middlewares) {
-    return middlewares.reduce((down, { create }) => ({ ...down, ...create(down) }), stackImpl);
-  }
-  function createMiddlewareStacks(middlewares, idbdb, { IDBKeyRange, indexedDB: indexedDB2 }, tmpTrans) {
-    const dbcore = createMiddlewareStack(createDBCore(idbdb, IDBKeyRange, tmpTrans), middlewares.dbcore);
-    return {
-      dbcore
-    };
-  }
-  function generateMiddlewareStacks({ _novip: db }, tmpTrans) {
-    const idbdb = tmpTrans.db;
-    const stacks = createMiddlewareStacks(db._middlewares, idbdb, db._deps, tmpTrans);
-    db.core = stacks.dbcore;
-    db.tables.forEach((table) => {
-      const tableName = table.name;
-      if (db.core.schema.tables.some((tbl) => tbl.name === tableName)) {
-        table.core = db.core.table(tableName);
-        if (db[tableName] instanceof db.Table) {
-          db[tableName].core = table.core;
-        }
-      }
-    });
-  }
-  function setApiOnPlace({ _novip: db }, objs, tableNames, dbschema) {
-    tableNames.forEach((tableName) => {
-      const schema = dbschema[tableName];
-      objs.forEach((obj) => {
-        const propDesc = getPropertyDescriptor(obj, tableName);
-        if (!propDesc || "value" in propDesc && propDesc.value === void 0) {
-          if (obj === db.Transaction.prototype || obj instanceof db.Transaction) {
-            setProp(obj, tableName, {
-              get() {
-                return this.table(tableName);
-              },
-              set(value) {
-                defineProperty(this, tableName, { value, writable: true, configurable: true, enumerable: true });
-              }
-            });
-          } else {
-            obj[tableName] = new db.Table(tableName, schema);
-          }
-        }
-      });
-    });
-  }
-  function removeTablesApi({ _novip: db }, objs) {
-    objs.forEach((obj) => {
-      for (let key in obj) {
-        if (obj[key] instanceof db.Table)
-          delete obj[key];
-      }
-    });
-  }
-  function lowerVersionFirst(a, b) {
-    return a._cfg.version - b._cfg.version;
-  }
-  function runUpgraders(db, oldVersion, idbUpgradeTrans, reject) {
-    const globalSchema = db._dbSchema;
-    const trans = db._createTransaction("readwrite", db._storeNames, globalSchema);
-    trans.create(idbUpgradeTrans);
-    trans._completion.catch(reject);
-    const rejectTransaction = trans._reject.bind(trans);
-    const transless = PSD.transless || PSD;
-    newScope(() => {
-      PSD.trans = trans;
-      PSD.transless = transless;
-      if (oldVersion === 0) {
-        keys(globalSchema).forEach((tableName) => {
-          createTable(idbUpgradeTrans, tableName, globalSchema[tableName].primKey, globalSchema[tableName].indexes);
-        });
-        generateMiddlewareStacks(db, idbUpgradeTrans);
-        DexiePromise.follow(() => db.on.populate.fire(trans)).catch(rejectTransaction);
-      } else
-        updateTablesAndIndexes(db, oldVersion, trans, idbUpgradeTrans).catch(rejectTransaction);
-    });
-  }
-  function updateTablesAndIndexes({ _novip: db }, oldVersion, trans, idbUpgradeTrans) {
-    const queue = [];
-    const versions = db._versions;
-    let globalSchema = db._dbSchema = buildGlobalSchema(db, db.idbdb, idbUpgradeTrans);
-    let anyContentUpgraderHasRun = false;
-    const versToRun = versions.filter((v) => v._cfg.version >= oldVersion);
-    versToRun.forEach((version) => {
-      queue.push(() => {
-        const oldSchema = globalSchema;
-        const newSchema = version._cfg.dbschema;
-        adjustToExistingIndexNames(db, oldSchema, idbUpgradeTrans);
-        adjustToExistingIndexNames(db, newSchema, idbUpgradeTrans);
-        globalSchema = db._dbSchema = newSchema;
-        const diff = getSchemaDiff(oldSchema, newSchema);
-        diff.add.forEach((tuple) => {
-          createTable(idbUpgradeTrans, tuple[0], tuple[1].primKey, tuple[1].indexes);
-        });
-        diff.change.forEach((change) => {
-          if (change.recreate) {
-            throw new exceptions.Upgrade("Not yet support for changing primary key");
-          } else {
-            const store = idbUpgradeTrans.objectStore(change.name);
-            change.add.forEach((idx) => addIndex(store, idx));
-            change.change.forEach((idx) => {
-              store.deleteIndex(idx.name);
-              addIndex(store, idx);
-            });
-            change.del.forEach((idxName) => store.deleteIndex(idxName));
-          }
-        });
-        const contentUpgrade = version._cfg.contentUpgrade;
-        if (contentUpgrade && version._cfg.version > oldVersion) {
-          generateMiddlewareStacks(db, idbUpgradeTrans);
-          trans._memoizedTables = {};
-          anyContentUpgraderHasRun = true;
-          let upgradeSchema = shallowClone(newSchema);
-          diff.del.forEach((table) => {
-            upgradeSchema[table] = oldSchema[table];
-          });
-          removeTablesApi(db, [db.Transaction.prototype]);
-          setApiOnPlace(db, [db.Transaction.prototype], keys(upgradeSchema), upgradeSchema);
-          trans.schema = upgradeSchema;
-          const contentUpgradeIsAsync = isAsyncFunction(contentUpgrade);
-          if (contentUpgradeIsAsync) {
-            incrementExpectedAwaits();
-          }
-          let returnValue;
-          const promiseFollowed = DexiePromise.follow(() => {
-            returnValue = contentUpgrade(trans);
-            if (returnValue) {
-              if (contentUpgradeIsAsync) {
-                var decrementor = decrementExpectedAwaits.bind(null, null);
-                returnValue.then(decrementor, decrementor);
-              }
-            }
-          });
-          return returnValue && typeof returnValue.then === "function" ? DexiePromise.resolve(returnValue) : promiseFollowed.then(() => returnValue);
-        }
-      });
-      queue.push((idbtrans) => {
-        if (!anyContentUpgraderHasRun || !hasIEDeleteObjectStoreBug) {
-          const newSchema = version._cfg.dbschema;
-          deleteRemovedTables(newSchema, idbtrans);
-        }
-        removeTablesApi(db, [db.Transaction.prototype]);
-        setApiOnPlace(db, [db.Transaction.prototype], db._storeNames, db._dbSchema);
-        trans.schema = db._dbSchema;
-      });
-    });
-    function runQueue() {
-      return queue.length ? DexiePromise.resolve(queue.shift()(trans.idbtrans)).then(runQueue) : DexiePromise.resolve();
-    }
-    return runQueue().then(() => {
-      createMissingTables(globalSchema, idbUpgradeTrans);
-    });
-  }
-  function getSchemaDiff(oldSchema, newSchema) {
-    const diff = {
-      del: [],
-      add: [],
-      change: []
-    };
-    let table;
-    for (table in oldSchema) {
-      if (!newSchema[table])
-        diff.del.push(table);
-    }
-    for (table in newSchema) {
-      const oldDef = oldSchema[table], newDef = newSchema[table];
-      if (!oldDef) {
-        diff.add.push([table, newDef]);
-      } else {
-        const change = {
-          name: table,
-          def: newDef,
-          recreate: false,
-          del: [],
-          add: [],
-          change: []
-        };
-        if ("" + (oldDef.primKey.keyPath || "") !== "" + (newDef.primKey.keyPath || "") || oldDef.primKey.auto !== newDef.primKey.auto && !isIEOrEdge) {
-          change.recreate = true;
-          diff.change.push(change);
-        } else {
-          const oldIndexes = oldDef.idxByName;
-          const newIndexes = newDef.idxByName;
-          let idxName;
-          for (idxName in oldIndexes) {
-            if (!newIndexes[idxName])
-              change.del.push(idxName);
-          }
-          for (idxName in newIndexes) {
-            const oldIdx = oldIndexes[idxName], newIdx = newIndexes[idxName];
-            if (!oldIdx)
-              change.add.push(newIdx);
-            else if (oldIdx.src !== newIdx.src)
-              change.change.push(newIdx);
-          }
-          if (change.del.length > 0 || change.add.length > 0 || change.change.length > 0) {
-            diff.change.push(change);
-          }
-        }
-      }
-    }
-    return diff;
-  }
-  function createTable(idbtrans, tableName, primKey, indexes) {
-    const store = idbtrans.db.createObjectStore(tableName, primKey.keyPath ? { keyPath: primKey.keyPath, autoIncrement: primKey.auto } : { autoIncrement: primKey.auto });
-    indexes.forEach((idx) => addIndex(store, idx));
-    return store;
-  }
-  function createMissingTables(newSchema, idbtrans) {
-    keys(newSchema).forEach((tableName) => {
-      if (!idbtrans.db.objectStoreNames.contains(tableName)) {
-        createTable(idbtrans, tableName, newSchema[tableName].primKey, newSchema[tableName].indexes);
-      }
-    });
-  }
-  function deleteRemovedTables(newSchema, idbtrans) {
-    [].slice.call(idbtrans.db.objectStoreNames).forEach((storeName) => newSchema[storeName] == null && idbtrans.db.deleteObjectStore(storeName));
-  }
-  function addIndex(store, idx) {
-    store.createIndex(idx.name, idx.keyPath, { unique: idx.unique, multiEntry: idx.multi });
-  }
-  function buildGlobalSchema(db, idbdb, tmpTrans) {
-    const globalSchema = {};
-    const dbStoreNames = slice(idbdb.objectStoreNames, 0);
-    dbStoreNames.forEach((storeName) => {
-      const store = tmpTrans.objectStore(storeName);
-      let keyPath = store.keyPath;
-      const primKey = createIndexSpec(nameFromKeyPath(keyPath), keyPath || "", false, false, !!store.autoIncrement, keyPath && typeof keyPath !== "string", true);
-      const indexes = [];
-      for (let j = 0; j < store.indexNames.length; ++j) {
-        const idbindex = store.index(store.indexNames[j]);
-        keyPath = idbindex.keyPath;
-        var index = createIndexSpec(idbindex.name, keyPath, !!idbindex.unique, !!idbindex.multiEntry, false, keyPath && typeof keyPath !== "string", false);
-        indexes.push(index);
-      }
-      globalSchema[storeName] = createTableSchema(storeName, primKey, indexes);
-    });
-    return globalSchema;
-  }
-  function readGlobalSchema({ _novip: db }, idbdb, tmpTrans) {
-    db.verno = idbdb.version / 10;
-    const globalSchema = db._dbSchema = buildGlobalSchema(db, idbdb, tmpTrans);
-    db._storeNames = slice(idbdb.objectStoreNames, 0);
-    setApiOnPlace(db, [db._allTables], keys(globalSchema), globalSchema);
-  }
-  function verifyInstalledSchema(db, tmpTrans) {
-    const installedSchema = buildGlobalSchema(db, db.idbdb, tmpTrans);
-    const diff = getSchemaDiff(installedSchema, db._dbSchema);
-    return !(diff.add.length || diff.change.some((ch) => ch.add.length || ch.change.length));
-  }
-  function adjustToExistingIndexNames({ _novip: db }, schema, idbtrans) {
-    const storeNames = idbtrans.db.objectStoreNames;
-    for (let i = 0; i < storeNames.length; ++i) {
-      const storeName = storeNames[i];
-      const store = idbtrans.objectStore(storeName);
-      db._hasGetAll = "getAll" in store;
-      for (let j = 0; j < store.indexNames.length; ++j) {
-        const indexName = store.indexNames[j];
-        const keyPath = store.index(indexName).keyPath;
-        const dexieName = typeof keyPath === "string" ? keyPath : "[" + slice(keyPath).join("+") + "]";
-        if (schema[storeName]) {
-          const indexSpec = schema[storeName].idxByName[dexieName];
-          if (indexSpec) {
-            indexSpec.name = indexName;
-            delete schema[storeName].idxByName[dexieName];
-            schema[storeName].idxByName[indexName] = indexSpec;
-          }
-        }
-      }
-    }
-    if (typeof navigator !== "undefined" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && _global.WorkerGlobalScope && _global instanceof _global.WorkerGlobalScope && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604) {
-      db._hasGetAll = false;
-    }
-  }
-  function parseIndexSyntax(primKeyAndIndexes) {
-    return primKeyAndIndexes.split(",").map((index, indexNum) => {
-      index = index.trim();
-      const name = index.replace(/([&*]|\+\+)/g, "");
-      const keyPath = /^\[/.test(name) ? name.match(/^\[(.*)\]$/)[1].split("+") : name;
-      return createIndexSpec(name, keyPath || null, /\&/.test(index), /\*/.test(index), /\+\+/.test(index), isArray(keyPath), indexNum === 0);
-    });
-  }
-  var Version = class {
-    _parseStoresSpec(stores, outSchema) {
-      keys(stores).forEach((tableName) => {
-        if (stores[tableName] !== null) {
-          var indexes = parseIndexSyntax(stores[tableName]);
-          var primKey = indexes.shift();
-          if (primKey.multi)
-            throw new exceptions.Schema("Primary key cannot be multi-valued");
-          indexes.forEach((idx) => {
-            if (idx.auto)
-              throw new exceptions.Schema("Only primary key can be marked as autoIncrement (++)");
-            if (!idx.keyPath)
-              throw new exceptions.Schema("Index must have a name and cannot be an empty string");
-          });
-          outSchema[tableName] = createTableSchema(tableName, primKey, indexes);
-        }
-      });
-    }
-    stores(stores) {
-      const db = this.db;
-      this._cfg.storesSource = this._cfg.storesSource ? extend(this._cfg.storesSource, stores) : stores;
-      const versions = db._versions;
-      const storesSpec = {};
-      let dbschema = {};
-      versions.forEach((version) => {
-        extend(storesSpec, version._cfg.storesSource);
-        dbschema = version._cfg.dbschema = {};
-        version._parseStoresSpec(storesSpec, dbschema);
-      });
-      db._dbSchema = dbschema;
-      removeTablesApi(db, [db._allTables, db, db.Transaction.prototype]);
-      setApiOnPlace(db, [db._allTables, db, db.Transaction.prototype, this._cfg.tables], keys(dbschema), dbschema);
-      db._storeNames = keys(dbschema);
-      return this;
-    }
-    upgrade(upgradeFunction) {
-      this._cfg.contentUpgrade = promisableChain(this._cfg.contentUpgrade || nop, upgradeFunction);
-      return this;
-    }
-  };
-  function createVersionConstructor(db) {
-    return makeClassConstructor(Version.prototype, function Version2(versionNumber) {
-      this.db = db;
-      this._cfg = {
-        version: versionNumber,
-        storesSource: null,
-        dbschema: {},
-        tables: {},
-        contentUpgrade: null
-      };
-    });
-  }
-  function getDbNamesTable(indexedDB2, IDBKeyRange) {
-    let dbNamesDB = indexedDB2["_dbNamesDB"];
-    if (!dbNamesDB) {
-      dbNamesDB = indexedDB2["_dbNamesDB"] = new Dexie$1(DBNAMES_DB, {
-        addons: [],
-        indexedDB: indexedDB2,
-        IDBKeyRange
-      });
-      dbNamesDB.version(1).stores({ dbnames: "name" });
-    }
-    return dbNamesDB.table("dbnames");
-  }
-  function hasDatabasesNative(indexedDB2) {
-    return indexedDB2 && typeof indexedDB2.databases === "function";
-  }
-  function getDatabaseNames({ indexedDB: indexedDB2, IDBKeyRange }) {
-    return hasDatabasesNative(indexedDB2) ? Promise.resolve(indexedDB2.databases()).then((infos) => infos.map((info) => info.name).filter((name) => name !== DBNAMES_DB)) : getDbNamesTable(indexedDB2, IDBKeyRange).toCollection().primaryKeys();
-  }
-  function _onDatabaseCreated({ indexedDB: indexedDB2, IDBKeyRange }, name) {
-    !hasDatabasesNative(indexedDB2) && name !== DBNAMES_DB && getDbNamesTable(indexedDB2, IDBKeyRange).put({ name }).catch(nop);
-  }
-  function _onDatabaseDeleted({ indexedDB: indexedDB2, IDBKeyRange }, name) {
-    !hasDatabasesNative(indexedDB2) && name !== DBNAMES_DB && getDbNamesTable(indexedDB2, IDBKeyRange).delete(name).catch(nop);
-  }
-  function vip(fn2) {
-    return newScope(function() {
-      PSD.letThrough = true;
-      return fn2();
-    });
-  }
-  function idbReady() {
-    var isSafari = !navigator.userAgentData && /Safari\//.test(navigator.userAgent) && !/Chrom(e|ium)\//.test(navigator.userAgent);
-    if (!isSafari || !indexedDB.databases)
-      return Promise.resolve();
-    var intervalId;
-    return new Promise(function(resolve) {
-      var tryIdb = function() {
-        return indexedDB.databases().finally(resolve);
-      };
-      intervalId = setInterval(tryIdb, 100);
-      tryIdb();
-    }).finally(function() {
-      return clearInterval(intervalId);
-    });
-  }
-  function dexieOpen(db) {
-    const state = db._state;
-    const { indexedDB: indexedDB2 } = db._deps;
-    if (state.isBeingOpened || db.idbdb)
-      return state.dbReadyPromise.then(() => state.dbOpenError ? rejection(state.dbOpenError) : db);
-    debug && (state.openCanceller._stackHolder = getErrorWithStack());
-    state.isBeingOpened = true;
-    state.dbOpenError = null;
-    state.openComplete = false;
-    const openCanceller = state.openCanceller;
-    function throwIfCancelled() {
-      if (state.openCanceller !== openCanceller)
-        throw new exceptions.DatabaseClosed("db.open() was cancelled");
-    }
-    let resolveDbReady = state.dbReadyResolve, upgradeTransaction = null, wasCreated = false;
-    return DexiePromise.race([openCanceller, (typeof navigator === "undefined" ? DexiePromise.resolve() : idbReady()).then(() => new DexiePromise((resolve, reject) => {
-      throwIfCancelled();
-      if (!indexedDB2)
-        throw new exceptions.MissingAPI();
-      const dbName = db.name;
-      const req = state.autoSchema ? indexedDB2.open(dbName) : indexedDB2.open(dbName, Math.round(db.verno * 10));
-      if (!req)
-        throw new exceptions.MissingAPI();
-      req.onerror = eventRejectHandler(reject);
-      req.onblocked = wrap(db._fireOnBlocked);
-      req.onupgradeneeded = wrap((e) => {
-        upgradeTransaction = req.transaction;
-        if (state.autoSchema && !db._options.allowEmptyDB) {
-          req.onerror = preventDefault;
-          upgradeTransaction.abort();
-          req.result.close();
-          const delreq = indexedDB2.deleteDatabase(dbName);
-          delreq.onsuccess = delreq.onerror = wrap(() => {
-            reject(new exceptions.NoSuchDatabase(`Database ${dbName} doesnt exist`));
-          });
-        } else {
-          upgradeTransaction.onerror = eventRejectHandler(reject);
-          var oldVer = e.oldVersion > Math.pow(2, 62) ? 0 : e.oldVersion;
-          wasCreated = oldVer < 1;
-          db._novip.idbdb = req.result;
-          runUpgraders(db, oldVer / 10, upgradeTransaction, reject);
-        }
-      }, reject);
-      req.onsuccess = wrap(() => {
-        upgradeTransaction = null;
-        const idbdb = db._novip.idbdb = req.result;
-        const objectStoreNames = slice(idbdb.objectStoreNames);
-        if (objectStoreNames.length > 0)
-          try {
-            const tmpTrans = idbdb.transaction(safariMultiStoreFix(objectStoreNames), "readonly");
-            if (state.autoSchema)
-              readGlobalSchema(db, idbdb, tmpTrans);
-            else {
-              adjustToExistingIndexNames(db, db._dbSchema, tmpTrans);
-              if (!verifyInstalledSchema(db, tmpTrans)) {
-                console.warn(`Dexie SchemaDiff: Schema was extended without increasing the number passed to db.version(). Some queries may fail.`);
-              }
-            }
-            generateMiddlewareStacks(db, tmpTrans);
-          } catch (e) {
-          }
-        connections.push(db);
-        idbdb.onversionchange = wrap((ev) => {
-          state.vcFired = true;
-          db.on("versionchange").fire(ev);
-        });
-        idbdb.onclose = wrap((ev) => {
-          db.on("close").fire(ev);
-        });
-        if (wasCreated)
-          _onDatabaseCreated(db._deps, dbName);
-        resolve();
-      }, reject);
-    }))]).then(() => {
-      throwIfCancelled();
-      state.onReadyBeingFired = [];
-      return DexiePromise.resolve(vip(() => db.on.ready.fire(db.vip))).then(function fireRemainders() {
-        if (state.onReadyBeingFired.length > 0) {
-          let remainders = state.onReadyBeingFired.reduce(promisableChain, nop);
-          state.onReadyBeingFired = [];
-          return DexiePromise.resolve(vip(() => remainders(db.vip))).then(fireRemainders);
-        }
-      });
-    }).finally(() => {
-      state.onReadyBeingFired = null;
-      state.isBeingOpened = false;
-    }).then(() => {
-      return db;
-    }).catch((err) => {
-      state.dbOpenError = err;
-      try {
-        upgradeTransaction && upgradeTransaction.abort();
-      } catch (_a) {
-      }
-      if (openCanceller === state.openCanceller) {
-        db._close();
-      }
-      return rejection(err);
-    }).finally(() => {
-      state.openComplete = true;
-      resolveDbReady();
-    });
-  }
-  function awaitIterator(iterator) {
-    var callNext = (result) => iterator.next(result), doThrow = (error) => iterator.throw(error), onSuccess = step(callNext), onError = step(doThrow);
-    function step(getNext) {
-      return (val) => {
-        var next = getNext(val), value = next.value;
-        return next.done ? value : !value || typeof value.then !== "function" ? isArray(value) ? Promise.all(value).then(onSuccess, onError) : onSuccess(value) : value.then(onSuccess, onError);
-      };
-    }
-    return step(callNext)();
-  }
-  function extractTransactionArgs(mode, _tableArgs_, scopeFunc) {
-    var i = arguments.length;
-    if (i < 2)
-      throw new exceptions.InvalidArgument("Too few arguments");
-    var args = new Array(i - 1);
-    while (--i)
-      args[i - 1] = arguments[i];
-    scopeFunc = args.pop();
-    var tables = flatten(args);
-    return [mode, tables, scopeFunc];
-  }
-  function enterTransactionScope(db, mode, storeNames, parentTransaction, scopeFunc) {
-    return DexiePromise.resolve().then(() => {
-      const transless = PSD.transless || PSD;
-      const trans = db._createTransaction(mode, storeNames, db._dbSchema, parentTransaction);
-      const zoneProps = {
-        trans,
-        transless
-      };
-      if (parentTransaction) {
-        trans.idbtrans = parentTransaction.idbtrans;
-      } else {
-        try {
-          trans.create();
-          db._state.PR1398_maxLoop = 3;
-        } catch (ex) {
-          if (ex.name === errnames.InvalidState && db.isOpen() && --db._state.PR1398_maxLoop > 0) {
-            console.warn("Dexie: Need to reopen db");
-            db._close();
-            return db.open().then(() => enterTransactionScope(db, mode, storeNames, null, scopeFunc));
-          }
-          return rejection(ex);
-        }
-      }
-      const scopeFuncIsAsync = isAsyncFunction(scopeFunc);
-      if (scopeFuncIsAsync) {
-        incrementExpectedAwaits();
-      }
-      let returnValue;
-      const promiseFollowed = DexiePromise.follow(() => {
-        returnValue = scopeFunc.call(trans, trans);
-        if (returnValue) {
-          if (scopeFuncIsAsync) {
-            var decrementor = decrementExpectedAwaits.bind(null, null);
-            returnValue.then(decrementor, decrementor);
-          } else if (typeof returnValue.next === "function" && typeof returnValue.throw === "function") {
-            returnValue = awaitIterator(returnValue);
-          }
-        }
-      }, zoneProps);
-      return (returnValue && typeof returnValue.then === "function" ? DexiePromise.resolve(returnValue).then((x) => trans.active ? x : rejection(new exceptions.PrematureCommit("Transaction committed too early. See http://bit.ly/2kdckMn"))) : promiseFollowed.then(() => returnValue)).then((x) => {
-        if (parentTransaction)
-          trans._resolve();
-        return trans._completion.then(() => x);
-      }).catch((e) => {
-        trans._reject(e);
-        return rejection(e);
-      });
-    });
-  }
-  function pad(a, value, count) {
-    const result = isArray(a) ? a.slice() : [a];
-    for (let i = 0; i < count; ++i)
-      result.push(value);
-    return result;
-  }
-  function createVirtualIndexMiddleware(down) {
-    return {
-      ...down,
-      table(tableName) {
-        const table = down.table(tableName);
-        const { schema } = table;
-        const indexLookup = {};
-        const allVirtualIndexes = [];
-        function addVirtualIndexes(keyPath, keyTail, lowLevelIndex) {
-          const keyPathAlias = getKeyPathAlias(keyPath);
-          const indexList = indexLookup[keyPathAlias] = indexLookup[keyPathAlias] || [];
-          const keyLength = keyPath == null ? 0 : typeof keyPath === "string" ? 1 : keyPath.length;
-          const isVirtual = keyTail > 0;
-          const virtualIndex = {
-            ...lowLevelIndex,
-            isVirtual,
-            keyTail,
-            keyLength,
-            extractKey: getKeyExtractor(keyPath),
-            unique: !isVirtual && lowLevelIndex.unique
-          };
-          indexList.push(virtualIndex);
-          if (!virtualIndex.isPrimaryKey) {
-            allVirtualIndexes.push(virtualIndex);
-          }
-          if (keyLength > 1) {
-            const virtualKeyPath = keyLength === 2 ? keyPath[0] : keyPath.slice(0, keyLength - 1);
-            addVirtualIndexes(virtualKeyPath, keyTail + 1, lowLevelIndex);
-          }
-          indexList.sort((a, b) => a.keyTail - b.keyTail);
-          return virtualIndex;
-        }
-        const primaryKey = addVirtualIndexes(schema.primaryKey.keyPath, 0, schema.primaryKey);
-        indexLookup[":id"] = [primaryKey];
-        for (const index of schema.indexes) {
-          addVirtualIndexes(index.keyPath, 0, index);
-        }
-        function findBestIndex(keyPath) {
-          const result2 = indexLookup[getKeyPathAlias(keyPath)];
-          return result2 && result2[0];
-        }
-        function translateRange(range, keyTail) {
-          return {
-            type: range.type === 1 ? 2 : range.type,
-            lower: pad(range.lower, range.lowerOpen ? down.MAX_KEY : down.MIN_KEY, keyTail),
-            lowerOpen: true,
-            upper: pad(range.upper, range.upperOpen ? down.MIN_KEY : down.MAX_KEY, keyTail),
-            upperOpen: true
-          };
-        }
-        function translateRequest(req) {
-          const index = req.query.index;
-          return index.isVirtual ? {
-            ...req,
-            query: {
-              index,
-              range: translateRange(req.query.range, index.keyTail)
-            }
-          } : req;
-        }
-        const result = {
-          ...table,
-          schema: {
-            ...schema,
-            primaryKey,
-            indexes: allVirtualIndexes,
-            getIndexByKeyPath: findBestIndex
-          },
-          count(req) {
-            return table.count(translateRequest(req));
-          },
-          query(req) {
-            return table.query(translateRequest(req));
-          },
-          openCursor(req) {
-            const { keyTail, isVirtual, keyLength } = req.query.index;
-            if (!isVirtual)
-              return table.openCursor(req);
-            function createVirtualCursor(cursor) {
-              function _continue(key) {
-                key != null ? cursor.continue(pad(key, req.reverse ? down.MAX_KEY : down.MIN_KEY, keyTail)) : req.unique ? cursor.continue(cursor.key.slice(0, keyLength).concat(req.reverse ? down.MIN_KEY : down.MAX_KEY, keyTail)) : cursor.continue();
-              }
-              const virtualCursor = Object.create(cursor, {
-                continue: { value: _continue },
-                continuePrimaryKey: {
-                  value(key, primaryKey2) {
-                    cursor.continuePrimaryKey(pad(key, down.MAX_KEY, keyTail), primaryKey2);
-                  }
-                },
-                primaryKey: {
-                  get() {
-                    return cursor.primaryKey;
-                  }
-                },
-                key: {
-                  get() {
-                    const key = cursor.key;
-                    return keyLength === 1 ? key[0] : key.slice(0, keyLength);
-                  }
-                },
-                value: {
-                  get() {
-                    return cursor.value;
-                  }
-                }
-              });
-              return virtualCursor;
-            }
-            return table.openCursor(translateRequest(req)).then((cursor) => cursor && createVirtualCursor(cursor));
-          }
-        };
-        return result;
-      }
-    };
-  }
-  var virtualIndexMiddleware = {
-    stack: "dbcore",
-    name: "VirtualIndexMiddleware",
-    level: 1,
-    create: createVirtualIndexMiddleware
-  };
-  function getObjectDiff(a, b, rv, prfx) {
-    rv = rv || {};
-    prfx = prfx || "";
-    keys(a).forEach((prop) => {
-      if (!hasOwn(b, prop)) {
-        rv[prfx + prop] = void 0;
-      } else {
-        var ap = a[prop], bp = b[prop];
-        if (typeof ap === "object" && typeof bp === "object" && ap && bp) {
-          const apTypeName = toStringTag(ap);
-          const bpTypeName = toStringTag(bp);
-          if (apTypeName !== bpTypeName) {
-            rv[prfx + prop] = b[prop];
-          } else if (apTypeName === "Object") {
-            getObjectDiff(ap, bp, rv, prfx + prop + ".");
-          } else if (ap !== bp) {
-            rv[prfx + prop] = b[prop];
-          }
-        } else if (ap !== bp)
-          rv[prfx + prop] = b[prop];
-      }
-    });
-    keys(b).forEach((prop) => {
-      if (!hasOwn(a, prop)) {
-        rv[prfx + prop] = b[prop];
-      }
-    });
-    return rv;
-  }
-  function getEffectiveKeys(primaryKey, req) {
-    if (req.type === "delete")
-      return req.keys;
-    return req.keys || req.values.map(primaryKey.extractKey);
-  }
-  var hooksMiddleware = {
-    stack: "dbcore",
-    name: "HooksMiddleware",
-    level: 2,
-    create: (downCore) => ({
-      ...downCore,
-      table(tableName) {
-        const downTable = downCore.table(tableName);
-        const { primaryKey } = downTable.schema;
-        const tableMiddleware = {
-          ...downTable,
-          mutate(req) {
-            const dxTrans = PSD.trans;
-            const { deleting, creating, updating } = dxTrans.table(tableName).hook;
-            switch (req.type) {
-              case "add":
-                if (creating.fire === nop)
-                  break;
-                return dxTrans._promise("readwrite", () => addPutOrDelete(req), true);
-              case "put":
-                if (creating.fire === nop && updating.fire === nop)
-                  break;
-                return dxTrans._promise("readwrite", () => addPutOrDelete(req), true);
-              case "delete":
-                if (deleting.fire === nop)
-                  break;
-                return dxTrans._promise("readwrite", () => addPutOrDelete(req), true);
-              case "deleteRange":
-                if (deleting.fire === nop)
-                  break;
-                return dxTrans._promise("readwrite", () => deleteRange(req), true);
-            }
-            return downTable.mutate(req);
-            function addPutOrDelete(req2) {
-              const dxTrans2 = PSD.trans;
-              const keys2 = req2.keys || getEffectiveKeys(primaryKey, req2);
-              if (!keys2)
-                throw new Error("Keys missing");
-              req2 = req2.type === "add" || req2.type === "put" ? { ...req2, keys: keys2 } : { ...req2 };
-              if (req2.type !== "delete")
-                req2.values = [...req2.values];
-              if (req2.keys)
-                req2.keys = [...req2.keys];
-              return getExistingValues(downTable, req2, keys2).then((existingValues) => {
-                const contexts = keys2.map((key, i) => {
-                  const existingValue = existingValues[i];
-                  const ctx = { onerror: null, onsuccess: null };
-                  if (req2.type === "delete") {
-                    deleting.fire.call(ctx, key, existingValue, dxTrans2);
-                  } else if (req2.type === "add" || existingValue === void 0) {
-                    const generatedPrimaryKey = creating.fire.call(ctx, key, req2.values[i], dxTrans2);
-                    if (key == null && generatedPrimaryKey != null) {
-                      key = generatedPrimaryKey;
-                      req2.keys[i] = key;
-                      if (!primaryKey.outbound) {
-                        setByKeyPath(req2.values[i], primaryKey.keyPath, key);
-                      }
-                    }
-                  } else {
-                    const objectDiff = getObjectDiff(existingValue, req2.values[i]);
-                    const additionalChanges = updating.fire.call(ctx, objectDiff, key, existingValue, dxTrans2);
-                    if (additionalChanges) {
-                      const requestedValue = req2.values[i];
-                      Object.keys(additionalChanges).forEach((keyPath) => {
-                        if (hasOwn(requestedValue, keyPath)) {
-                          requestedValue[keyPath] = additionalChanges[keyPath];
-                        } else {
-                          setByKeyPath(requestedValue, keyPath, additionalChanges[keyPath]);
-                        }
-                      });
-                    }
-                  }
-                  return ctx;
-                });
-                return downTable.mutate(req2).then(({ failures, results, numFailures, lastResult }) => {
-                  for (let i = 0; i < keys2.length; ++i) {
-                    const primKey = results ? results[i] : keys2[i];
-                    const ctx = contexts[i];
-                    if (primKey == null) {
-                      ctx.onerror && ctx.onerror(failures[i]);
-                    } else {
-                      ctx.onsuccess && ctx.onsuccess(
-                        req2.type === "put" && existingValues[i] ? req2.values[i] : primKey
-                      );
-                    }
-                  }
-                  return { failures, results, numFailures, lastResult };
-                }).catch((error) => {
-                  contexts.forEach((ctx) => ctx.onerror && ctx.onerror(error));
-                  return Promise.reject(error);
-                });
-              });
-            }
-            function deleteRange(req2) {
-              return deleteNextChunk(req2.trans, req2.range, 1e4);
-            }
-            function deleteNextChunk(trans, range, limit) {
-              return downTable.query({ trans, values: false, query: { index: primaryKey, range }, limit }).then(({ result }) => {
-                return addPutOrDelete({ type: "delete", keys: result, trans }).then((res) => {
-                  if (res.numFailures > 0)
-                    return Promise.reject(res.failures[0]);
-                  if (result.length < limit) {
-                    return { failures: [], numFailures: 0, lastResult: void 0 };
-                  } else {
-                    return deleteNextChunk(trans, { ...range, lower: result[result.length - 1], lowerOpen: true }, limit);
-                  }
-                });
-              });
-            }
-          }
-        };
-        return tableMiddleware;
-      }
-    })
-  };
-  function getExistingValues(table, req, effectiveKeys) {
-    return req.type === "add" ? Promise.resolve([]) : table.getMany({ trans: req.trans, keys: effectiveKeys, cache: "immutable" });
-  }
-  function getFromTransactionCache(keys2, cache, clone) {
-    try {
-      if (!cache)
-        return null;
-      if (cache.keys.length < keys2.length)
-        return null;
-      const result = [];
-      for (let i = 0, j = 0; i < cache.keys.length && j < keys2.length; ++i) {
-        if (cmp(cache.keys[i], keys2[j]) !== 0)
-          continue;
-        result.push(clone ? deepClone(cache.values[i]) : cache.values[i]);
-        ++j;
-      }
-      return result.length === keys2.length ? result : null;
-    } catch (_a) {
-      return null;
-    }
-  }
-  var cacheExistingValuesMiddleware = {
-    stack: "dbcore",
-    level: -1,
-    create: (core) => {
-      return {
-        table: (tableName) => {
-          const table = core.table(tableName);
-          return {
-            ...table,
-            getMany: (req) => {
-              if (!req.cache) {
-                return table.getMany(req);
-              }
-              const cachedResult = getFromTransactionCache(req.keys, req.trans["_cache"], req.cache === "clone");
-              if (cachedResult) {
-                return DexiePromise.resolve(cachedResult);
-              }
-              return table.getMany(req).then((res) => {
-                req.trans["_cache"] = {
-                  keys: req.keys,
-                  values: req.cache === "clone" ? deepClone(res) : res
-                };
-                return res;
-              });
-            },
-            mutate: (req) => {
-              if (req.type !== "add")
-                req.trans["_cache"] = null;
-              return table.mutate(req);
-            }
-          };
-        }
-      };
-    }
-  };
-  function isEmptyRange(node) {
-    return !("from" in node);
-  }
-  var RangeSet = function(fromOrTree, to) {
-    if (this) {
-      extend(this, arguments.length ? { d: 1, from: fromOrTree, to: arguments.length > 1 ? to : fromOrTree } : { d: 0 });
-    } else {
-      const rv = new RangeSet();
-      if (fromOrTree && "d" in fromOrTree) {
-        extend(rv, fromOrTree);
-      }
-      return rv;
-    }
-  };
-  props(RangeSet.prototype, {
-    add(rangeSet) {
-      mergeRanges(this, rangeSet);
-      return this;
-    },
-    addKey(key) {
-      addRange(this, key, key);
-      return this;
-    },
-    addKeys(keys2) {
-      keys2.forEach((key) => addRange(this, key, key));
-      return this;
-    },
-    [iteratorSymbol]() {
-      return getRangeSetIterator(this);
-    }
-  });
-  function addRange(target, from, to) {
-    const diff = cmp(from, to);
-    if (isNaN(diff))
-      return;
-    if (diff > 0)
-      throw RangeError();
-    if (isEmptyRange(target))
-      return extend(target, { from, to, d: 1 });
-    const left2 = target.l;
-    const right2 = target.r;
-    if (cmp(to, target.from) < 0) {
-      left2 ? addRange(left2, from, to) : target.l = { from, to, d: 1, l: null, r: null };
-      return rebalance(target);
-    }
-    if (cmp(from, target.to) > 0) {
-      right2 ? addRange(right2, from, to) : target.r = { from, to, d: 1, l: null, r: null };
-      return rebalance(target);
-    }
-    if (cmp(from, target.from) < 0) {
-      target.from = from;
-      target.l = null;
-      target.d = right2 ? right2.d + 1 : 1;
-    }
-    if (cmp(to, target.to) > 0) {
-      target.to = to;
-      target.r = null;
-      target.d = target.l ? target.l.d + 1 : 1;
-    }
-    const rightWasCutOff = !target.r;
-    if (left2 && !target.l) {
-      mergeRanges(target, left2);
-    }
-    if (right2 && rightWasCutOff) {
-      mergeRanges(target, right2);
-    }
-  }
-  function mergeRanges(target, newSet) {
-    function _addRangeSet(target2, { from, to, l, r }) {
-      addRange(target2, from, to);
-      if (l)
-        _addRangeSet(target2, l);
-      if (r)
-        _addRangeSet(target2, r);
-    }
-    if (!isEmptyRange(newSet))
-      _addRangeSet(target, newSet);
-  }
-  function rangesOverlap(rangeSet1, rangeSet2) {
-    const i1 = getRangeSetIterator(rangeSet2);
-    let nextResult1 = i1.next();
-    if (nextResult1.done)
-      return false;
-    let a = nextResult1.value;
-    const i2 = getRangeSetIterator(rangeSet1);
-    let nextResult2 = i2.next(a.from);
-    let b = nextResult2.value;
-    while (!nextResult1.done && !nextResult2.done) {
-      if (cmp(b.from, a.to) <= 0 && cmp(b.to, a.from) >= 0)
-        return true;
-      cmp(a.from, b.from) < 0 ? a = (nextResult1 = i1.next(b.from)).value : b = (nextResult2 = i2.next(a.from)).value;
-    }
-    return false;
-  }
-  function getRangeSetIterator(node) {
-    let state = isEmptyRange(node) ? null : { s: 0, n: node };
-    return {
-      next(key) {
-        const keyProvided = arguments.length > 0;
-        while (state) {
-          switch (state.s) {
-            case 0:
-              state.s = 1;
-              if (keyProvided) {
-                while (state.n.l && cmp(key, state.n.from) < 0)
-                  state = { up: state, n: state.n.l, s: 1 };
-              } else {
-                while (state.n.l)
-                  state = { up: state, n: state.n.l, s: 1 };
-              }
-            case 1:
-              state.s = 2;
-              if (!keyProvided || cmp(key, state.n.to) <= 0)
-                return { value: state.n, done: false };
-            case 2:
-              if (state.n.r) {
-                state.s = 3;
-                state = { up: state, n: state.n.r, s: 0 };
-                continue;
-              }
-            case 3:
-              state = state.up;
-          }
-        }
-        return { done: true };
-      }
-    };
-  }
-  function rebalance(target) {
-    var _a, _b;
-    const diff = (((_a = target.r) === null || _a === void 0 ? void 0 : _a.d) || 0) - (((_b = target.l) === null || _b === void 0 ? void 0 : _b.d) || 0);
-    const r = diff > 1 ? "r" : diff < -1 ? "l" : "";
-    if (r) {
-      const l = r === "r" ? "l" : "r";
-      const rootClone = { ...target };
-      const oldRootRight = target[r];
-      target.from = oldRootRight.from;
-      target.to = oldRootRight.to;
-      target[r] = oldRootRight[r];
-      rootClone[r] = oldRootRight[l];
-      target[l] = rootClone;
-      rootClone.d = computeDepth(rootClone);
-    }
-    target.d = computeDepth(target);
-  }
-  function computeDepth({ r, l }) {
-    return (r ? l ? Math.max(r.d, l.d) : r.d : l ? l.d : 0) + 1;
-  }
-  var observabilityMiddleware = {
-    stack: "dbcore",
-    level: 0,
-    create: (core) => {
-      const dbName = core.schema.name;
-      const FULL_RANGE = new RangeSet(core.MIN_KEY, core.MAX_KEY);
-      return {
-        ...core,
-        table: (tableName) => {
-          const table = core.table(tableName);
-          const { schema } = table;
-          const { primaryKey } = schema;
-          const { extractKey, outbound } = primaryKey;
-          const tableClone = {
-            ...table,
-            mutate: (req) => {
-              const trans = req.trans;
-              const mutatedParts = trans.mutatedParts || (trans.mutatedParts = {});
-              const getRangeSet = (indexName) => {
-                const part = `idb://${dbName}/${tableName}/${indexName}`;
-                return mutatedParts[part] || (mutatedParts[part] = new RangeSet());
-              };
-              const pkRangeSet = getRangeSet("");
-              const delsRangeSet = getRangeSet(":dels");
-              const { type: type2 } = req;
-              let [keys2, newObjs] = req.type === "deleteRange" ? [req.range] : req.type === "delete" ? [req.keys] : req.values.length < 50 ? [[], req.values] : [];
-              const oldCache = req.trans["_cache"];
-              return table.mutate(req).then((res) => {
-                if (isArray(keys2)) {
-                  if (type2 !== "delete")
-                    keys2 = res.results;
-                  pkRangeSet.addKeys(keys2);
-                  const oldObjs = getFromTransactionCache(keys2, oldCache);
-                  if (!oldObjs && type2 !== "add") {
-                    delsRangeSet.addKeys(keys2);
-                  }
-                  if (oldObjs || newObjs) {
-                    trackAffectedIndexes(getRangeSet, schema, oldObjs, newObjs);
-                  }
-                } else if (keys2) {
-                  const range = { from: keys2.lower, to: keys2.upper };
-                  delsRangeSet.add(range);
-                  pkRangeSet.add(range);
-                } else {
-                  pkRangeSet.add(FULL_RANGE);
-                  delsRangeSet.add(FULL_RANGE);
-                  schema.indexes.forEach((idx) => getRangeSet(idx.name).add(FULL_RANGE));
-                }
-                return res;
-              });
-            }
-          };
-          const getRange = ({ query: { index, range } }) => {
-            var _a, _b;
-            return [
-              index,
-              new RangeSet((_a = range.lower) !== null && _a !== void 0 ? _a : core.MIN_KEY, (_b = range.upper) !== null && _b !== void 0 ? _b : core.MAX_KEY)
-            ];
-          };
-          const readSubscribers = {
-            get: (req) => [primaryKey, new RangeSet(req.key)],
-            getMany: (req) => [primaryKey, new RangeSet().addKeys(req.keys)],
-            count: getRange,
-            query: getRange,
-            openCursor: getRange
-          };
-          keys(readSubscribers).forEach((method) => {
-            tableClone[method] = function(req) {
-              const { subscr } = PSD;
-              if (subscr) {
-                const getRangeSet = (indexName) => {
-                  const part = `idb://${dbName}/${tableName}/${indexName}`;
-                  return subscr[part] || (subscr[part] = new RangeSet());
-                };
-                const pkRangeSet = getRangeSet("");
-                const delsRangeSet = getRangeSet(":dels");
-                const [queriedIndex, queriedRanges] = readSubscribers[method](req);
-                getRangeSet(queriedIndex.name || "").add(queriedRanges);
-                if (!queriedIndex.isPrimaryKey) {
-                  if (method === "count") {
-                    delsRangeSet.add(FULL_RANGE);
-                  } else {
-                    const keysPromise = method === "query" && outbound && req.values && table.query({
-                      ...req,
-                      values: false
-                    });
-                    return table[method].apply(this, arguments).then((res) => {
-                      if (method === "query") {
-                        if (outbound && req.values) {
-                          return keysPromise.then(({ result: resultingKeys }) => {
-                            pkRangeSet.addKeys(resultingKeys);
-                            return res;
-                          });
-                        }
-                        const pKeys = req.values ? res.result.map(extractKey) : res.result;
-                        if (req.values) {
-                          pkRangeSet.addKeys(pKeys);
-                        } else {
-                          delsRangeSet.addKeys(pKeys);
-                        }
-                      } else if (method === "openCursor") {
-                        const cursor = res;
-                        const wantValues = req.values;
-                        return cursor && Object.create(cursor, {
-                          key: {
-                            get() {
-                              delsRangeSet.addKey(cursor.primaryKey);
-                              return cursor.key;
-                            }
-                          },
-                          primaryKey: {
-                            get() {
-                              const pkey = cursor.primaryKey;
-                              delsRangeSet.addKey(pkey);
-                              return pkey;
-                            }
-                          },
-                          value: {
-                            get() {
-                              wantValues && pkRangeSet.addKey(cursor.primaryKey);
-                              return cursor.value;
-                            }
-                          }
-                        });
-                      }
-                      return res;
-                    });
-                  }
-                }
-              }
-              return table[method].apply(this, arguments);
-            };
-          });
-          return tableClone;
-        }
-      };
-    }
-  };
-  function trackAffectedIndexes(getRangeSet, schema, oldObjs, newObjs) {
-    function addAffectedIndex(ix) {
-      const rangeSet = getRangeSet(ix.name || "");
-      function extractKey(obj) {
-        return obj != null ? ix.extractKey(obj) : null;
-      }
-      const addKeyOrKeys = (key) => ix.multiEntry && isArray(key) ? key.forEach((key2) => rangeSet.addKey(key2)) : rangeSet.addKey(key);
-      (oldObjs || newObjs).forEach((_, i) => {
-        const oldKey = oldObjs && extractKey(oldObjs[i]);
-        const newKey = newObjs && extractKey(newObjs[i]);
-        if (cmp(oldKey, newKey) !== 0) {
-          if (oldKey != null)
-            addKeyOrKeys(oldKey);
-          if (newKey != null)
-            addKeyOrKeys(newKey);
-        }
-      });
-    }
-    schema.indexes.forEach(addAffectedIndex);
-  }
-  var Dexie$1 = class _Dexie$1 {
-    constructor(name, options) {
-      this._middlewares = {};
-      this.verno = 0;
-      const deps = _Dexie$1.dependencies;
-      this._options = options = {
-        addons: _Dexie$1.addons,
-        autoOpen: true,
-        indexedDB: deps.indexedDB,
-        IDBKeyRange: deps.IDBKeyRange,
-        ...options
-      };
-      this._deps = {
-        indexedDB: options.indexedDB,
-        IDBKeyRange: options.IDBKeyRange
-      };
-      const { addons } = options;
-      this._dbSchema = {};
-      this._versions = [];
-      this._storeNames = [];
-      this._allTables = {};
-      this.idbdb = null;
-      this._novip = this;
-      const state = {
-        dbOpenError: null,
-        isBeingOpened: false,
-        onReadyBeingFired: null,
-        openComplete: false,
-        dbReadyResolve: nop,
-        dbReadyPromise: null,
-        cancelOpen: nop,
-        openCanceller: null,
-        autoSchema: true,
-        PR1398_maxLoop: 3
-      };
-      state.dbReadyPromise = new DexiePromise((resolve) => {
-        state.dbReadyResolve = resolve;
-      });
-      state.openCanceller = new DexiePromise((_, reject) => {
-        state.cancelOpen = reject;
-      });
-      this._state = state;
-      this.name = name;
-      this.on = Events(this, "populate", "blocked", "versionchange", "close", { ready: [promisableChain, nop] });
-      this.on.ready.subscribe = override(this.on.ready.subscribe, (subscribe) => {
-        return (subscriber, bSticky) => {
-          _Dexie$1.vip(() => {
-            const state2 = this._state;
-            if (state2.openComplete) {
-              if (!state2.dbOpenError)
-                DexiePromise.resolve().then(subscriber);
-              if (bSticky)
-                subscribe(subscriber);
-            } else if (state2.onReadyBeingFired) {
-              state2.onReadyBeingFired.push(subscriber);
-              if (bSticky)
-                subscribe(subscriber);
-            } else {
-              subscribe(subscriber);
-              const db = this;
-              if (!bSticky)
-                subscribe(function unsubscribe() {
-                  db.on.ready.unsubscribe(subscriber);
-                  db.on.ready.unsubscribe(unsubscribe);
-                });
-            }
-          });
-        };
-      });
-      this.Collection = createCollectionConstructor(this);
-      this.Table = createTableConstructor(this);
-      this.Transaction = createTransactionConstructor(this);
-      this.Version = createVersionConstructor(this);
-      this.WhereClause = createWhereClauseConstructor(this);
-      this.on("versionchange", (ev) => {
-        if (ev.newVersion > 0)
-          console.warn(`Another connection wants to upgrade database '${this.name}'. Closing db now to resume the upgrade.`);
-        else
-          console.warn(`Another connection wants to delete database '${this.name}'. Closing db now to resume the delete request.`);
-        this.close();
-      });
-      this.on("blocked", (ev) => {
-        if (!ev.newVersion || ev.newVersion < ev.oldVersion)
-          console.warn(`Dexie.delete('${this.name}') was blocked`);
-        else
-          console.warn(`Upgrade '${this.name}' blocked by other connection holding version ${ev.oldVersion / 10}`);
-      });
-      this._maxKey = getMaxKey(options.IDBKeyRange);
-      this._createTransaction = (mode, storeNames, dbschema, parentTransaction) => new this.Transaction(mode, storeNames, dbschema, this._options.chromeTransactionDurability, parentTransaction);
-      this._fireOnBlocked = (ev) => {
-        this.on("blocked").fire(ev);
-        connections.filter((c) => c.name === this.name && c !== this && !c._state.vcFired).map((c) => c.on("versionchange").fire(ev));
-      };
-      this.use(virtualIndexMiddleware);
-      this.use(hooksMiddleware);
-      this.use(observabilityMiddleware);
-      this.use(cacheExistingValuesMiddleware);
-      this.vip = Object.create(this, { _vip: { value: true } });
-      addons.forEach((addon) => addon(this));
-    }
-    version(versionNumber) {
-      if (isNaN(versionNumber) || versionNumber < 0.1)
-        throw new exceptions.Type(`Given version is not a positive number`);
-      versionNumber = Math.round(versionNumber * 10) / 10;
-      if (this.idbdb || this._state.isBeingOpened)
-        throw new exceptions.Schema("Cannot add version when database is open");
-      this.verno = Math.max(this.verno, versionNumber);
-      const versions = this._versions;
-      var versionInstance = versions.filter((v) => v._cfg.version === versionNumber)[0];
-      if (versionInstance)
-        return versionInstance;
-      versionInstance = new this.Version(versionNumber);
-      versions.push(versionInstance);
-      versions.sort(lowerVersionFirst);
-      versionInstance.stores({});
-      this._state.autoSchema = false;
-      return versionInstance;
-    }
-    _whenReady(fn2) {
-      return this.idbdb && (this._state.openComplete || PSD.letThrough || this._vip) ? fn2() : new DexiePromise((resolve, reject) => {
-        if (this._state.openComplete) {
-          return reject(new exceptions.DatabaseClosed(this._state.dbOpenError));
-        }
-        if (!this._state.isBeingOpened) {
-          if (!this._options.autoOpen) {
-            reject(new exceptions.DatabaseClosed());
-            return;
-          }
-          this.open().catch(nop);
-        }
-        this._state.dbReadyPromise.then(resolve, reject);
-      }).then(fn2);
-    }
-    use({ stack, create, level, name }) {
-      if (name)
-        this.unuse({ stack, name });
-      const middlewares = this._middlewares[stack] || (this._middlewares[stack] = []);
-      middlewares.push({ stack, create, level: level == null ? 10 : level, name });
-      middlewares.sort((a, b) => a.level - b.level);
-      return this;
-    }
-    unuse({ stack, name, create }) {
-      if (stack && this._middlewares[stack]) {
-        this._middlewares[stack] = this._middlewares[stack].filter((mw) => create ? mw.create !== create : name ? mw.name !== name : false);
-      }
-      return this;
-    }
-    open() {
-      return dexieOpen(this);
-    }
-    _close() {
-      const state = this._state;
-      const idx = connections.indexOf(this);
-      if (idx >= 0)
-        connections.splice(idx, 1);
-      if (this.idbdb) {
-        try {
-          this.idbdb.close();
-        } catch (e) {
-        }
-        this._novip.idbdb = null;
-      }
-      state.dbReadyPromise = new DexiePromise((resolve) => {
-        state.dbReadyResolve = resolve;
-      });
-      state.openCanceller = new DexiePromise((_, reject) => {
-        state.cancelOpen = reject;
-      });
-    }
-    close() {
-      this._close();
-      const state = this._state;
-      this._options.autoOpen = false;
-      state.dbOpenError = new exceptions.DatabaseClosed();
-      if (state.isBeingOpened)
-        state.cancelOpen(state.dbOpenError);
-    }
-    delete() {
-      const hasArguments = arguments.length > 0;
-      const state = this._state;
-      return new DexiePromise((resolve, reject) => {
-        const doDelete = () => {
-          this.close();
-          var req = this._deps.indexedDB.deleteDatabase(this.name);
-          req.onsuccess = wrap(() => {
-            _onDatabaseDeleted(this._deps, this.name);
-            resolve();
-          });
-          req.onerror = eventRejectHandler(reject);
-          req.onblocked = this._fireOnBlocked;
-        };
-        if (hasArguments)
-          throw new exceptions.InvalidArgument("Arguments not allowed in db.delete()");
-        if (state.isBeingOpened) {
-          state.dbReadyPromise.then(doDelete);
-        } else {
-          doDelete();
-        }
-      });
-    }
-    backendDB() {
-      return this.idbdb;
-    }
-    isOpen() {
-      return this.idbdb !== null;
-    }
-    hasBeenClosed() {
-      const dbOpenError = this._state.dbOpenError;
-      return dbOpenError && dbOpenError.name === "DatabaseClosed";
-    }
-    hasFailed() {
-      return this._state.dbOpenError !== null;
-    }
-    dynamicallyOpened() {
-      return this._state.autoSchema;
-    }
-    get tables() {
-      return keys(this._allTables).map((name) => this._allTables[name]);
-    }
-    transaction() {
-      const args = extractTransactionArgs.apply(this, arguments);
-      return this._transaction.apply(this, args);
-    }
-    _transaction(mode, tables, scopeFunc) {
-      let parentTransaction = PSD.trans;
-      if (!parentTransaction || parentTransaction.db !== this || mode.indexOf("!") !== -1)
-        parentTransaction = null;
-      const onlyIfCompatible = mode.indexOf("?") !== -1;
-      mode = mode.replace("!", "").replace("?", "");
-      let idbMode, storeNames;
-      try {
-        storeNames = tables.map((table) => {
-          var storeName = table instanceof this.Table ? table.name : table;
-          if (typeof storeName !== "string")
-            throw new TypeError("Invalid table argument to Dexie.transaction(). Only Table or String are allowed");
-          return storeName;
-        });
-        if (mode == "r" || mode === READONLY)
-          idbMode = READONLY;
-        else if (mode == "rw" || mode == READWRITE)
-          idbMode = READWRITE;
-        else
-          throw new exceptions.InvalidArgument("Invalid transaction mode: " + mode);
-        if (parentTransaction) {
-          if (parentTransaction.mode === READONLY && idbMode === READWRITE) {
-            if (onlyIfCompatible) {
-              parentTransaction = null;
-            } else
-              throw new exceptions.SubTransaction("Cannot enter a sub-transaction with READWRITE mode when parent transaction is READONLY");
-          }
-          if (parentTransaction) {
-            storeNames.forEach((storeName) => {
-              if (parentTransaction && parentTransaction.storeNames.indexOf(storeName) === -1) {
-                if (onlyIfCompatible) {
-                  parentTransaction = null;
-                } else
-                  throw new exceptions.SubTransaction("Table " + storeName + " not included in parent transaction.");
-              }
-            });
-          }
-          if (onlyIfCompatible && parentTransaction && !parentTransaction.active) {
-            parentTransaction = null;
-          }
-        }
-      } catch (e) {
-        return parentTransaction ? parentTransaction._promise(null, (_, reject) => {
-          reject(e);
-        }) : rejection(e);
-      }
-      const enterTransaction = enterTransactionScope.bind(null, this, idbMode, storeNames, parentTransaction, scopeFunc);
-      return parentTransaction ? parentTransaction._promise(idbMode, enterTransaction, "lock") : PSD.trans ? usePSD(PSD.transless, () => this._whenReady(enterTransaction)) : this._whenReady(enterTransaction);
-    }
-    table(tableName) {
-      if (!hasOwn(this._allTables, tableName)) {
-        throw new exceptions.InvalidTable(`Table ${tableName} does not exist`);
-      }
-      return this._allTables[tableName];
-    }
-  };
-  var symbolObservable = typeof Symbol !== "undefined" && "observable" in Symbol ? Symbol.observable : "@@observable";
-  var Observable = class {
-    constructor(subscribe) {
-      this._subscribe = subscribe;
-    }
-    subscribe(x, error, complete) {
-      return this._subscribe(!x || typeof x === "function" ? { next: x, error, complete } : x);
-    }
-    [symbolObservable]() {
-      return this;
-    }
-  };
-  function extendObservabilitySet(target, newSet) {
-    keys(newSet).forEach((part) => {
-      const rangeSet = target[part] || (target[part] = new RangeSet());
-      mergeRanges(rangeSet, newSet[part]);
-    });
-    return target;
-  }
-  function liveQuery(querier) {
-    let hasValue = false;
-    let currentValue = void 0;
-    const observable = new Observable((observer) => {
-      const scopeFuncIsAsync = isAsyncFunction(querier);
-      function execute(subscr) {
-        if (scopeFuncIsAsync) {
-          incrementExpectedAwaits();
-        }
-        const exec = () => newScope(querier, { subscr, trans: null });
-        const rv = PSD.trans ? usePSD(PSD.transless, exec) : exec();
-        if (scopeFuncIsAsync) {
-          rv.then(decrementExpectedAwaits, decrementExpectedAwaits);
-        }
-        return rv;
-      }
-      let closed = false;
-      let accumMuts = {};
-      let currentObs = {};
-      const subscription = {
-        get closed() {
-          return closed;
-        },
-        unsubscribe: () => {
-          closed = true;
-          globalEvents.storagemutated.unsubscribe(mutationListener);
-        }
-      };
-      observer.start && observer.start(subscription);
-      let querying = false, startedListening = false;
-      function shouldNotify() {
-        return keys(currentObs).some((key) => accumMuts[key] && rangesOverlap(accumMuts[key], currentObs[key]));
-      }
-      const mutationListener = (parts) => {
-        extendObservabilitySet(accumMuts, parts);
-        if (shouldNotify()) {
-          doQuery();
-        }
-      };
-      const doQuery = () => {
-        if (querying || closed)
-          return;
-        accumMuts = {};
-        const subscr = {};
-        const ret = execute(subscr);
-        if (!startedListening) {
-          globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, mutationListener);
-          startedListening = true;
-        }
-        querying = true;
-        Promise.resolve(ret).then((result) => {
-          hasValue = true;
-          currentValue = result;
-          querying = false;
-          if (closed)
-            return;
-          if (shouldNotify()) {
-            doQuery();
-          } else {
-            accumMuts = {};
-            currentObs = subscr;
-            observer.next && observer.next(result);
-          }
-        }, (err) => {
-          querying = false;
-          hasValue = false;
-          observer.error && observer.error(err);
-          subscription.unsubscribe();
-        });
-      };
-      doQuery();
-      return subscription;
-    });
-    observable.hasValue = () => hasValue;
-    observable.getValue = () => currentValue;
-    return observable;
-  }
-  var domDeps;
-  try {
-    domDeps = {
-      indexedDB: _global.indexedDB || _global.mozIndexedDB || _global.webkitIndexedDB || _global.msIndexedDB,
-      IDBKeyRange: _global.IDBKeyRange || _global.webkitIDBKeyRange
-    };
-  } catch (e) {
-    domDeps = { indexedDB: null, IDBKeyRange: null };
-  }
-  var Dexie = Dexie$1;
-  props(Dexie, {
-    ...fullNameExceptions,
-    delete(databaseName) {
-      const db = new Dexie(databaseName, { addons: [] });
-      return db.delete();
-    },
-    exists(name) {
-      return new Dexie(name, { addons: [] }).open().then((db) => {
-        db.close();
-        return true;
-      }).catch("NoSuchDatabaseError", () => false);
-    },
-    getDatabaseNames(cb) {
-      try {
-        return getDatabaseNames(Dexie.dependencies).then(cb);
-      } catch (_a) {
-        return rejection(new exceptions.MissingAPI());
-      }
-    },
-    defineClass() {
-      function Class(content) {
-        extend(this, content);
-      }
-      return Class;
-    },
-    ignoreTransaction(scopeFunc) {
-      return PSD.trans ? usePSD(PSD.transless, scopeFunc) : scopeFunc();
-    },
-    vip,
-    async: function(generatorFn) {
-      return function() {
-        try {
-          var rv = awaitIterator(generatorFn.apply(this, arguments));
-          if (!rv || typeof rv.then !== "function")
-            return DexiePromise.resolve(rv);
-          return rv;
-        } catch (e) {
-          return rejection(e);
-        }
-      };
-    },
-    spawn: function(generatorFn, args, thiz) {
-      try {
-        var rv = awaitIterator(generatorFn.apply(thiz, args || []));
-        if (!rv || typeof rv.then !== "function")
-          return DexiePromise.resolve(rv);
-        return rv;
-      } catch (e) {
-        return rejection(e);
-      }
-    },
-    currentTransaction: {
-      get: () => PSD.trans || null
-    },
-    waitFor: function(promiseOrFunction, optionalTimeout) {
-      const promise = DexiePromise.resolve(typeof promiseOrFunction === "function" ? Dexie.ignoreTransaction(promiseOrFunction) : promiseOrFunction).timeout(optionalTimeout || 6e4);
-      return PSD.trans ? PSD.trans.waitFor(promise) : promise;
-    },
-    Promise: DexiePromise,
-    debug: {
-      get: () => debug,
-      set: (value) => {
-        setDebug(value, value === "dexie" ? () => true : dexieStackFrameFilter);
-      }
-    },
-    derive,
-    extend,
-    props,
-    override,
-    Events,
-    on: globalEvents,
-    liveQuery,
-    extendObservabilitySet,
-    getByKeyPath,
-    setByKeyPath,
-    delByKeyPath,
-    shallowClone,
-    deepClone,
-    getObjectDiff,
-    cmp,
-    asap: asap$1,
-    minKey,
-    addons: [],
-    connections,
-    errnames,
-    dependencies: domDeps,
-    semVer: DEXIE_VERSION,
-    version: DEXIE_VERSION.split(".").map((n) => parseInt(n)).reduce((p, c, i) => p + c / Math.pow(10, i * 2))
-  });
-  Dexie.maxKey = getMaxKey(Dexie.dependencies.IDBKeyRange);
-  if (typeof dispatchEvent !== "undefined" && typeof addEventListener !== "undefined") {
-    globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, (updatedParts) => {
-      if (!propagatingLocally) {
-        let event;
-        if (isIEOrEdge) {
-          event = document.createEvent("CustomEvent");
-          event.initCustomEvent(STORAGE_MUTATED_DOM_EVENT_NAME, true, true, updatedParts);
-        } else {
-          event = new CustomEvent(STORAGE_MUTATED_DOM_EVENT_NAME, {
-            detail: updatedParts
-          });
-        }
-        propagatingLocally = true;
-        dispatchEvent(event);
-        propagatingLocally = false;
-      }
-    });
-    addEventListener(STORAGE_MUTATED_DOM_EVENT_NAME, ({ detail }) => {
-      if (!propagatingLocally) {
-        propagateLocally(detail);
-      }
-    });
-  }
-  function propagateLocally(updateParts) {
-    let wasMe = propagatingLocally;
-    try {
-      propagatingLocally = true;
-      globalEvents.storagemutated.fire(updateParts);
-    } finally {
-      propagatingLocally = wasMe;
-    }
-  }
-  var propagatingLocally = false;
-  if (typeof BroadcastChannel !== "undefined") {
-    const bc = new BroadcastChannel(STORAGE_MUTATED_DOM_EVENT_NAME);
-    if (typeof bc.unref === "function") {
-      bc.unref();
-    }
-    globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, (changedParts) => {
-      if (!propagatingLocally) {
-        bc.postMessage(changedParts);
-      }
-    });
-    bc.onmessage = (ev) => {
-      if (ev.data)
-        propagateLocally(ev.data);
-    };
-  } else if (typeof self !== "undefined" && typeof navigator !== "undefined") {
-    globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, (changedParts) => {
-      try {
-        if (!propagatingLocally) {
-          if (typeof localStorage !== "undefined") {
-            localStorage.setItem(STORAGE_MUTATED_DOM_EVENT_NAME, JSON.stringify({
-              trig: Math.random(),
-              changedParts
-            }));
-          }
-          if (typeof self["clients"] === "object") {
-            [...self["clients"].matchAll({ includeUncontrolled: true })].forEach((client) => client.postMessage({
-              type: STORAGE_MUTATED_DOM_EVENT_NAME,
-              changedParts
-            }));
-          }
-        }
-      } catch (_a) {
-      }
-    });
-    if (typeof addEventListener !== "undefined") {
-      addEventListener("storage", (ev) => {
-        if (ev.key === STORAGE_MUTATED_DOM_EVENT_NAME) {
-          const data = JSON.parse(ev.newValue);
-          if (data)
-            propagateLocally(data.changedParts);
-        }
-      });
-    }
-    const swContainer = self.document && navigator.serviceWorker;
-    if (swContainer) {
-      swContainer.addEventListener("message", propagateMessageLocally);
-    }
-  }
-  function propagateMessageLocally({ data }) {
-    if (data && data.type === STORAGE_MUTATED_DOM_EVENT_NAME) {
-      propagateLocally(data.changedParts);
-    }
-  }
-  DexiePromise.rejectionMapper = mapError;
-  setDebug(debug, dexieStackFrameFilter);
-
-  // node_modules/uuid/dist/esm-browser/rng.js
-  var getRandomValues;
-  var rnds8 = new Uint8Array(16);
-  function rng() {
-    if (!getRandomValues) {
-      getRandomValues = typeof crypto !== "undefined" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
-      if (!getRandomValues) {
-        throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
-      }
-    }
-    return getRandomValues(rnds8);
-  }
-
-  // node_modules/uuid/dist/esm-browser/stringify.js
-  var byteToHex = [];
-  for (let i = 0; i < 256; ++i) {
-    byteToHex.push((i + 256).toString(16).slice(1));
-  }
-  function unsafeStringify(arr, offset2 = 0) {
-    return byteToHex[arr[offset2 + 0]] + byteToHex[arr[offset2 + 1]] + byteToHex[arr[offset2 + 2]] + byteToHex[arr[offset2 + 3]] + "-" + byteToHex[arr[offset2 + 4]] + byteToHex[arr[offset2 + 5]] + "-" + byteToHex[arr[offset2 + 6]] + byteToHex[arr[offset2 + 7]] + "-" + byteToHex[arr[offset2 + 8]] + byteToHex[arr[offset2 + 9]] + "-" + byteToHex[arr[offset2 + 10]] + byteToHex[arr[offset2 + 11]] + byteToHex[arr[offset2 + 12]] + byteToHex[arr[offset2 + 13]] + byteToHex[arr[offset2 + 14]] + byteToHex[arr[offset2 + 15]];
-  }
-
-  // node_modules/uuid/dist/esm-browser/native.js
-  var randomUUID = typeof crypto !== "undefined" && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-  var native_default = {
-    randomUUID
-  };
-
-  // node_modules/uuid/dist/esm-browser/v4.js
-  function v4(options, buf, offset2) {
-    if (native_default.randomUUID && !buf && !options) {
-      return native_default.randomUUID();
-    }
-    options = options || {};
-    const rnds = options.random || (options.rng || rng)();
-    rnds[6] = rnds[6] & 15 | 64;
-    rnds[8] = rnds[8] & 63 | 128;
-    if (buf) {
-      offset2 = offset2 || 0;
-      for (let i = 0; i < 16; ++i) {
-        buf[offset2 + i] = rnds[i];
-      }
-      return buf;
-    }
-    return unsafeStringify(rnds);
-  }
-  var v4_default = v4;
-
-  // src/db.ts
-  function createDb() {
-    const db = new Dexie$1("duelmeter");
-    db.version(1).stores({
-      results: "&id,first,win,myDeck,opDeck,point,timestamp",
-      myDecks: "&id,&name",
-      opDecks: "&id,&name"
-    });
-    return db;
-  }
-  var BaseRepository = class {
-    constructor(di) {
-      this.di = di;
-    }
-    get deps() {
-      const db = this.di.get("db");
-      const $reduce = this.di.get("$reduce");
-      return { db, $reduce };
-    }
-    get $reduce() {
-      return this.deps.$reduce;
-    }
-    get db() {
-      return this.deps.db;
-    }
-  };
-  var DuelResultRepository = class extends BaseRepository {
-    async load() {
-      const list = await this.db.results.toArray();
-      const items = list.filter((r) => r.id != null).map((r) => [r.id, r]);
-      this.$reduce({
-        duelResults: {
-          byId: {
-            $set: Object.fromEntries(items)
-          }
-        }
-      });
-    }
-    async add(result) {
-      const id = await this.db.results.add({
-        ...result,
-        id: v4_default()
-      });
-      const entry = { ...result, id };
-      this.$reduce({
-        duelResults: {
-          byId: { [id]: { $set: entry } }
-        }
-      });
-    }
-    async update(result) {
-      await this.db.results.update(result.id, result);
-      this.$reduce({
-        duelResults: {
-          byId: { [result.id]: { $set: result } }
-        }
-      });
-    }
-    async delete(id) {
-      await this.db.results.delete(id);
-      this.$reduce({
-        duelResults: {
-          byId: { $unset: [id] }
-        }
-      });
-    }
-  };
-  var DeckRepository = class extends BaseRepository {
-    constructor(di, tableName) {
-      super(di);
-      this.tableName = tableName;
-    }
-    async load() {
-      const list = await this.db[this.tableName].toArray();
-      this.$reduce({
-        [this.tableName]: {
-          byId: {
-            $set: list.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {})
-          }
-        }
-      });
-    }
-    async add(deck) {
-      const entry = { ...deck, id: v4_default() };
-      const id = await this.db[this.tableName].add(entry);
-      this.$reduce({
-        [this.tableName]: { byId: { [id]: { $set: entry } } }
-      });
-    }
-    async update(deck) {
-      await this.db[this.tableName].update(deck.id, deck);
-      this.$reduce({
-        [this.tableName]: { byId: { [deck.id]: { $set: deck } } }
-      });
-    }
-    async delete(id) {
-      await this.db[this.tableName].delete(id);
-      this.$reduce({
-        [this.tableName]: { byId: { $unset: [id] } }
-      });
-    }
-  };
-
-  // src/deck.tsx
-  var import_react61 = __toESM(require_react());
+  var import_react67 = __toESM(require_react());
 
   // node_modules/@babel/runtime/helpers/esm/extends.js
   function _extends() {
@@ -35123,8 +30235,55 @@
   Container.displayName = "Container";
   var Container_default = Container;
 
+  // node_modules/react-bootstrap/esm/InputGroup.js
+  var import_classnames24 = __toESM(require_classnames());
+  var React45 = __toESM(require_react());
+  var import_react48 = __toESM(require_react());
+  var import_jsx_runtime39 = __toESM(require_jsx_runtime());
+  var InputGroupText = createWithBsPrefix("input-group-text", {
+    Component: "span"
+  });
+  var InputGroupCheckbox = (props2) => /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(InputGroupText, {
+    children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(FormCheckInput_default, {
+      type: "checkbox",
+      ...props2
+    })
+  });
+  var InputGroupRadio = (props2) => /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(InputGroupText, {
+    children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(FormCheckInput_default, {
+      type: "radio",
+      ...props2
+    })
+  });
+  var InputGroup = /* @__PURE__ */ React45.forwardRef(({
+    bsPrefix,
+    size: size2,
+    hasValidation,
+    className,
+    // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
+    as: Component = "div",
+    ...props2
+  }, ref) => {
+    bsPrefix = useBootstrapPrefix(bsPrefix, "input-group");
+    const contextValue = (0, import_react48.useMemo)(() => ({}), []);
+    return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(InputGroupContext_default.Provider, {
+      value: contextValue,
+      children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(Component, {
+        ref,
+        ...props2,
+        className: (0, import_classnames24.default)(className, bsPrefix, size2 && `${bsPrefix}-${size2}`, hasValidation && "has-validation")
+      })
+    });
+  });
+  InputGroup.displayName = "InputGroup";
+  var InputGroup_default = Object.assign(InputGroup, {
+    Text: InputGroupText,
+    Radio: InputGroupRadio,
+    Checkbox: InputGroupCheckbox
+  });
+
   // node_modules/react-bootstrap/esm/Modal.js
-  var import_classnames26 = __toESM(require_classnames());
+  var import_classnames27 = __toESM(require_classnames());
 
   // node_modules/dom-helpers/esm/scrollbarSize.js
   var size;
@@ -35146,8 +30305,8 @@
   }
 
   // node_modules/react-bootstrap/esm/Modal.js
-  var React51 = __toESM(require_react());
-  var import_react53 = __toESM(require_react());
+  var React52 = __toESM(require_react());
+  var import_react54 = __toESM(require_react());
 
   // node_modules/dom-helpers/esm/activeElement.js
   function activeElement(doc) {
@@ -35165,8 +30324,8 @@
   }
 
   // node_modules/@restart/ui/esm/Modal.js
-  var import_react51 = __toESM(require_react());
-  var React46 = __toESM(require_react());
+  var import_react52 = __toESM(require_react());
+  var React47 = __toESM(require_react());
   var import_react_dom3 = __toESM(require_react_dom());
 
   // node_modules/@restart/ui/esm/getScrollbarWidth.js
@@ -35260,7 +30419,7 @@
   var ModalManager_default = ModalManager;
 
   // node_modules/@restart/ui/esm/useWaitForDOMRef.js
-  var import_react48 = __toESM(require_react());
+  var import_react49 = __toESM(require_react());
   var resolveContainerRef = (ref, document2) => {
     if (!canUseDOM_default)
       return null;
@@ -35276,18 +30435,18 @@
   };
   function useWaitForDOMRef(ref, onResolved) {
     const window2 = useWindow();
-    const [resolvedRef, setRef] = (0, import_react48.useState)(() => resolveContainerRef(ref, window2 == null ? void 0 : window2.document));
+    const [resolvedRef, setRef] = (0, import_react49.useState)(() => resolveContainerRef(ref, window2 == null ? void 0 : window2.document));
     if (!resolvedRef) {
       const earlyRef = resolveContainerRef(ref);
       if (earlyRef)
         setRef(earlyRef);
     }
-    (0, import_react48.useEffect)(() => {
+    (0, import_react49.useEffect)(() => {
       if (onResolved && resolvedRef) {
         onResolved(resolvedRef);
       }
     }, [onResolved, resolvedRef]);
-    (0, import_react48.useEffect)(() => {
+    (0, import_react49.useEffect)(() => {
       const nextRef = resolveContainerRef(ref);
       if (nextRef !== resolvedRef) {
         setRef(nextRef);
@@ -35297,10 +30456,10 @@
   }
 
   // node_modules/@restart/ui/esm/ImperativeTransition.js
-  var import_react50 = __toESM(require_react());
+  var import_react51 = __toESM(require_react());
 
   // node_modules/@restart/ui/esm/NoopTransition.js
-  var import_react49 = __toESM(require_react());
+  var import_react50 = __toESM(require_react());
   function NoopTransition({
     children,
     in: inProp,
@@ -35308,10 +30467,10 @@
     mountOnEnter,
     unmountOnExit
   }) {
-    const ref = (0, import_react49.useRef)(null);
-    const hasEnteredRef = (0, import_react49.useRef)(inProp);
+    const ref = (0, import_react50.useRef)(null);
+    const hasEnteredRef = (0, import_react50.useRef)(inProp);
     const handleExited = useEventCallback(onExited);
-    (0, import_react49.useEffect)(() => {
+    (0, import_react50.useEffect)(() => {
       if (inProp)
         hasEnteredRef.current = true;
       else {
@@ -35319,7 +30478,7 @@
       }
     }, [inProp, handleExited]);
     const combinedRef = useMergedRefs_default(ref, children.ref);
-    const child = /* @__PURE__ */ (0, import_react49.cloneElement)(children, {
+    const child = /* @__PURE__ */ (0, import_react50.cloneElement)(children, {
       ref: combinedRef
     });
     if (inProp)
@@ -35335,13 +30494,13 @@
   var NoopTransition_default = NoopTransition;
 
   // node_modules/@restart/ui/esm/ImperativeTransition.js
-  var import_jsx_runtime39 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime40 = __toESM(require_jsx_runtime());
   function useTransition({
     in: inProp,
     onTransition
   }) {
-    const ref = (0, import_react50.useRef)(null);
-    const isInitialRef = (0, import_react50.useRef)(true);
+    const ref = (0, import_react51.useRef)(null);
+    const isInitialRef = (0, import_react51.useRef)(true);
     const handleTransition = useEventCallback(onTransition);
     useIsomorphicEffect_default(() => {
       if (!ref.current) {
@@ -35373,7 +30532,7 @@
     onEntered,
     transition
   }) {
-    const [exited, setExited] = (0, import_react50.useState)(!inProp);
+    const [exited, setExited] = (0, import_react51.useState)(!inProp);
     if (inProp && exited) {
       setExited(false);
     }
@@ -35398,20 +30557,20 @@
       }
     });
     const combinedRef = useMergedRefs_default(ref, children.ref);
-    return exited && !inProp ? null : /* @__PURE__ */ (0, import_react50.cloneElement)(children, {
+    return exited && !inProp ? null : /* @__PURE__ */ (0, import_react51.cloneElement)(children, {
       ref: combinedRef
     });
   }
   function renderTransition(Component, runTransition, props2) {
     if (Component) {
-      return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(Component, Object.assign({}, props2));
+      return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Component, Object.assign({}, props2));
     }
     if (runTransition) {
-      return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(ImperativeTransition, Object.assign({}, props2, {
+      return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(ImperativeTransition, Object.assign({}, props2, {
         transition: runTransition
       }));
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(NoopTransition_default, Object.assign({}, props2));
+    return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(NoopTransition_default, Object.assign({}, props2));
   }
 
   // node_modules/@restart/ui/esm/utils.js
@@ -35420,9 +30579,9 @@
   }
 
   // node_modules/@restart/ui/esm/Modal.js
-  var import_jsx_runtime40 = __toESM(require_jsx_runtime());
   var import_jsx_runtime41 = __toESM(require_jsx_runtime());
   var import_jsx_runtime42 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime43 = __toESM(require_jsx_runtime());
   var _excluded6 = ["show", "role", "className", "style", "children", "backdrop", "keyboard", "onBackdropClick", "onEscapeKeyDown", "transition", "runTransition", "backdropTransition", "runBackdropTransition", "autoFocus", "enforceFocus", "restoreFocus", "restoreFocusOptions", "renderDialog", "renderBackdrop", "manager", "container", "onShow", "onHide", "onExit", "onExited", "onExiting", "onEnter", "onEntering", "onEntered"];
   function _objectWithoutPropertiesLoose7(source, excluded) {
     if (source == null)
@@ -35449,7 +30608,7 @@
   function useModalManager(provided) {
     const window2 = useWindow();
     const modalManager = provided || getManager(window2);
-    const modal = (0, import_react51.useRef)({
+    const modal = (0, import_react52.useRef)({
       dialog: null,
       backdrop: null
     });
@@ -35457,15 +30616,15 @@
       add: () => modalManager.add(modal.current),
       remove: () => modalManager.remove(modal.current),
       isTopModal: () => modalManager.isTopModal(modal.current),
-      setDialogRef: (0, import_react51.useCallback)((ref) => {
+      setDialogRef: (0, import_react52.useCallback)((ref) => {
         modal.current.dialog = ref;
       }, []),
-      setBackdropRef: (0, import_react51.useCallback)((ref) => {
+      setBackdropRef: (0, import_react52.useCallback)((ref) => {
         modal.current.backdrop = ref;
       }, [])
     });
   }
-  var Modal = /* @__PURE__ */ (0, import_react51.forwardRef)((_ref, ref) => {
+  var Modal = /* @__PURE__ */ (0, import_react52.forwardRef)((_ref, ref) => {
     let {
       show = false,
       role = "dialog",
@@ -35485,7 +30644,7 @@
       restoreFocus = true,
       restoreFocusOptions,
       renderDialog,
-      renderBackdrop = (props2) => /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", Object.assign({}, props2)),
+      renderBackdrop = (props2) => /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", Object.assign({}, props2)),
       manager: providedManager,
       container: containerRef,
       onShow,
@@ -35503,9 +30662,9 @@
     const modal = useModalManager(providedManager);
     const isMounted = useMounted();
     const prevShow = usePrevious(show);
-    const [exited, setExited] = (0, import_react51.useState)(!show);
-    const lastFocusRef = (0, import_react51.useRef)(null);
-    (0, import_react51.useImperativeHandle)(ref, () => modal, [modal]);
+    const [exited, setExited] = (0, import_react52.useState)(!show);
+    const lastFocusRef = (0, import_react52.useRef)(null);
+    (0, import_react52.useImperativeHandle)(ref, () => modal, [modal]);
     if (canUseDOM_default && !prevShow && show) {
       lastFocusRef.current = activeElement(ownerWindow2 == null ? void 0 : ownerWindow2.document);
     }
@@ -35545,7 +30704,7 @@
         lastFocusRef.current = null;
       }
     });
-    (0, import_react51.useEffect)(() => {
+    (0, import_react52.useEffect)(() => {
       if (!show || !container)
         return;
       handleShow();
@@ -35555,7 +30714,7 @@
       /* should never change: */
       handleShow
     ]);
-    (0, import_react51.useEffect)(() => {
+    (0, import_react52.useEffect)(() => {
       if (!exited)
         return;
       handleHide();
@@ -35589,8 +30748,8 @@
         }
       }
     });
-    const removeFocusListenerRef = (0, import_react51.useRef)();
-    const removeKeydownListenerRef = (0, import_react51.useRef)();
+    const removeFocusListenerRef = (0, import_react52.useRef)();
+    const removeKeydownListenerRef = (0, import_react52.useRef)();
     const handleHidden = (...args) => {
       setExited(true);
       onExited == null ? void 0 : onExited(...args);
@@ -35608,8 +30767,8 @@
       className,
       tabIndex: -1
     });
-    let dialog = renderDialog ? renderDialog(dialogProps) : /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", Object.assign({}, dialogProps, {
-      children: /* @__PURE__ */ React46.cloneElement(children, {
+    let dialog = renderDialog ? renderDialog(dialogProps) : /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", Object.assign({}, dialogProps, {
+      children: /* @__PURE__ */ React47.cloneElement(children, {
         role: "document"
       })
     }));
@@ -35640,8 +30799,8 @@
         children: backdropElement
       });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_jsx_runtime41.Fragment, {
-      children: /* @__PURE__ */ import_react_dom3.default.createPortal(/* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(import_jsx_runtime41.Fragment, {
+    return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_jsx_runtime42.Fragment, {
+      children: /* @__PURE__ */ import_react_dom3.default.createPortal(/* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(import_jsx_runtime42.Fragment, {
         children: [backdropElement, dialog]
       }), container)
     });
@@ -35741,8 +30900,8 @@
   var ModalBody_default = createWithBsPrefix("modal-body");
 
   // node_modules/react-bootstrap/esm/ModalContext.js
-  var React47 = __toESM(require_react());
-  var ModalContext = /* @__PURE__ */ React47.createContext({
+  var React48 = __toESM(require_react());
+  var ModalContext = /* @__PURE__ */ React48.createContext({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onHide() {
     }
@@ -35750,10 +30909,10 @@
   var ModalContext_default = ModalContext;
 
   // node_modules/react-bootstrap/esm/ModalDialog.js
-  var import_classnames24 = __toESM(require_classnames());
-  var React48 = __toESM(require_react());
-  var import_jsx_runtime43 = __toESM(require_jsx_runtime());
-  var ModalDialog = /* @__PURE__ */ React48.forwardRef(({
+  var import_classnames25 = __toESM(require_classnames());
+  var React49 = __toESM(require_react());
+  var import_jsx_runtime44 = __toESM(require_jsx_runtime());
+  var ModalDialog = /* @__PURE__ */ React49.forwardRef(({
     bsPrefix,
     className,
     contentClassName,
@@ -35767,12 +30926,12 @@
     bsPrefix = useBootstrapPrefix(bsPrefix, "modal");
     const dialogClass = `${bsPrefix}-dialog`;
     const fullScreenClass = typeof fullscreen === "string" ? `${bsPrefix}-fullscreen-${fullscreen}` : `${bsPrefix}-fullscreen`;
-    return /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", {
       ...props2,
       ref,
-      className: (0, import_classnames24.default)(dialogClass, className, size2 && `${bsPrefix}-${size2}`, centered && `${dialogClass}-centered`, scrollable && `${dialogClass}-scrollable`, fullscreen && fullScreenClass),
-      children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("div", {
-        className: (0, import_classnames24.default)(`${bsPrefix}-content`, contentClassName),
+      className: (0, import_classnames25.default)(dialogClass, className, size2 && `${bsPrefix}-${size2}`, centered && `${dialogClass}-centered`, scrollable && `${dialogClass}-scrollable`, fullscreen && fullScreenClass),
+      children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", {
+        className: (0, import_classnames25.default)(`${bsPrefix}-content`, contentClassName),
         children
       })
     });
@@ -35784,15 +30943,15 @@
   var ModalFooter_default = createWithBsPrefix("modal-footer");
 
   // node_modules/react-bootstrap/esm/ModalHeader.js
-  var import_classnames25 = __toESM(require_classnames());
-  var React50 = __toESM(require_react());
+  var import_classnames26 = __toESM(require_classnames());
+  var React51 = __toESM(require_react());
 
   // node_modules/react-bootstrap/esm/AbstractModalHeader.js
-  var React49 = __toESM(require_react());
-  var import_react52 = __toESM(require_react());
-  var import_jsx_runtime44 = __toESM(require_jsx_runtime());
+  var React50 = __toESM(require_react());
+  var import_react53 = __toESM(require_react());
   var import_jsx_runtime45 = __toESM(require_jsx_runtime());
-  var AbstractModalHeader = /* @__PURE__ */ React49.forwardRef(({
+  var import_jsx_runtime46 = __toESM(require_jsx_runtime());
+  var AbstractModalHeader = /* @__PURE__ */ React50.forwardRef(({
     closeLabel = "Close",
     closeVariant,
     closeButton = false,
@@ -35800,15 +30959,15 @@
     children,
     ...props2
   }, ref) => {
-    const context3 = (0, import_react52.useContext)(ModalContext_default);
+    const context3 = (0, import_react53.useContext)(ModalContext_default);
     const handleClick = useEventCallback(() => {
       context3 == null ? void 0 : context3.onHide();
       onHide == null ? void 0 : onHide();
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)("div", {
       ref,
       ...props2,
-      children: [children, closeButton && /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(CloseButton_default, {
+      children: [children, closeButton && /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(CloseButton_default, {
         "aria-label": closeLabel,
         variant: closeVariant,
         onClick: handleClick
@@ -35818,8 +30977,8 @@
   var AbstractModalHeader_default = AbstractModalHeader;
 
   // node_modules/react-bootstrap/esm/ModalHeader.js
-  var import_jsx_runtime46 = __toESM(require_jsx_runtime());
-  var ModalHeader = /* @__PURE__ */ React50.forwardRef(({
+  var import_jsx_runtime47 = __toESM(require_jsx_runtime());
+  var ModalHeader = /* @__PURE__ */ React51.forwardRef(({
     bsPrefix,
     className,
     closeLabel = "Close",
@@ -35827,10 +30986,10 @@
     ...props2
   }, ref) => {
     bsPrefix = useBootstrapPrefix(bsPrefix, "modal-header");
-    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(AbstractModalHeader_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(AbstractModalHeader_default, {
       ref,
       ...props2,
-      className: (0, import_classnames25.default)(className, bsPrefix),
+      className: (0, import_classnames26.default)(className, bsPrefix),
       closeLabel,
       closeButton
     });
@@ -35845,20 +31004,20 @@
   });
 
   // node_modules/react-bootstrap/esm/Modal.js
-  var import_jsx_runtime47 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime48 = __toESM(require_jsx_runtime());
   function DialogTransition(props2) {
-    return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Fade_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(Fade_default, {
       ...props2,
       timeout: null
     });
   }
   function BackdropTransition(props2) {
-    return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Fade_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(Fade_default, {
       ...props2,
       timeout: null
     });
   }
-  var Modal2 = /* @__PURE__ */ React51.forwardRef(({
+  var Modal2 = /* @__PURE__ */ React52.forwardRef(({
     bsPrefix,
     className,
     style: style2,
@@ -35892,17 +31051,17 @@
     manager: propsManager,
     ...props2
   }, ref) => {
-    const [modalStyle, setStyle] = (0, import_react53.useState)({});
-    const [animateStaticModal, setAnimateStaticModal] = (0, import_react53.useState)(false);
-    const waitingForMouseUpRef = (0, import_react53.useRef)(false);
-    const ignoreBackdropClickRef = (0, import_react53.useRef)(false);
-    const removeStaticModalAnimationRef = (0, import_react53.useRef)(null);
+    const [modalStyle, setStyle] = (0, import_react54.useState)({});
+    const [animateStaticModal, setAnimateStaticModal] = (0, import_react54.useState)(false);
+    const waitingForMouseUpRef = (0, import_react54.useRef)(false);
+    const ignoreBackdropClickRef = (0, import_react54.useRef)(false);
+    const removeStaticModalAnimationRef = (0, import_react54.useRef)(null);
     const [modal, setModalRef] = useCallbackRef();
     const mergedRef = useMergedRefs_default(ref, setModalRef);
     const handleHide = useEventCallback(onHide);
     const isRTL = useIsRTL();
     bsPrefix = useBootstrapPrefix(bsPrefix, "modal");
-    const modalContext = (0, import_react53.useMemo)(() => ({
+    const modalContext = (0, import_react54.useMemo)(() => ({
       onHide: handleHide
     }), [handleHide]);
     function getModalManager() {
@@ -35993,26 +31152,26 @@
       onExited == null ? void 0 : onExited(node);
       removeEventListener_default(window, "resize", handleWindowResize);
     };
-    const renderBackdrop = (0, import_react53.useCallback)((backdropProps) => /* @__PURE__ */ (0, import_jsx_runtime47.jsx)("div", {
+    const renderBackdrop = (0, import_react54.useCallback)((backdropProps) => /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("div", {
       ...backdropProps,
-      className: (0, import_classnames26.default)(`${bsPrefix}-backdrop`, backdropClassName, !animation && "show")
+      className: (0, import_classnames27.default)(`${bsPrefix}-backdrop`, backdropClassName, !animation && "show")
     }), [animation, backdropClassName, bsPrefix]);
     const baseModalStyle = {
       ...style2,
       ...modalStyle
     };
     baseModalStyle.display = "block";
-    const renderDialog = (dialogProps) => /* @__PURE__ */ (0, import_jsx_runtime47.jsx)("div", {
+    const renderDialog = (dialogProps) => /* @__PURE__ */ (0, import_jsx_runtime48.jsx)("div", {
       role: "dialog",
       ...dialogProps,
       style: baseModalStyle,
-      className: (0, import_classnames26.default)(className, bsPrefix, animateStaticModal && `${bsPrefix}-static`, !animation && "show"),
+      className: (0, import_classnames27.default)(className, bsPrefix, animateStaticModal && `${bsPrefix}-static`, !animation && "show"),
       onClick: backdrop ? handleClick : void 0,
       onMouseUp: handleMouseUp,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledby,
       "aria-describedby": ariaDescribedby,
-      children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Dialog, {
+      children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(Dialog, {
         ...props2,
         onMouseDown: handleDialogMouseDown,
         className: dialogClassName,
@@ -36020,9 +31179,9 @@
         children
       })
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(ModalContext_default.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(ModalContext_default.Provider, {
       value: modalContext,
-      children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Modal_default, {
+      children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(Modal_default, {
         show,
         ref: mergedRef,
         backdrop,
@@ -36061,15 +31220,15 @@
   });
 
   // node_modules/react-bootstrap/esm/Navbar.js
-  var import_classnames32 = __toESM(require_classnames());
-  var React59 = __toESM(require_react());
-  var import_react60 = __toESM(require_react());
+  var import_classnames33 = __toESM(require_classnames());
+  var React60 = __toESM(require_react());
+  var import_react61 = __toESM(require_react());
 
   // node_modules/react-bootstrap/esm/NavbarBrand.js
-  var import_classnames27 = __toESM(require_classnames());
-  var React52 = __toESM(require_react());
-  var import_jsx_runtime48 = __toESM(require_jsx_runtime());
-  var NavbarBrand = /* @__PURE__ */ React52.forwardRef(({
+  var import_classnames28 = __toESM(require_classnames());
+  var React53 = __toESM(require_react());
+  var import_jsx_runtime49 = __toESM(require_jsx_runtime());
+  var NavbarBrand = /* @__PURE__ */ React53.forwardRef(({
     bsPrefix,
     className,
     as,
@@ -36077,30 +31236,30 @@
   }, ref) => {
     bsPrefix = useBootstrapPrefix(bsPrefix, "navbar-brand");
     const Component = as || (props2.href ? "a" : "span");
-    return /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(Component, {
+    return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(Component, {
       ...props2,
       ref,
-      className: (0, import_classnames27.default)(className, bsPrefix)
+      className: (0, import_classnames28.default)(className, bsPrefix)
     });
   });
   NavbarBrand.displayName = "NavbarBrand";
   var NavbarBrand_default = NavbarBrand;
 
   // node_modules/react-bootstrap/esm/NavbarCollapse.js
-  var React53 = __toESM(require_react());
-  var import_react54 = __toESM(require_react());
-  var import_jsx_runtime49 = __toESM(require_jsx_runtime());
-  var NavbarCollapse = /* @__PURE__ */ React53.forwardRef(({
+  var React54 = __toESM(require_react());
+  var import_react55 = __toESM(require_react());
+  var import_jsx_runtime50 = __toESM(require_jsx_runtime());
+  var NavbarCollapse = /* @__PURE__ */ React54.forwardRef(({
     children,
     bsPrefix,
     ...props2
   }, ref) => {
     bsPrefix = useBootstrapPrefix(bsPrefix, "navbar-collapse");
-    const context3 = (0, import_react54.useContext)(NavbarContext_default);
-    return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(Collapse_default, {
+    const context3 = (0, import_react55.useContext)(NavbarContext_default);
+    return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Collapse_default, {
       in: !!(context3 && context3.expanded),
       ...props2,
-      children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)("div", {
+      children: /* @__PURE__ */ (0, import_jsx_runtime50.jsx)("div", {
         ref,
         className: bsPrefix,
         children
@@ -36111,11 +31270,11 @@
   var NavbarCollapse_default = NavbarCollapse;
 
   // node_modules/react-bootstrap/esm/NavbarToggle.js
-  var import_classnames28 = __toESM(require_classnames());
-  var React54 = __toESM(require_react());
-  var import_react55 = __toESM(require_react());
-  var import_jsx_runtime50 = __toESM(require_jsx_runtime());
-  var NavbarToggle = /* @__PURE__ */ React54.forwardRef(({
+  var import_classnames29 = __toESM(require_classnames());
+  var React55 = __toESM(require_react());
+  var import_react56 = __toESM(require_react());
+  var import_jsx_runtime51 = __toESM(require_jsx_runtime());
+  var NavbarToggle = /* @__PURE__ */ React55.forwardRef(({
     bsPrefix,
     className,
     children,
@@ -36129,7 +31288,7 @@
     const {
       onToggle,
       expanded
-    } = (0, import_react55.useContext)(NavbarContext_default) || {};
+    } = (0, import_react56.useContext)(NavbarContext_default) || {};
     const handleClick = useEventCallback((e) => {
       if (onClick)
         onClick(e);
@@ -36139,13 +31298,13 @@
     if (Component === "button") {
       props2.type = "button";
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(Component, {
+    return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(Component, {
       ...props2,
       ref,
       onClick: handleClick,
       "aria-label": label,
-      className: (0, import_classnames28.default)(className, bsPrefix, !expanded && "collapsed"),
-      children: children || /* @__PURE__ */ (0, import_jsx_runtime50.jsx)("span", {
+      className: (0, import_classnames29.default)(className, bsPrefix, !expanded && "collapsed"),
+      children: children || /* @__PURE__ */ (0, import_jsx_runtime51.jsx)("span", {
         className: `${bsPrefix}-icon`
       })
     });
@@ -36154,14 +31313,14 @@
   var NavbarToggle_default = NavbarToggle;
 
   // node_modules/react-bootstrap/esm/NavbarOffcanvas.js
-  var React58 = __toESM(require_react());
-  var import_react59 = __toESM(require_react());
+  var React59 = __toESM(require_react());
+  var import_react60 = __toESM(require_react());
 
   // node_modules/react-bootstrap/esm/Offcanvas.js
-  var import_classnames31 = __toESM(require_classnames());
+  var import_classnames32 = __toESM(require_classnames());
 
   // node_modules/@restart/hooks/esm/useMediaQuery.js
-  var import_react56 = __toESM(require_react());
+  var import_react57 = __toESM(require_react());
   var matchersByWindow = /* @__PURE__ */ new WeakMap();
   var getMatcher = (query, targetWindow) => {
     if (!query || !targetWindow)
@@ -36178,7 +31337,7 @@
   };
   function useMediaQuery(query, targetWindow = typeof window === "undefined" ? void 0 : window) {
     const mql = getMatcher(query, targetWindow);
-    const [matches, setMatches] = (0, import_react56.useState)(() => mql ? mql.matches : false);
+    const [matches, setMatches] = (0, import_react57.useState)(() => mql ? mql.matches : false);
     useIsomorphicEffect_default(() => {
       let mql2 = getMatcher(query, targetWindow);
       if (!mql2) {
@@ -36204,7 +31363,7 @@
   }
 
   // node_modules/@restart/hooks/esm/useBreakpoint.js
-  var import_react57 = __toESM(require_react());
+  var import_react58 = __toESM(require_react());
   function createBreakpointHook(breakpointValues) {
     const names = Object.keys(breakpointValues);
     function and(query, next) {
@@ -36244,7 +31403,7 @@
           [breakpointOrMap]: direction
         };
       }
-      let query = (0, import_react57.useMemo)(() => Object.entries(breakpointMap).reduce((query2, [key, direction2]) => {
+      let query = (0, import_react58.useMemo)(() => Object.entries(breakpointMap).reduce((query2, [key, direction2]) => {
         if (direction2 === "up" || direction2 === true) {
           query2 = and(query2, getMinQuery(key));
         }
@@ -36268,21 +31427,21 @@
   var useBreakpoint_default = useBreakpoint;
 
   // node_modules/react-bootstrap/esm/Offcanvas.js
-  var React57 = __toESM(require_react());
-  var import_react58 = __toESM(require_react());
+  var React58 = __toESM(require_react());
+  var import_react59 = __toESM(require_react());
 
   // node_modules/react-bootstrap/esm/OffcanvasBody.js
   var OffcanvasBody_default = createWithBsPrefix("offcanvas-body");
 
   // node_modules/react-bootstrap/esm/OffcanvasToggling.js
-  var import_classnames29 = __toESM(require_classnames());
-  var React55 = __toESM(require_react());
-  var import_jsx_runtime51 = __toESM(require_jsx_runtime());
+  var import_classnames30 = __toESM(require_classnames());
+  var React56 = __toESM(require_react());
+  var import_jsx_runtime52 = __toESM(require_jsx_runtime());
   var transitionStyles = {
     [ENTERING]: "show",
     [ENTERED]: "show"
   };
-  var OffcanvasToggling = /* @__PURE__ */ React55.forwardRef(({
+  var OffcanvasToggling = /* @__PURE__ */ React56.forwardRef(({
     bsPrefix,
     className,
     children,
@@ -36293,7 +31452,7 @@
     ...props2
   }, ref) => {
     bsPrefix = useBootstrapPrefix(bsPrefix, "offcanvas");
-    return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(TransitionWrapper_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(TransitionWrapper_default, {
       ref,
       addEndListener: transitionEndListener,
       in: inProp,
@@ -36302,9 +31461,9 @@
       appear,
       ...props2,
       childRef: children.ref,
-      children: (status, innerProps) => /* @__PURE__ */ React55.cloneElement(children, {
+      children: (status, innerProps) => /* @__PURE__ */ React56.cloneElement(children, {
         ...innerProps,
-        className: (0, import_classnames29.default)(className, children.props.className, (status === ENTERING || status === EXITING) && `${bsPrefix}-toggling`, transitionStyles[status])
+        className: (0, import_classnames30.default)(className, children.props.className, (status === ENTERING || status === EXITING) && `${bsPrefix}-toggling`, transitionStyles[status])
       })
     });
   });
@@ -36312,10 +31471,10 @@
   var OffcanvasToggling_default = OffcanvasToggling;
 
   // node_modules/react-bootstrap/esm/OffcanvasHeader.js
-  var import_classnames30 = __toESM(require_classnames());
-  var React56 = __toESM(require_react());
-  var import_jsx_runtime52 = __toESM(require_jsx_runtime());
-  var OffcanvasHeader = /* @__PURE__ */ React56.forwardRef(({
+  var import_classnames31 = __toESM(require_classnames());
+  var React57 = __toESM(require_react());
+  var import_jsx_runtime53 = __toESM(require_jsx_runtime());
+  var OffcanvasHeader = /* @__PURE__ */ React57.forwardRef(({
     bsPrefix,
     className,
     closeLabel = "Close",
@@ -36323,10 +31482,10 @@
     ...props2
   }, ref) => {
     bsPrefix = useBootstrapPrefix(bsPrefix, "offcanvas-header");
-    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(AbstractModalHeader_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(AbstractModalHeader_default, {
       ref,
       ...props2,
-      className: (0, import_classnames30.default)(className, bsPrefix),
+      className: (0, import_classnames31.default)(className, bsPrefix),
       closeLabel,
       closeButton
     });
@@ -36341,20 +31500,20 @@
   });
 
   // node_modules/react-bootstrap/esm/Offcanvas.js
-  var import_jsx_runtime53 = __toESM(require_jsx_runtime());
   var import_jsx_runtime54 = __toESM(require_jsx_runtime());
   var import_jsx_runtime55 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
   function DialogTransition2(props2) {
-    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(OffcanvasToggling_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(OffcanvasToggling_default, {
       ...props2
     });
   }
   function BackdropTransition2(props2) {
-    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(Fade_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Fade_default, {
       ...props2
     });
   }
-  var Offcanvas = /* @__PURE__ */ React57.forwardRef(({
+  var Offcanvas = /* @__PURE__ */ React58.forwardRef(({
     bsPrefix,
     className,
     children,
@@ -36385,21 +31544,21 @@
     renderStaticNode = false,
     ...props2
   }, ref) => {
-    const modalManager = (0, import_react58.useRef)();
+    const modalManager = (0, import_react59.useRef)();
     bsPrefix = useBootstrapPrefix(bsPrefix, "offcanvas");
     const {
       onToggle
-    } = (0, import_react58.useContext)(NavbarContext_default) || {};
-    const [showOffcanvas, setShowOffcanvas] = (0, import_react58.useState)(false);
+    } = (0, import_react59.useContext)(NavbarContext_default) || {};
+    const [showOffcanvas, setShowOffcanvas] = (0, import_react59.useState)(false);
     const hideResponsiveOffcanvas = useBreakpoint_default(responsive || "xs", "up");
-    (0, import_react58.useEffect)(() => {
+    (0, import_react59.useEffect)(() => {
       setShowOffcanvas(responsive ? show && !hideResponsiveOffcanvas : show);
     }, [show, responsive, hideResponsiveOffcanvas]);
     const handleHide = useEventCallback(() => {
       onToggle == null ? void 0 : onToggle();
       onHide == null ? void 0 : onHide();
     });
-    const modalContext = (0, import_react58.useMemo)(() => ({
+    const modalContext = (0, import_react59.useMemo)(() => ({
       onHide: handleHide
     }), [handleHide]);
     function getModalManager() {
@@ -36424,21 +31583,21 @@
         node.style.visibility = "";
       onExited == null ? void 0 : onExited(...args);
     };
-    const renderBackdrop = (0, import_react58.useCallback)((backdropProps) => /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("div", {
+    const renderBackdrop = (0, import_react59.useCallback)((backdropProps) => /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("div", {
       ...backdropProps,
-      className: (0, import_classnames31.default)(`${bsPrefix}-backdrop`, backdropClassName)
+      className: (0, import_classnames32.default)(`${bsPrefix}-backdrop`, backdropClassName)
     }), [backdropClassName, bsPrefix]);
-    const renderDialog = (dialogProps) => /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("div", {
+    const renderDialog = (dialogProps) => /* @__PURE__ */ (0, import_jsx_runtime54.jsx)("div", {
       ...dialogProps,
       ...props2,
-      className: (0, import_classnames31.default)(className, responsive ? `${bsPrefix}-${responsive}` : bsPrefix, `${bsPrefix}-${placement}`),
+      className: (0, import_classnames32.default)(className, responsive ? `${bsPrefix}-${responsive}` : bsPrefix, `${bsPrefix}-${placement}`),
       "aria-labelledby": ariaLabelledby,
       children
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(import_jsx_runtime54.Fragment, {
-      children: [!showOffcanvas && (responsive || renderStaticNode) && renderDialog({}), /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(ModalContext_default.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(import_jsx_runtime55.Fragment, {
+      children: [!showOffcanvas && (responsive || renderStaticNode) && renderDialog({}), /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(ModalContext_default.Provider, {
         value: modalContext,
-        children: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(Modal_default, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Modal_default, {
           show: showOffcanvas,
           ref,
           backdrop,
@@ -36474,10 +31633,10 @@
   });
 
   // node_modules/react-bootstrap/esm/NavbarOffcanvas.js
-  var import_jsx_runtime56 = __toESM(require_jsx_runtime());
-  var NavbarOffcanvas = /* @__PURE__ */ React58.forwardRef((props2, ref) => {
-    const context3 = (0, import_react59.useContext)(NavbarContext_default);
-    return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(Offcanvas_default, {
+  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
+  var NavbarOffcanvas = /* @__PURE__ */ React59.forwardRef((props2, ref) => {
+    const context3 = (0, import_react60.useContext)(NavbarContext_default);
+    return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Offcanvas_default, {
       ref,
       show: !!(context3 != null && context3.expanded),
       ...props2,
@@ -36488,11 +31647,11 @@
   var NavbarOffcanvas_default = NavbarOffcanvas;
 
   // node_modules/react-bootstrap/esm/Navbar.js
-  var import_jsx_runtime57 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
   var NavbarText = createWithBsPrefix("navbar-text", {
     Component: "span"
   });
-  var Navbar = /* @__PURE__ */ React59.forwardRef((props2, ref) => {
+  var Navbar = /* @__PURE__ */ React60.forwardRef((props2, ref) => {
     const {
       bsPrefix: initialBsPrefix,
       expand = true,
@@ -36512,7 +31671,7 @@
       expanded: "onToggle"
     });
     const bsPrefix = useBootstrapPrefix(initialBsPrefix, "navbar");
-    const handleCollapse = (0, import_react60.useCallback)((...args) => {
+    const handleCollapse = (0, import_react61.useCallback)((...args) => {
       onSelect == null ? void 0 : onSelect(...args);
       if (collapseOnSelect && expanded) {
         onToggle == null ? void 0 : onToggle(false);
@@ -36524,20 +31683,20 @@
     let expandClass = `${bsPrefix}-expand`;
     if (typeof expand === "string")
       expandClass = `${expandClass}-${expand}`;
-    const navbarContext = (0, import_react60.useMemo)(() => ({
+    const navbarContext = (0, import_react61.useMemo)(() => ({
       onToggle: () => onToggle == null ? void 0 : onToggle(!expanded),
       bsPrefix,
       expanded: !!expanded,
       expand
     }), [bsPrefix, expanded, expand, onToggle]);
-    return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(NavbarContext_default.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(NavbarContext_default.Provider, {
       value: navbarContext,
-      children: /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(SelectableContext_default.Provider, {
+      children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(SelectableContext_default.Provider, {
         value: handleCollapse,
-        children: /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(Component, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Component, {
           ref,
           ...controlledProps,
-          className: (0, import_classnames32.default)(className, bsPrefix, expand && expandClass, variant && `${bsPrefix}-${variant}`, bg && `bg-${bg}`, sticky && `sticky-${sticky}`, fixed && `fixed-${fixed}`)
+          className: (0, import_classnames33.default)(className, bsPrefix, expand && expandClass, variant && `${bsPrefix}-${variant}`, bg && `bg-${bg}`, sticky && `sticky-${sticky}`, fixed && `fixed-${fixed}`)
         })
       })
     });
@@ -36552,10 +31711,10 @@
   });
 
   // node_modules/react-bootstrap/esm/Row.js
-  var import_classnames33 = __toESM(require_classnames());
-  var React60 = __toESM(require_react());
-  var import_jsx_runtime58 = __toESM(require_jsx_runtime());
-  var Row = /* @__PURE__ */ React60.forwardRef(({
+  var import_classnames34 = __toESM(require_classnames());
+  var React61 = __toESM(require_react());
+  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
+  var Row = /* @__PURE__ */ React61.forwardRef(({
     bsPrefix,
     className,
     // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
@@ -36582,20 +31741,20 @@
       if (cols != null)
         classes.push(`${sizePrefix}${infix}-${cols}`);
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(Component, {
+    return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(Component, {
       ref,
       ...props2,
-      className: (0, import_classnames33.default)(className, decoratedBsPrefix, ...classes)
+      className: (0, import_classnames34.default)(className, decoratedBsPrefix, ...classes)
     });
   });
   Row.displayName = "Row";
   var Row_default = Row;
 
   // node_modules/react-bootstrap/esm/Table.js
-  var import_classnames34 = __toESM(require_classnames());
-  var React61 = __toESM(require_react());
-  var import_jsx_runtime59 = __toESM(require_jsx_runtime());
-  var Table2 = /* @__PURE__ */ React61.forwardRef(({
+  var import_classnames35 = __toESM(require_classnames());
+  var React62 = __toESM(require_react());
+  var import_jsx_runtime60 = __toESM(require_jsx_runtime());
+  var Table = /* @__PURE__ */ React62.forwardRef(({
     bsPrefix,
     className,
     striped,
@@ -36608,8 +31767,8 @@
     ...props2
   }, ref) => {
     const decoratedBsPrefix = useBootstrapPrefix(bsPrefix, "table");
-    const classes = (0, import_classnames34.default)(className, decoratedBsPrefix, variant && `${decoratedBsPrefix}-${variant}`, size2 && `${decoratedBsPrefix}-${size2}`, striped && `${decoratedBsPrefix}-${typeof striped === "string" ? `striped-${striped}` : "striped"}`, bordered && `${decoratedBsPrefix}-bordered`, borderless && `${decoratedBsPrefix}-borderless`, hover && `${decoratedBsPrefix}-hover`);
-    const table = /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("table", {
+    const classes = (0, import_classnames35.default)(className, decoratedBsPrefix, variant && `${decoratedBsPrefix}-${variant}`, size2 && `${decoratedBsPrefix}-${size2}`, striped && `${decoratedBsPrefix}-${typeof striped === "string" ? `striped-${striped}` : "striped"}`, bordered && `${decoratedBsPrefix}-bordered`, borderless && `${decoratedBsPrefix}-borderless`, hover && `${decoratedBsPrefix}-hover`);
+    const table = /* @__PURE__ */ (0, import_jsx_runtime60.jsx)("table", {
       ...props2,
       className: classes,
       ref
@@ -36619,20 +31778,4905 @@
       if (typeof responsive === "string") {
         responsiveClass = `${responsiveClass}-${responsive}`;
       }
-      return /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("div", {
+      return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)("div", {
         className: responsiveClass,
         children: table
       });
     }
     return table;
   });
-  var Table_default = Table2;
+  var Table_default = Table;
+
+  // node_modules/dexie/dist/modern/dexie.mjs
+  var _global = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : global;
+  var keys = Object.keys;
+  var isArray = Array.isArray;
+  if (typeof Promise !== "undefined" && !_global.Promise) {
+    _global.Promise = Promise;
+  }
+  function extend(obj, extension) {
+    if (typeof extension !== "object")
+      return obj;
+    keys(extension).forEach(function(key) {
+      obj[key] = extension[key];
+    });
+    return obj;
+  }
+  var getProto = Object.getPrototypeOf;
+  var _hasOwn = {}.hasOwnProperty;
+  function hasOwn(obj, prop) {
+    return _hasOwn.call(obj, prop);
+  }
+  function props(proto, extension) {
+    if (typeof extension === "function")
+      extension = extension(getProto(proto));
+    (typeof Reflect === "undefined" ? keys : Reflect.ownKeys)(extension).forEach((key) => {
+      setProp(proto, key, extension[key]);
+    });
+  }
+  var defineProperty = Object.defineProperty;
+  function setProp(obj, prop, functionOrGetSet, options) {
+    defineProperty(obj, prop, extend(functionOrGetSet && hasOwn(functionOrGetSet, "get") && typeof functionOrGetSet.get === "function" ? { get: functionOrGetSet.get, set: functionOrGetSet.set, configurable: true } : { value: functionOrGetSet, configurable: true, writable: true }, options));
+  }
+  function derive(Child) {
+    return {
+      from: function(Parent) {
+        Child.prototype = Object.create(Parent.prototype);
+        setProp(Child.prototype, "constructor", Child);
+        return {
+          extend: props.bind(null, Child.prototype)
+        };
+      }
+    };
+  }
+  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+  function getPropertyDescriptor(obj, prop) {
+    const pd = getOwnPropertyDescriptor(obj, prop);
+    let proto;
+    return pd || (proto = getProto(obj)) && getPropertyDescriptor(proto, prop);
+  }
+  var _slice = [].slice;
+  function slice(args, start2, end2) {
+    return _slice.call(args, start2, end2);
+  }
+  function override(origFunc, overridedFactory) {
+    return overridedFactory(origFunc);
+  }
+  function assert(b) {
+    if (!b)
+      throw new Error("Assertion Failed");
+  }
+  function asap$1(fn2) {
+    if (_global.setImmediate)
+      setImmediate(fn2);
+    else
+      setTimeout(fn2, 0);
+  }
+  function arrayToObject(array, extractor) {
+    return array.reduce((result, item, i) => {
+      var nameAndValue = extractor(item, i);
+      if (nameAndValue)
+        result[nameAndValue[0]] = nameAndValue[1];
+      return result;
+    }, {});
+  }
+  function tryCatch(fn2, onerror, args) {
+    try {
+      fn2.apply(null, args);
+    } catch (ex) {
+      onerror && onerror(ex);
+    }
+  }
+  function getByKeyPath(obj, keyPath) {
+    if (hasOwn(obj, keyPath))
+      return obj[keyPath];
+    if (!keyPath)
+      return obj;
+    if (typeof keyPath !== "string") {
+      var rv = [];
+      for (var i = 0, l = keyPath.length; i < l; ++i) {
+        var val = getByKeyPath(obj, keyPath[i]);
+        rv.push(val);
+      }
+      return rv;
+    }
+    var period = keyPath.indexOf(".");
+    if (period !== -1) {
+      var innerObj = obj[keyPath.substr(0, period)];
+      return innerObj === void 0 ? void 0 : getByKeyPath(innerObj, keyPath.substr(period + 1));
+    }
+    return void 0;
+  }
+  function setByKeyPath(obj, keyPath, value) {
+    if (!obj || keyPath === void 0)
+      return;
+    if ("isFrozen" in Object && Object.isFrozen(obj))
+      return;
+    if (typeof keyPath !== "string" && "length" in keyPath) {
+      assert(typeof value !== "string" && "length" in value);
+      for (var i = 0, l = keyPath.length; i < l; ++i) {
+        setByKeyPath(obj, keyPath[i], value[i]);
+      }
+    } else {
+      var period = keyPath.indexOf(".");
+      if (period !== -1) {
+        var currentKeyPath = keyPath.substr(0, period);
+        var remainingKeyPath = keyPath.substr(period + 1);
+        if (remainingKeyPath === "")
+          if (value === void 0) {
+            if (isArray(obj) && !isNaN(parseInt(currentKeyPath)))
+              obj.splice(currentKeyPath, 1);
+            else
+              delete obj[currentKeyPath];
+          } else
+            obj[currentKeyPath] = value;
+        else {
+          var innerObj = obj[currentKeyPath];
+          if (!innerObj || !hasOwn(obj, currentKeyPath))
+            innerObj = obj[currentKeyPath] = {};
+          setByKeyPath(innerObj, remainingKeyPath, value);
+        }
+      } else {
+        if (value === void 0) {
+          if (isArray(obj) && !isNaN(parseInt(keyPath)))
+            obj.splice(keyPath, 1);
+          else
+            delete obj[keyPath];
+        } else
+          obj[keyPath] = value;
+      }
+    }
+  }
+  function delByKeyPath(obj, keyPath) {
+    if (typeof keyPath === "string")
+      setByKeyPath(obj, keyPath, void 0);
+    else if ("length" in keyPath)
+      [].map.call(keyPath, function(kp) {
+        setByKeyPath(obj, kp, void 0);
+      });
+  }
+  function shallowClone(obj) {
+    var rv = {};
+    for (var m in obj) {
+      if (hasOwn(obj, m))
+        rv[m] = obj[m];
+    }
+    return rv;
+  }
+  var concat = [].concat;
+  function flatten(a) {
+    return concat.apply([], a);
+  }
+  var intrinsicTypeNames = "Boolean,String,Date,RegExp,Blob,File,FileList,FileSystemFileHandle,ArrayBuffer,DataView,Uint8ClampedArray,ImageBitmap,ImageData,Map,Set,CryptoKey".split(",").concat(flatten([8, 16, 32, 64].map((num) => ["Int", "Uint", "Float"].map((t) => t + num + "Array")))).filter((t) => _global[t]);
+  var intrinsicTypes = intrinsicTypeNames.map((t) => _global[t]);
+  arrayToObject(intrinsicTypeNames, (x) => [x, true]);
+  var circularRefs = null;
+  function deepClone(any) {
+    circularRefs = typeof WeakMap !== "undefined" && /* @__PURE__ */ new WeakMap();
+    const rv = innerDeepClone(any);
+    circularRefs = null;
+    return rv;
+  }
+  function innerDeepClone(any) {
+    if (!any || typeof any !== "object")
+      return any;
+    let rv = circularRefs && circularRefs.get(any);
+    if (rv)
+      return rv;
+    if (isArray(any)) {
+      rv = [];
+      circularRefs && circularRefs.set(any, rv);
+      for (var i = 0, l = any.length; i < l; ++i) {
+        rv.push(innerDeepClone(any[i]));
+      }
+    } else if (intrinsicTypes.indexOf(any.constructor) >= 0) {
+      rv = any;
+    } else {
+      const proto = getProto(any);
+      rv = proto === Object.prototype ? {} : Object.create(proto);
+      circularRefs && circularRefs.set(any, rv);
+      for (var prop in any) {
+        if (hasOwn(any, prop)) {
+          rv[prop] = innerDeepClone(any[prop]);
+        }
+      }
+    }
+    return rv;
+  }
+  var { toString } = {};
+  function toStringTag(o) {
+    return toString.call(o).slice(8, -1);
+  }
+  var iteratorSymbol = typeof Symbol !== "undefined" ? Symbol.iterator : "@@iterator";
+  var getIteratorOf = typeof iteratorSymbol === "symbol" ? function(x) {
+    var i;
+    return x != null && (i = x[iteratorSymbol]) && i.apply(x);
+  } : function() {
+    return null;
+  };
+  var NO_CHAR_ARRAY = {};
+  function getArrayOf(arrayLike) {
+    var i, a, x, it;
+    if (arguments.length === 1) {
+      if (isArray(arrayLike))
+        return arrayLike.slice();
+      if (this === NO_CHAR_ARRAY && typeof arrayLike === "string")
+        return [arrayLike];
+      if (it = getIteratorOf(arrayLike)) {
+        a = [];
+        while (x = it.next(), !x.done)
+          a.push(x.value);
+        return a;
+      }
+      if (arrayLike == null)
+        return [arrayLike];
+      i = arrayLike.length;
+      if (typeof i === "number") {
+        a = new Array(i);
+        while (i--)
+          a[i] = arrayLike[i];
+        return a;
+      }
+      return [arrayLike];
+    }
+    i = arguments.length;
+    a = new Array(i);
+    while (i--)
+      a[i] = arguments[i];
+    return a;
+  }
+  var isAsyncFunction = typeof Symbol !== "undefined" ? (fn2) => fn2[Symbol.toStringTag] === "AsyncFunction" : () => false;
+  var debug = typeof location !== "undefined" && /^(http|https):\/\/(localhost|127\.0\.0\.1)/.test(location.href);
+  function setDebug(value, filter) {
+    debug = value;
+    libraryFilter = filter;
+  }
+  var libraryFilter = () => true;
+  var NEEDS_THROW_FOR_STACK = !new Error("").stack;
+  function getErrorWithStack() {
+    if (NEEDS_THROW_FOR_STACK)
+      try {
+        getErrorWithStack.arguments;
+        throw new Error();
+      } catch (e) {
+        return e;
+      }
+    return new Error();
+  }
+  function prettyStack(exception, numIgnoredFrames) {
+    var stack = exception.stack;
+    if (!stack)
+      return "";
+    numIgnoredFrames = numIgnoredFrames || 0;
+    if (stack.indexOf(exception.name) === 0)
+      numIgnoredFrames += (exception.name + exception.message).split("\n").length;
+    return stack.split("\n").slice(numIgnoredFrames).filter(libraryFilter).map((frame) => "\n" + frame).join("");
+  }
+  var dexieErrorNames = [
+    "Modify",
+    "Bulk",
+    "OpenFailed",
+    "VersionChange",
+    "Schema",
+    "Upgrade",
+    "InvalidTable",
+    "MissingAPI",
+    "NoSuchDatabase",
+    "InvalidArgument",
+    "SubTransaction",
+    "Unsupported",
+    "Internal",
+    "DatabaseClosed",
+    "PrematureCommit",
+    "ForeignAwait"
+  ];
+  var idbDomErrorNames = [
+    "Unknown",
+    "Constraint",
+    "Data",
+    "TransactionInactive",
+    "ReadOnly",
+    "Version",
+    "NotFound",
+    "InvalidState",
+    "InvalidAccess",
+    "Abort",
+    "Timeout",
+    "QuotaExceeded",
+    "Syntax",
+    "DataClone"
+  ];
+  var errorList = dexieErrorNames.concat(idbDomErrorNames);
+  var defaultTexts = {
+    VersionChanged: "Database version changed by other database connection",
+    DatabaseClosed: "Database has been closed",
+    Abort: "Transaction aborted",
+    TransactionInactive: "Transaction has already completed or failed",
+    MissingAPI: "IndexedDB API missing. Please visit https://tinyurl.com/y2uuvskb"
+  };
+  function DexieError(name, msg) {
+    this._e = getErrorWithStack();
+    this.name = name;
+    this.message = msg;
+  }
+  derive(DexieError).from(Error).extend({
+    stack: {
+      get: function() {
+        return this._stack || (this._stack = this.name + ": " + this.message + prettyStack(this._e, 2));
+      }
+    },
+    toString: function() {
+      return this.name + ": " + this.message;
+    }
+  });
+  function getMultiErrorMessage(msg, failures) {
+    return msg + ". Errors: " + Object.keys(failures).map((key) => failures[key].toString()).filter((v, i, s) => s.indexOf(v) === i).join("\n");
+  }
+  function ModifyError(msg, failures, successCount, failedKeys) {
+    this._e = getErrorWithStack();
+    this.failures = failures;
+    this.failedKeys = failedKeys;
+    this.successCount = successCount;
+    this.message = getMultiErrorMessage(msg, failures);
+  }
+  derive(ModifyError).from(DexieError);
+  function BulkError(msg, failures) {
+    this._e = getErrorWithStack();
+    this.name = "BulkError";
+    this.failures = Object.keys(failures).map((pos) => failures[pos]);
+    this.failuresByPos = failures;
+    this.message = getMultiErrorMessage(msg, failures);
+  }
+  derive(BulkError).from(DexieError);
+  var errnames = errorList.reduce((obj, name) => (obj[name] = name + "Error", obj), {});
+  var BaseException = DexieError;
+  var exceptions = errorList.reduce((obj, name) => {
+    var fullName = name + "Error";
+    function DexieError2(msgOrInner, inner) {
+      this._e = getErrorWithStack();
+      this.name = fullName;
+      if (!msgOrInner) {
+        this.message = defaultTexts[name] || fullName;
+        this.inner = null;
+      } else if (typeof msgOrInner === "string") {
+        this.message = `${msgOrInner}${!inner ? "" : "\n " + inner}`;
+        this.inner = inner || null;
+      } else if (typeof msgOrInner === "object") {
+        this.message = `${msgOrInner.name} ${msgOrInner.message}`;
+        this.inner = msgOrInner;
+      }
+    }
+    derive(DexieError2).from(BaseException);
+    obj[name] = DexieError2;
+    return obj;
+  }, {});
+  exceptions.Syntax = SyntaxError;
+  exceptions.Type = TypeError;
+  exceptions.Range = RangeError;
+  var exceptionMap = idbDomErrorNames.reduce((obj, name) => {
+    obj[name + "Error"] = exceptions[name];
+    return obj;
+  }, {});
+  function mapError(domError, message) {
+    if (!domError || domError instanceof DexieError || domError instanceof TypeError || domError instanceof SyntaxError || !domError.name || !exceptionMap[domError.name])
+      return domError;
+    var rv = new exceptionMap[domError.name](message || domError.message, domError);
+    if ("stack" in domError) {
+      setProp(rv, "stack", { get: function() {
+        return this.inner.stack;
+      } });
+    }
+    return rv;
+  }
+  var fullNameExceptions = errorList.reduce((obj, name) => {
+    if (["Syntax", "Type", "Range"].indexOf(name) === -1)
+      obj[name + "Error"] = exceptions[name];
+    return obj;
+  }, {});
+  fullNameExceptions.ModifyError = ModifyError;
+  fullNameExceptions.DexieError = DexieError;
+  fullNameExceptions.BulkError = BulkError;
+  function nop() {
+  }
+  function mirror(val) {
+    return val;
+  }
+  function pureFunctionChain(f1, f2) {
+    if (f1 == null || f1 === mirror)
+      return f2;
+    return function(val) {
+      return f2(f1(val));
+    };
+  }
+  function callBoth(on1, on2) {
+    return function() {
+      on1.apply(this, arguments);
+      on2.apply(this, arguments);
+    };
+  }
+  function hookCreatingChain(f1, f2) {
+    if (f1 === nop)
+      return f2;
+    return function() {
+      var res = f1.apply(this, arguments);
+      if (res !== void 0)
+        arguments[0] = res;
+      var onsuccess = this.onsuccess, onerror = this.onerror;
+      this.onsuccess = null;
+      this.onerror = null;
+      var res2 = f2.apply(this, arguments);
+      if (onsuccess)
+        this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+      if (onerror)
+        this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+      return res2 !== void 0 ? res2 : res;
+    };
+  }
+  function hookDeletingChain(f1, f2) {
+    if (f1 === nop)
+      return f2;
+    return function() {
+      f1.apply(this, arguments);
+      var onsuccess = this.onsuccess, onerror = this.onerror;
+      this.onsuccess = this.onerror = null;
+      f2.apply(this, arguments);
+      if (onsuccess)
+        this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+      if (onerror)
+        this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+    };
+  }
+  function hookUpdatingChain(f1, f2) {
+    if (f1 === nop)
+      return f2;
+    return function(modifications) {
+      var res = f1.apply(this, arguments);
+      extend(modifications, res);
+      var onsuccess = this.onsuccess, onerror = this.onerror;
+      this.onsuccess = null;
+      this.onerror = null;
+      var res2 = f2.apply(this, arguments);
+      if (onsuccess)
+        this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+      if (onerror)
+        this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+      return res === void 0 ? res2 === void 0 ? void 0 : res2 : extend(res, res2);
+    };
+  }
+  function reverseStoppableEventChain(f1, f2) {
+    if (f1 === nop)
+      return f2;
+    return function() {
+      if (f2.apply(this, arguments) === false)
+        return false;
+      return f1.apply(this, arguments);
+    };
+  }
+  function promisableChain(f1, f2) {
+    if (f1 === nop)
+      return f2;
+    return function() {
+      var res = f1.apply(this, arguments);
+      if (res && typeof res.then === "function") {
+        var thiz = this, i = arguments.length, args = new Array(i);
+        while (i--)
+          args[i] = arguments[i];
+        return res.then(function() {
+          return f2.apply(thiz, args);
+        });
+      }
+      return f2.apply(this, arguments);
+    };
+  }
+  var INTERNAL = {};
+  var LONG_STACKS_CLIP_LIMIT = 100;
+  var MAX_LONG_STACKS = 20;
+  var ZONE_ECHO_LIMIT = 100;
+  var [resolvedNativePromise, nativePromiseProto, resolvedGlobalPromise] = typeof Promise === "undefined" ? [] : (() => {
+    let globalP = Promise.resolve();
+    if (typeof crypto === "undefined" || !crypto.subtle)
+      return [globalP, getProto(globalP), globalP];
+    const nativeP = crypto.subtle.digest("SHA-512", new Uint8Array([0]));
+    return [
+      nativeP,
+      getProto(nativeP),
+      globalP
+    ];
+  })();
+  var nativePromiseThen = nativePromiseProto && nativePromiseProto.then;
+  var NativePromise = resolvedNativePromise && resolvedNativePromise.constructor;
+  var patchGlobalPromise = !!resolvedGlobalPromise;
+  var stack_being_generated = false;
+  var schedulePhysicalTick = resolvedGlobalPromise ? () => {
+    resolvedGlobalPromise.then(physicalTick);
+  } : _global.setImmediate ? setImmediate.bind(null, physicalTick) : _global.MutationObserver ? () => {
+    var hiddenDiv = document.createElement("div");
+    new MutationObserver(() => {
+      physicalTick();
+      hiddenDiv = null;
+    }).observe(hiddenDiv, { attributes: true });
+    hiddenDiv.setAttribute("i", "1");
+  } : () => {
+    setTimeout(physicalTick, 0);
+  };
+  var asap = function(callback, args) {
+    microtickQueue.push([callback, args]);
+    if (needsNewPhysicalTick) {
+      schedulePhysicalTick();
+      needsNewPhysicalTick = false;
+    }
+  };
+  var isOutsideMicroTick = true;
+  var needsNewPhysicalTick = true;
+  var unhandledErrors = [];
+  var rejectingErrors = [];
+  var currentFulfiller = null;
+  var rejectionMapper = mirror;
+  var globalPSD = {
+    id: "global",
+    global: true,
+    ref: 0,
+    unhandleds: [],
+    onunhandled: globalError,
+    pgp: false,
+    env: {},
+    finalize: function() {
+      this.unhandleds.forEach((uh) => {
+        try {
+          globalError(uh[0], uh[1]);
+        } catch (e) {
+        }
+      });
+    }
+  };
+  var PSD = globalPSD;
+  var microtickQueue = [];
+  var numScheduledCalls = 0;
+  var tickFinalizers = [];
+  function DexiePromise(fn2) {
+    if (typeof this !== "object")
+      throw new TypeError("Promises must be constructed via new");
+    this._listeners = [];
+    this.onuncatched = nop;
+    this._lib = false;
+    var psd = this._PSD = PSD;
+    if (debug) {
+      this._stackHolder = getErrorWithStack();
+      this._prev = null;
+      this._numPrev = 0;
+    }
+    if (typeof fn2 !== "function") {
+      if (fn2 !== INTERNAL)
+        throw new TypeError("Not a function");
+      this._state = arguments[1];
+      this._value = arguments[2];
+      if (this._state === false)
+        handleRejection(this, this._value);
+      return;
+    }
+    this._state = null;
+    this._value = null;
+    ++psd.ref;
+    executePromiseTask(this, fn2);
+  }
+  var thenProp = {
+    get: function() {
+      var psd = PSD, microTaskId = totalEchoes;
+      function then(onFulfilled, onRejected) {
+        var possibleAwait = !psd.global && (psd !== PSD || microTaskId !== totalEchoes);
+        const cleanup = possibleAwait && !decrementExpectedAwaits();
+        var rv = new DexiePromise((resolve, reject) => {
+          propagateToListener(this, new Listener(nativeAwaitCompatibleWrap(onFulfilled, psd, possibleAwait, cleanup), nativeAwaitCompatibleWrap(onRejected, psd, possibleAwait, cleanup), resolve, reject, psd));
+        });
+        debug && linkToPreviousPromise(rv, this);
+        return rv;
+      }
+      then.prototype = INTERNAL;
+      return then;
+    },
+    set: function(value) {
+      setProp(this, "then", value && value.prototype === INTERNAL ? thenProp : {
+        get: function() {
+          return value;
+        },
+        set: thenProp.set
+      });
+    }
+  };
+  props(DexiePromise.prototype, {
+    then: thenProp,
+    _then: function(onFulfilled, onRejected) {
+      propagateToListener(this, new Listener(null, null, onFulfilled, onRejected, PSD));
+    },
+    catch: function(onRejected) {
+      if (arguments.length === 1)
+        return this.then(null, onRejected);
+      var type2 = arguments[0], handler = arguments[1];
+      return typeof type2 === "function" ? this.then(null, (err) => err instanceof type2 ? handler(err) : PromiseReject(err)) : this.then(null, (err) => err && err.name === type2 ? handler(err) : PromiseReject(err));
+    },
+    finally: function(onFinally) {
+      return this.then((value) => {
+        onFinally();
+        return value;
+      }, (err) => {
+        onFinally();
+        return PromiseReject(err);
+      });
+    },
+    stack: {
+      get: function() {
+        if (this._stack)
+          return this._stack;
+        try {
+          stack_being_generated = true;
+          var stacks = getStack(this, [], MAX_LONG_STACKS);
+          var stack = stacks.join("\nFrom previous: ");
+          if (this._state !== null)
+            this._stack = stack;
+          return stack;
+        } finally {
+          stack_being_generated = false;
+        }
+      }
+    },
+    timeout: function(ms, msg) {
+      return ms < Infinity ? new DexiePromise((resolve, reject) => {
+        var handle = setTimeout(() => reject(new exceptions.Timeout(msg)), ms);
+        this.then(resolve, reject).finally(clearTimeout.bind(null, handle));
+      }) : this;
+    }
+  });
+  if (typeof Symbol !== "undefined" && Symbol.toStringTag)
+    setProp(DexiePromise.prototype, Symbol.toStringTag, "Dexie.Promise");
+  globalPSD.env = snapShot();
+  function Listener(onFulfilled, onRejected, resolve, reject, zone) {
+    this.onFulfilled = typeof onFulfilled === "function" ? onFulfilled : null;
+    this.onRejected = typeof onRejected === "function" ? onRejected : null;
+    this.resolve = resolve;
+    this.reject = reject;
+    this.psd = zone;
+  }
+  props(DexiePromise, {
+    all: function() {
+      var values = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+      return new DexiePromise(function(resolve, reject) {
+        if (values.length === 0)
+          resolve([]);
+        var remaining = values.length;
+        values.forEach((a, i) => DexiePromise.resolve(a).then((x) => {
+          values[i] = x;
+          if (!--remaining)
+            resolve(values);
+        }, reject));
+      });
+    },
+    resolve: (value) => {
+      if (value instanceof DexiePromise)
+        return value;
+      if (value && typeof value.then === "function")
+        return new DexiePromise((resolve, reject) => {
+          value.then(resolve, reject);
+        });
+      var rv = new DexiePromise(INTERNAL, true, value);
+      linkToPreviousPromise(rv, currentFulfiller);
+      return rv;
+    },
+    reject: PromiseReject,
+    race: function() {
+      var values = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+      return new DexiePromise((resolve, reject) => {
+        values.map((value) => DexiePromise.resolve(value).then(resolve, reject));
+      });
+    },
+    PSD: {
+      get: () => PSD,
+      set: (value) => PSD = value
+    },
+    totalEchoes: { get: () => totalEchoes },
+    newPSD: newScope,
+    usePSD,
+    scheduler: {
+      get: () => asap,
+      set: (value) => {
+        asap = value;
+      }
+    },
+    rejectionMapper: {
+      get: () => rejectionMapper,
+      set: (value) => {
+        rejectionMapper = value;
+      }
+    },
+    follow: (fn2, zoneProps) => {
+      return new DexiePromise((resolve, reject) => {
+        return newScope((resolve2, reject2) => {
+          var psd = PSD;
+          psd.unhandleds = [];
+          psd.onunhandled = reject2;
+          psd.finalize = callBoth(function() {
+            run_at_end_of_this_or_next_physical_tick(() => {
+              this.unhandleds.length === 0 ? resolve2() : reject2(this.unhandleds[0]);
+            });
+          }, psd.finalize);
+          fn2();
+        }, zoneProps, resolve, reject);
+      });
+    }
+  });
+  if (NativePromise) {
+    if (NativePromise.allSettled)
+      setProp(DexiePromise, "allSettled", function() {
+        const possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+        return new DexiePromise((resolve) => {
+          if (possiblePromises.length === 0)
+            resolve([]);
+          let remaining = possiblePromises.length;
+          const results = new Array(remaining);
+          possiblePromises.forEach((p, i) => DexiePromise.resolve(p).then((value) => results[i] = { status: "fulfilled", value }, (reason) => results[i] = { status: "rejected", reason }).then(() => --remaining || resolve(results)));
+        });
+      });
+    if (NativePromise.any && typeof AggregateError !== "undefined")
+      setProp(DexiePromise, "any", function() {
+        const possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+        return new DexiePromise((resolve, reject) => {
+          if (possiblePromises.length === 0)
+            reject(new AggregateError([]));
+          let remaining = possiblePromises.length;
+          const failures = new Array(remaining);
+          possiblePromises.forEach((p, i) => DexiePromise.resolve(p).then((value) => resolve(value), (failure) => {
+            failures[i] = failure;
+            if (!--remaining)
+              reject(new AggregateError(failures));
+          }));
+        });
+      });
+  }
+  function executePromiseTask(promise, fn2) {
+    try {
+      fn2((value) => {
+        if (promise._state !== null)
+          return;
+        if (value === promise)
+          throw new TypeError("A promise cannot be resolved with itself.");
+        var shouldExecuteTick = promise._lib && beginMicroTickScope();
+        if (value && typeof value.then === "function") {
+          executePromiseTask(promise, (resolve, reject) => {
+            value instanceof DexiePromise ? value._then(resolve, reject) : value.then(resolve, reject);
+          });
+        } else {
+          promise._state = true;
+          promise._value = value;
+          propagateAllListeners(promise);
+        }
+        if (shouldExecuteTick)
+          endMicroTickScope();
+      }, handleRejection.bind(null, promise));
+    } catch (ex) {
+      handleRejection(promise, ex);
+    }
+  }
+  function handleRejection(promise, reason) {
+    rejectingErrors.push(reason);
+    if (promise._state !== null)
+      return;
+    var shouldExecuteTick = promise._lib && beginMicroTickScope();
+    reason = rejectionMapper(reason);
+    promise._state = false;
+    promise._value = reason;
+    debug && reason !== null && typeof reason === "object" && !reason._promise && tryCatch(() => {
+      var origProp = getPropertyDescriptor(reason, "stack");
+      reason._promise = promise;
+      setProp(reason, "stack", {
+        get: () => stack_being_generated ? origProp && (origProp.get ? origProp.get.apply(reason) : origProp.value) : promise.stack
+      });
+    });
+    addPossiblyUnhandledError(promise);
+    propagateAllListeners(promise);
+    if (shouldExecuteTick)
+      endMicroTickScope();
+  }
+  function propagateAllListeners(promise) {
+    var listeners = promise._listeners;
+    promise._listeners = [];
+    for (var i = 0, len = listeners.length; i < len; ++i) {
+      propagateToListener(promise, listeners[i]);
+    }
+    var psd = promise._PSD;
+    --psd.ref || psd.finalize();
+    if (numScheduledCalls === 0) {
+      ++numScheduledCalls;
+      asap(() => {
+        if (--numScheduledCalls === 0)
+          finalizePhysicalTick();
+      }, []);
+    }
+  }
+  function propagateToListener(promise, listener) {
+    if (promise._state === null) {
+      promise._listeners.push(listener);
+      return;
+    }
+    var cb = promise._state ? listener.onFulfilled : listener.onRejected;
+    if (cb === null) {
+      return (promise._state ? listener.resolve : listener.reject)(promise._value);
+    }
+    ++listener.psd.ref;
+    ++numScheduledCalls;
+    asap(callListener, [cb, promise, listener]);
+  }
+  function callListener(cb, promise, listener) {
+    try {
+      currentFulfiller = promise;
+      var ret, value = promise._value;
+      if (promise._state) {
+        ret = cb(value);
+      } else {
+        if (rejectingErrors.length)
+          rejectingErrors = [];
+        ret = cb(value);
+        if (rejectingErrors.indexOf(value) === -1)
+          markErrorAsHandled(promise);
+      }
+      listener.resolve(ret);
+    } catch (e) {
+      listener.reject(e);
+    } finally {
+      currentFulfiller = null;
+      if (--numScheduledCalls === 0)
+        finalizePhysicalTick();
+      --listener.psd.ref || listener.psd.finalize();
+    }
+  }
+  function getStack(promise, stacks, limit) {
+    if (stacks.length === limit)
+      return stacks;
+    var stack = "";
+    if (promise._state === false) {
+      var failure = promise._value, errorName, message;
+      if (failure != null) {
+        errorName = failure.name || "Error";
+        message = failure.message || failure;
+        stack = prettyStack(failure, 0);
+      } else {
+        errorName = failure;
+        message = "";
+      }
+      stacks.push(errorName + (message ? ": " + message : "") + stack);
+    }
+    if (debug) {
+      stack = prettyStack(promise._stackHolder, 2);
+      if (stack && stacks.indexOf(stack) === -1)
+        stacks.push(stack);
+      if (promise._prev)
+        getStack(promise._prev, stacks, limit);
+    }
+    return stacks;
+  }
+  function linkToPreviousPromise(promise, prev) {
+    var numPrev = prev ? prev._numPrev + 1 : 0;
+    if (numPrev < LONG_STACKS_CLIP_LIMIT) {
+      promise._prev = prev;
+      promise._numPrev = numPrev;
+    }
+  }
+  function physicalTick() {
+    beginMicroTickScope() && endMicroTickScope();
+  }
+  function beginMicroTickScope() {
+    var wasRootExec = isOutsideMicroTick;
+    isOutsideMicroTick = false;
+    needsNewPhysicalTick = false;
+    return wasRootExec;
+  }
+  function endMicroTickScope() {
+    var callbacks, i, l;
+    do {
+      while (microtickQueue.length > 0) {
+        callbacks = microtickQueue;
+        microtickQueue = [];
+        l = callbacks.length;
+        for (i = 0; i < l; ++i) {
+          var item = callbacks[i];
+          item[0].apply(null, item[1]);
+        }
+      }
+    } while (microtickQueue.length > 0);
+    isOutsideMicroTick = true;
+    needsNewPhysicalTick = true;
+  }
+  function finalizePhysicalTick() {
+    var unhandledErrs = unhandledErrors;
+    unhandledErrors = [];
+    unhandledErrs.forEach((p) => {
+      p._PSD.onunhandled.call(null, p._value, p);
+    });
+    var finalizers = tickFinalizers.slice(0);
+    var i = finalizers.length;
+    while (i)
+      finalizers[--i]();
+  }
+  function run_at_end_of_this_or_next_physical_tick(fn2) {
+    function finalizer() {
+      fn2();
+      tickFinalizers.splice(tickFinalizers.indexOf(finalizer), 1);
+    }
+    tickFinalizers.push(finalizer);
+    ++numScheduledCalls;
+    asap(() => {
+      if (--numScheduledCalls === 0)
+        finalizePhysicalTick();
+    }, []);
+  }
+  function addPossiblyUnhandledError(promise) {
+    if (!unhandledErrors.some((p) => p._value === promise._value))
+      unhandledErrors.push(promise);
+  }
+  function markErrorAsHandled(promise) {
+    var i = unhandledErrors.length;
+    while (i)
+      if (unhandledErrors[--i]._value === promise._value) {
+        unhandledErrors.splice(i, 1);
+        return;
+      }
+  }
+  function PromiseReject(reason) {
+    return new DexiePromise(INTERNAL, false, reason);
+  }
+  function wrap(fn2, errorCatcher) {
+    var psd = PSD;
+    return function() {
+      var wasRootExec = beginMicroTickScope(), outerScope = PSD;
+      try {
+        switchToZone(psd, true);
+        return fn2.apply(this, arguments);
+      } catch (e) {
+        errorCatcher && errorCatcher(e);
+      } finally {
+        switchToZone(outerScope, false);
+        if (wasRootExec)
+          endMicroTickScope();
+      }
+    };
+  }
+  var task = { awaits: 0, echoes: 0, id: 0 };
+  var taskCounter = 0;
+  var zoneStack = [];
+  var zoneEchoes = 0;
+  var totalEchoes = 0;
+  var zone_id_counter = 0;
+  function newScope(fn2, props2, a1, a2) {
+    var parent = PSD, psd = Object.create(parent);
+    psd.parent = parent;
+    psd.ref = 0;
+    psd.global = false;
+    psd.id = ++zone_id_counter;
+    var globalEnv = globalPSD.env;
+    psd.env = patchGlobalPromise ? {
+      Promise: DexiePromise,
+      PromiseProp: { value: DexiePromise, configurable: true, writable: true },
+      all: DexiePromise.all,
+      race: DexiePromise.race,
+      allSettled: DexiePromise.allSettled,
+      any: DexiePromise.any,
+      resolve: DexiePromise.resolve,
+      reject: DexiePromise.reject,
+      nthen: getPatchedPromiseThen(globalEnv.nthen, psd),
+      gthen: getPatchedPromiseThen(globalEnv.gthen, psd)
+    } : {};
+    if (props2)
+      extend(psd, props2);
+    ++parent.ref;
+    psd.finalize = function() {
+      --this.parent.ref || this.parent.finalize();
+    };
+    var rv = usePSD(psd, fn2, a1, a2);
+    if (psd.ref === 0)
+      psd.finalize();
+    return rv;
+  }
+  function incrementExpectedAwaits() {
+    if (!task.id)
+      task.id = ++taskCounter;
+    ++task.awaits;
+    task.echoes += ZONE_ECHO_LIMIT;
+    return task.id;
+  }
+  function decrementExpectedAwaits() {
+    if (!task.awaits)
+      return false;
+    if (--task.awaits === 0)
+      task.id = 0;
+    task.echoes = task.awaits * ZONE_ECHO_LIMIT;
+    return true;
+  }
+  if (("" + nativePromiseThen).indexOf("[native code]") === -1) {
+    incrementExpectedAwaits = decrementExpectedAwaits = nop;
+  }
+  function onPossibleParallellAsync(possiblePromise) {
+    if (task.echoes && possiblePromise && possiblePromise.constructor === NativePromise) {
+      incrementExpectedAwaits();
+      return possiblePromise.then((x) => {
+        decrementExpectedAwaits();
+        return x;
+      }, (e) => {
+        decrementExpectedAwaits();
+        return rejection(e);
+      });
+    }
+    return possiblePromise;
+  }
+  function zoneEnterEcho(targetZone) {
+    ++totalEchoes;
+    if (!task.echoes || --task.echoes === 0) {
+      task.echoes = task.id = 0;
+    }
+    zoneStack.push(PSD);
+    switchToZone(targetZone, true);
+  }
+  function zoneLeaveEcho() {
+    var zone = zoneStack[zoneStack.length - 1];
+    zoneStack.pop();
+    switchToZone(zone, false);
+  }
+  function switchToZone(targetZone, bEnteringZone) {
+    var currentZone = PSD;
+    if (bEnteringZone ? task.echoes && (!zoneEchoes++ || targetZone !== PSD) : zoneEchoes && (!--zoneEchoes || targetZone !== PSD)) {
+      enqueueNativeMicroTask(bEnteringZone ? zoneEnterEcho.bind(null, targetZone) : zoneLeaveEcho);
+    }
+    if (targetZone === PSD)
+      return;
+    PSD = targetZone;
+    if (currentZone === globalPSD)
+      globalPSD.env = snapShot();
+    if (patchGlobalPromise) {
+      var GlobalPromise = globalPSD.env.Promise;
+      var targetEnv = targetZone.env;
+      nativePromiseProto.then = targetEnv.nthen;
+      GlobalPromise.prototype.then = targetEnv.gthen;
+      if (currentZone.global || targetZone.global) {
+        Object.defineProperty(_global, "Promise", targetEnv.PromiseProp);
+        GlobalPromise.all = targetEnv.all;
+        GlobalPromise.race = targetEnv.race;
+        GlobalPromise.resolve = targetEnv.resolve;
+        GlobalPromise.reject = targetEnv.reject;
+        if (targetEnv.allSettled)
+          GlobalPromise.allSettled = targetEnv.allSettled;
+        if (targetEnv.any)
+          GlobalPromise.any = targetEnv.any;
+      }
+    }
+  }
+  function snapShot() {
+    var GlobalPromise = _global.Promise;
+    return patchGlobalPromise ? {
+      Promise: GlobalPromise,
+      PromiseProp: Object.getOwnPropertyDescriptor(_global, "Promise"),
+      all: GlobalPromise.all,
+      race: GlobalPromise.race,
+      allSettled: GlobalPromise.allSettled,
+      any: GlobalPromise.any,
+      resolve: GlobalPromise.resolve,
+      reject: GlobalPromise.reject,
+      nthen: nativePromiseProto.then,
+      gthen: GlobalPromise.prototype.then
+    } : {};
+  }
+  function usePSD(psd, fn2, a1, a2, a3) {
+    var outerScope = PSD;
+    try {
+      switchToZone(psd, true);
+      return fn2(a1, a2, a3);
+    } finally {
+      switchToZone(outerScope, false);
+    }
+  }
+  function enqueueNativeMicroTask(job) {
+    nativePromiseThen.call(resolvedNativePromise, job);
+  }
+  function nativeAwaitCompatibleWrap(fn2, zone, possibleAwait, cleanup) {
+    return typeof fn2 !== "function" ? fn2 : function() {
+      var outerZone = PSD;
+      if (possibleAwait)
+        incrementExpectedAwaits();
+      switchToZone(zone, true);
+      try {
+        return fn2.apply(this, arguments);
+      } finally {
+        switchToZone(outerZone, false);
+        if (cleanup)
+          enqueueNativeMicroTask(decrementExpectedAwaits);
+      }
+    };
+  }
+  function getPatchedPromiseThen(origThen, zone) {
+    return function(onResolved, onRejected) {
+      return origThen.call(this, nativeAwaitCompatibleWrap(onResolved, zone), nativeAwaitCompatibleWrap(onRejected, zone));
+    };
+  }
+  var UNHANDLEDREJECTION = "unhandledrejection";
+  function globalError(err, promise) {
+    var rv;
+    try {
+      rv = promise.onuncatched(err);
+    } catch (e) {
+    }
+    if (rv !== false)
+      try {
+        var event, eventData = { promise, reason: err };
+        if (_global.document && document.createEvent) {
+          event = document.createEvent("Event");
+          event.initEvent(UNHANDLEDREJECTION, true, true);
+          extend(event, eventData);
+        } else if (_global.CustomEvent) {
+          event = new CustomEvent(UNHANDLEDREJECTION, { detail: eventData });
+          extend(event, eventData);
+        }
+        if (event && _global.dispatchEvent) {
+          dispatchEvent(event);
+          if (!_global.PromiseRejectionEvent && _global.onunhandledrejection)
+            try {
+              _global.onunhandledrejection(event);
+            } catch (_) {
+            }
+        }
+        if (debug && event && !event.defaultPrevented) {
+          console.warn(`Unhandled rejection: ${err.stack || err}`);
+        }
+      } catch (e) {
+      }
+  }
+  var rejection = DexiePromise.reject;
+  function tempTransaction(db, mode, storeNames, fn2) {
+    if (!db.idbdb || !db._state.openComplete && (!PSD.letThrough && !db._vip)) {
+      if (db._state.openComplete) {
+        return rejection(new exceptions.DatabaseClosed(db._state.dbOpenError));
+      }
+      if (!db._state.isBeingOpened) {
+        if (!db._options.autoOpen)
+          return rejection(new exceptions.DatabaseClosed());
+        db.open().catch(nop);
+      }
+      return db._state.dbReadyPromise.then(() => tempTransaction(db, mode, storeNames, fn2));
+    } else {
+      var trans = db._createTransaction(mode, storeNames, db._dbSchema);
+      try {
+        trans.create();
+        db._state.PR1398_maxLoop = 3;
+      } catch (ex) {
+        if (ex.name === errnames.InvalidState && db.isOpen() && --db._state.PR1398_maxLoop > 0) {
+          console.warn("Dexie: Need to reopen db");
+          db._close();
+          return db.open().then(() => tempTransaction(db, mode, storeNames, fn2));
+        }
+        return rejection(ex);
+      }
+      return trans._promise(mode, (resolve, reject) => {
+        return newScope(() => {
+          PSD.trans = trans;
+          return fn2(resolve, reject, trans);
+        });
+      }).then((result) => {
+        return trans._completion.then(() => result);
+      });
+    }
+  }
+  var DEXIE_VERSION = "3.2.4";
+  var maxString = String.fromCharCode(65535);
+  var minKey = -Infinity;
+  var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
+  var STRING_EXPECTED = "String expected.";
+  var connections = [];
+  var isIEOrEdge = typeof navigator !== "undefined" && /(MSIE|Trident|Edge)/.test(navigator.userAgent);
+  var hasIEDeleteObjectStoreBug = isIEOrEdge;
+  var hangsOnDeleteLargeKeyRange = isIEOrEdge;
+  var dexieStackFrameFilter = (frame) => !/(dexie\.js|dexie\.min\.js)/.test(frame);
+  var DBNAMES_DB = "__dbnames";
+  var READONLY = "readonly";
+  var READWRITE = "readwrite";
+  function combine(filter1, filter2) {
+    return filter1 ? filter2 ? function() {
+      return filter1.apply(this, arguments) && filter2.apply(this, arguments);
+    } : filter1 : filter2;
+  }
+  var AnyRange = {
+    type: 3,
+    lower: -Infinity,
+    lowerOpen: false,
+    upper: [[]],
+    upperOpen: false
+  };
+  function workaroundForUndefinedPrimKey(keyPath) {
+    return typeof keyPath === "string" && !/\./.test(keyPath) ? (obj) => {
+      if (obj[keyPath] === void 0 && keyPath in obj) {
+        obj = deepClone(obj);
+        delete obj[keyPath];
+      }
+      return obj;
+    } : (obj) => obj;
+  }
+  var Table2 = class {
+    _trans(mode, fn2, writeLocked) {
+      const trans = this._tx || PSD.trans;
+      const tableName = this.name;
+      function checkTableInTransaction(resolve, reject, trans2) {
+        if (!trans2.schema[tableName])
+          throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
+        return fn2(trans2.idbtrans, trans2);
+      }
+      const wasRootExec = beginMicroTickScope();
+      try {
+        return trans && trans.db === this.db ? trans === PSD.trans ? trans._promise(mode, checkTableInTransaction, writeLocked) : newScope(() => trans._promise(mode, checkTableInTransaction, writeLocked), { trans, transless: PSD.transless || PSD }) : tempTransaction(this.db, mode, [this.name], checkTableInTransaction);
+      } finally {
+        if (wasRootExec)
+          endMicroTickScope();
+      }
+    }
+    get(keyOrCrit, cb) {
+      if (keyOrCrit && keyOrCrit.constructor === Object)
+        return this.where(keyOrCrit).first(cb);
+      return this._trans("readonly", (trans) => {
+        return this.core.get({ trans, key: keyOrCrit }).then((res) => this.hook.reading.fire(res));
+      }).then(cb);
+    }
+    where(indexOrCrit) {
+      if (typeof indexOrCrit === "string")
+        return new this.db.WhereClause(this, indexOrCrit);
+      if (isArray(indexOrCrit))
+        return new this.db.WhereClause(this, `[${indexOrCrit.join("+")}]`);
+      const keyPaths = keys(indexOrCrit);
+      if (keyPaths.length === 1)
+        return this.where(keyPaths[0]).equals(indexOrCrit[keyPaths[0]]);
+      const compoundIndex = this.schema.indexes.concat(this.schema.primKey).filter((ix) => ix.compound && keyPaths.every((keyPath) => ix.keyPath.indexOf(keyPath) >= 0) && ix.keyPath.every((keyPath) => keyPaths.indexOf(keyPath) >= 0))[0];
+      if (compoundIndex && this.db._maxKey !== maxString)
+        return this.where(compoundIndex.name).equals(compoundIndex.keyPath.map((kp) => indexOrCrit[kp]));
+      if (!compoundIndex && debug)
+        console.warn(`The query ${JSON.stringify(indexOrCrit)} on ${this.name} would benefit of a compound index [${keyPaths.join("+")}]`);
+      const { idxByName } = this.schema;
+      const idb = this.db._deps.indexedDB;
+      function equals(a, b) {
+        try {
+          return idb.cmp(a, b) === 0;
+        } catch (e) {
+          return false;
+        }
+      }
+      const [idx, filterFunction] = keyPaths.reduce(([prevIndex, prevFilterFn], keyPath) => {
+        const index = idxByName[keyPath];
+        const value = indexOrCrit[keyPath];
+        return [
+          prevIndex || index,
+          prevIndex || !index ? combine(prevFilterFn, index && index.multi ? (x) => {
+            const prop = getByKeyPath(x, keyPath);
+            return isArray(prop) && prop.some((item) => equals(value, item));
+          } : (x) => equals(value, getByKeyPath(x, keyPath))) : prevFilterFn
+        ];
+      }, [null, null]);
+      return idx ? this.where(idx.name).equals(indexOrCrit[idx.keyPath]).filter(filterFunction) : compoundIndex ? this.filter(filterFunction) : this.where(keyPaths).equals("");
+    }
+    filter(filterFunction) {
+      return this.toCollection().and(filterFunction);
+    }
+    count(thenShortcut) {
+      return this.toCollection().count(thenShortcut);
+    }
+    offset(offset2) {
+      return this.toCollection().offset(offset2);
+    }
+    limit(numRows) {
+      return this.toCollection().limit(numRows);
+    }
+    each(callback) {
+      return this.toCollection().each(callback);
+    }
+    toArray(thenShortcut) {
+      return this.toCollection().toArray(thenShortcut);
+    }
+    toCollection() {
+      return new this.db.Collection(new this.db.WhereClause(this));
+    }
+    orderBy(index) {
+      return new this.db.Collection(new this.db.WhereClause(this, isArray(index) ? `[${index.join("+")}]` : index));
+    }
+    reverse() {
+      return this.toCollection().reverse();
+    }
+    mapToClass(constructor) {
+      this.schema.mappedClass = constructor;
+      const readHook = (obj) => {
+        if (!obj)
+          return obj;
+        const res = Object.create(constructor.prototype);
+        for (var m in obj)
+          if (hasOwn(obj, m))
+            try {
+              res[m] = obj[m];
+            } catch (_) {
+            }
+        return res;
+      };
+      if (this.schema.readHook) {
+        this.hook.reading.unsubscribe(this.schema.readHook);
+      }
+      this.schema.readHook = readHook;
+      this.hook("reading", readHook);
+      return constructor;
+    }
+    defineClass() {
+      function Class(content) {
+        extend(this, content);
+      }
+      return this.mapToClass(Class);
+    }
+    add(obj, key) {
+      const { auto: auto2, keyPath } = this.schema.primKey;
+      let objToAdd = obj;
+      if (keyPath && auto2) {
+        objToAdd = workaroundForUndefinedPrimKey(keyPath)(obj);
+      }
+      return this._trans("readwrite", (trans) => {
+        return this.core.mutate({ trans, type: "add", keys: key != null ? [key] : null, values: [objToAdd] });
+      }).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult).then((lastResult) => {
+        if (keyPath) {
+          try {
+            setByKeyPath(obj, keyPath, lastResult);
+          } catch (_) {
+          }
+        }
+        return lastResult;
+      });
+    }
+    update(keyOrObject, modifications) {
+      if (typeof keyOrObject === "object" && !isArray(keyOrObject)) {
+        const key = getByKeyPath(keyOrObject, this.schema.primKey.keyPath);
+        if (key === void 0)
+          return rejection(new exceptions.InvalidArgument("Given object does not contain its primary key"));
+        try {
+          if (typeof modifications !== "function") {
+            keys(modifications).forEach((keyPath) => {
+              setByKeyPath(keyOrObject, keyPath, modifications[keyPath]);
+            });
+          } else {
+            modifications(keyOrObject, { value: keyOrObject, primKey: key });
+          }
+        } catch (_a) {
+        }
+        return this.where(":id").equals(key).modify(modifications);
+      } else {
+        return this.where(":id").equals(keyOrObject).modify(modifications);
+      }
+    }
+    put(obj, key) {
+      const { auto: auto2, keyPath } = this.schema.primKey;
+      let objToAdd = obj;
+      if (keyPath && auto2) {
+        objToAdd = workaroundForUndefinedPrimKey(keyPath)(obj);
+      }
+      return this._trans("readwrite", (trans) => this.core.mutate({ trans, type: "put", values: [objToAdd], keys: key != null ? [key] : null })).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult).then((lastResult) => {
+        if (keyPath) {
+          try {
+            setByKeyPath(obj, keyPath, lastResult);
+          } catch (_) {
+          }
+        }
+        return lastResult;
+      });
+    }
+    delete(key) {
+      return this._trans("readwrite", (trans) => this.core.mutate({ trans, type: "delete", keys: [key] })).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : void 0);
+    }
+    clear() {
+      return this._trans("readwrite", (trans) => this.core.mutate({ trans, type: "deleteRange", range: AnyRange })).then((res) => res.numFailures ? DexiePromise.reject(res.failures[0]) : void 0);
+    }
+    bulkGet(keys2) {
+      return this._trans("readonly", (trans) => {
+        return this.core.getMany({
+          keys: keys2,
+          trans
+        }).then((result) => result.map((res) => this.hook.reading.fire(res)));
+      });
+    }
+    bulkAdd(objects, keysOrOptions, options) {
+      const keys2 = Array.isArray(keysOrOptions) ? keysOrOptions : void 0;
+      options = options || (keys2 ? void 0 : keysOrOptions);
+      const wantResults = options ? options.allKeys : void 0;
+      return this._trans("readwrite", (trans) => {
+        const { auto: auto2, keyPath } = this.schema.primKey;
+        if (keyPath && keys2)
+          throw new exceptions.InvalidArgument("bulkAdd(): keys argument invalid on tables with inbound keys");
+        if (keys2 && keys2.length !== objects.length)
+          throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
+        const numObjects = objects.length;
+        let objectsToAdd = keyPath && auto2 ? objects.map(workaroundForUndefinedPrimKey(keyPath)) : objects;
+        return this.core.mutate({ trans, type: "add", keys: keys2, values: objectsToAdd, wantResults }).then(({ numFailures, results, lastResult, failures }) => {
+          const result = wantResults ? results : lastResult;
+          if (numFailures === 0)
+            return result;
+          throw new BulkError(`${this.name}.bulkAdd(): ${numFailures} of ${numObjects} operations failed`, failures);
+        });
+      });
+    }
+    bulkPut(objects, keysOrOptions, options) {
+      const keys2 = Array.isArray(keysOrOptions) ? keysOrOptions : void 0;
+      options = options || (keys2 ? void 0 : keysOrOptions);
+      const wantResults = options ? options.allKeys : void 0;
+      return this._trans("readwrite", (trans) => {
+        const { auto: auto2, keyPath } = this.schema.primKey;
+        if (keyPath && keys2)
+          throw new exceptions.InvalidArgument("bulkPut(): keys argument invalid on tables with inbound keys");
+        if (keys2 && keys2.length !== objects.length)
+          throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
+        const numObjects = objects.length;
+        let objectsToPut = keyPath && auto2 ? objects.map(workaroundForUndefinedPrimKey(keyPath)) : objects;
+        return this.core.mutate({ trans, type: "put", keys: keys2, values: objectsToPut, wantResults }).then(({ numFailures, results, lastResult, failures }) => {
+          const result = wantResults ? results : lastResult;
+          if (numFailures === 0)
+            return result;
+          throw new BulkError(`${this.name}.bulkPut(): ${numFailures} of ${numObjects} operations failed`, failures);
+        });
+      });
+    }
+    bulkDelete(keys2) {
+      const numKeys = keys2.length;
+      return this._trans("readwrite", (trans) => {
+        return this.core.mutate({ trans, type: "delete", keys: keys2 });
+      }).then(({ numFailures, lastResult, failures }) => {
+        if (numFailures === 0)
+          return lastResult;
+        throw new BulkError(`${this.name}.bulkDelete(): ${numFailures} of ${numKeys} operations failed`, failures);
+      });
+    }
+  };
+  function Events(ctx) {
+    var evs = {};
+    var rv = function(eventName, subscriber) {
+      if (subscriber) {
+        var i2 = arguments.length, args = new Array(i2 - 1);
+        while (--i2)
+          args[i2 - 1] = arguments[i2];
+        evs[eventName].subscribe.apply(null, args);
+        return ctx;
+      } else if (typeof eventName === "string") {
+        return evs[eventName];
+      }
+    };
+    rv.addEventType = add;
+    for (var i = 1, l = arguments.length; i < l; ++i) {
+      add(arguments[i]);
+    }
+    return rv;
+    function add(eventName, chainFunction, defaultFunction) {
+      if (typeof eventName === "object")
+        return addConfiguredEvents(eventName);
+      if (!chainFunction)
+        chainFunction = reverseStoppableEventChain;
+      if (!defaultFunction)
+        defaultFunction = nop;
+      var context3 = {
+        subscribers: [],
+        fire: defaultFunction,
+        subscribe: function(cb) {
+          if (context3.subscribers.indexOf(cb) === -1) {
+            context3.subscribers.push(cb);
+            context3.fire = chainFunction(context3.fire, cb);
+          }
+        },
+        unsubscribe: function(cb) {
+          context3.subscribers = context3.subscribers.filter(function(fn2) {
+            return fn2 !== cb;
+          });
+          context3.fire = context3.subscribers.reduce(chainFunction, defaultFunction);
+        }
+      };
+      evs[eventName] = rv[eventName] = context3;
+      return context3;
+    }
+    function addConfiguredEvents(cfg) {
+      keys(cfg).forEach(function(eventName) {
+        var args = cfg[eventName];
+        if (isArray(args)) {
+          add(eventName, cfg[eventName][0], cfg[eventName][1]);
+        } else if (args === "asap") {
+          var context3 = add(eventName, mirror, function fire() {
+            var i2 = arguments.length, args2 = new Array(i2);
+            while (i2--)
+              args2[i2] = arguments[i2];
+            context3.subscribers.forEach(function(fn2) {
+              asap$1(function fireEvent() {
+                fn2.apply(null, args2);
+              });
+            });
+          });
+        } else
+          throw new exceptions.InvalidArgument("Invalid event config");
+      });
+    }
+  }
+  function makeClassConstructor(prototype, constructor) {
+    derive(constructor).from({ prototype });
+    return constructor;
+  }
+  function createTableConstructor(db) {
+    return makeClassConstructor(Table2.prototype, function Table3(name, tableSchema, trans) {
+      this.db = db;
+      this._tx = trans;
+      this.name = name;
+      this.schema = tableSchema;
+      this.hook = db._allTables[name] ? db._allTables[name].hook : Events(null, {
+        "creating": [hookCreatingChain, nop],
+        "reading": [pureFunctionChain, mirror],
+        "updating": [hookUpdatingChain, nop],
+        "deleting": [hookDeletingChain, nop]
+      });
+    });
+  }
+  function isPlainKeyRange(ctx, ignoreLimitFilter) {
+    return !(ctx.filter || ctx.algorithm || ctx.or) && (ignoreLimitFilter ? ctx.justLimit : !ctx.replayFilter);
+  }
+  function addFilter(ctx, fn2) {
+    ctx.filter = combine(ctx.filter, fn2);
+  }
+  function addReplayFilter(ctx, factory, isLimitFilter) {
+    var curr = ctx.replayFilter;
+    ctx.replayFilter = curr ? () => combine(curr(), factory()) : factory;
+    ctx.justLimit = isLimitFilter && !curr;
+  }
+  function addMatchFilter(ctx, fn2) {
+    ctx.isMatch = combine(ctx.isMatch, fn2);
+  }
+  function getIndexOrStore(ctx, coreSchema) {
+    if (ctx.isPrimKey)
+      return coreSchema.primaryKey;
+    const index = coreSchema.getIndexByKeyPath(ctx.index);
+    if (!index)
+      throw new exceptions.Schema("KeyPath " + ctx.index + " on object store " + coreSchema.name + " is not indexed");
+    return index;
+  }
+  function openCursor(ctx, coreTable, trans) {
+    const index = getIndexOrStore(ctx, coreTable.schema);
+    return coreTable.openCursor({
+      trans,
+      values: !ctx.keysOnly,
+      reverse: ctx.dir === "prev",
+      unique: !!ctx.unique,
+      query: {
+        index,
+        range: ctx.range
+      }
+    });
+  }
+  function iter(ctx, fn2, coreTrans, coreTable) {
+    const filter = ctx.replayFilter ? combine(ctx.filter, ctx.replayFilter()) : ctx.filter;
+    if (!ctx.or) {
+      return iterate(openCursor(ctx, coreTable, coreTrans), combine(ctx.algorithm, filter), fn2, !ctx.keysOnly && ctx.valueMapper);
+    } else {
+      const set = {};
+      const union = (item, cursor, advance) => {
+        if (!filter || filter(cursor, advance, (result) => cursor.stop(result), (err) => cursor.fail(err))) {
+          var primaryKey = cursor.primaryKey;
+          var key = "" + primaryKey;
+          if (key === "[object ArrayBuffer]")
+            key = "" + new Uint8Array(primaryKey);
+          if (!hasOwn(set, key)) {
+            set[key] = true;
+            fn2(item, cursor, advance);
+          }
+        }
+      };
+      return Promise.all([
+        ctx.or._iterate(union, coreTrans),
+        iterate(openCursor(ctx, coreTable, coreTrans), ctx.algorithm, union, !ctx.keysOnly && ctx.valueMapper)
+      ]);
+    }
+  }
+  function iterate(cursorPromise, filter, fn2, valueMapper) {
+    var mappedFn = valueMapper ? (x, c, a) => fn2(valueMapper(x), c, a) : fn2;
+    var wrappedFn = wrap(mappedFn);
+    return cursorPromise.then((cursor) => {
+      if (cursor) {
+        return cursor.start(() => {
+          var c = () => cursor.continue();
+          if (!filter || filter(cursor, (advancer) => c = advancer, (val) => {
+            cursor.stop(val);
+            c = nop;
+          }, (e) => {
+            cursor.fail(e);
+            c = nop;
+          }))
+            wrappedFn(cursor.value, cursor, (advancer) => c = advancer);
+          c();
+        });
+      }
+    });
+  }
+  function cmp(a, b) {
+    try {
+      const ta = type(a);
+      const tb = type(b);
+      if (ta !== tb) {
+        if (ta === "Array")
+          return 1;
+        if (tb === "Array")
+          return -1;
+        if (ta === "binary")
+          return 1;
+        if (tb === "binary")
+          return -1;
+        if (ta === "string")
+          return 1;
+        if (tb === "string")
+          return -1;
+        if (ta === "Date")
+          return 1;
+        if (tb !== "Date")
+          return NaN;
+        return -1;
+      }
+      switch (ta) {
+        case "number":
+        case "Date":
+        case "string":
+          return a > b ? 1 : a < b ? -1 : 0;
+        case "binary": {
+          return compareUint8Arrays(getUint8Array(a), getUint8Array(b));
+        }
+        case "Array":
+          return compareArrays(a, b);
+      }
+    } catch (_a) {
+    }
+    return NaN;
+  }
+  function compareArrays(a, b) {
+    const al = a.length;
+    const bl = b.length;
+    const l = al < bl ? al : bl;
+    for (let i = 0; i < l; ++i) {
+      const res = cmp(a[i], b[i]);
+      if (res !== 0)
+        return res;
+    }
+    return al === bl ? 0 : al < bl ? -1 : 1;
+  }
+  function compareUint8Arrays(a, b) {
+    const al = a.length;
+    const bl = b.length;
+    const l = al < bl ? al : bl;
+    for (let i = 0; i < l; ++i) {
+      if (a[i] !== b[i])
+        return a[i] < b[i] ? -1 : 1;
+    }
+    return al === bl ? 0 : al < bl ? -1 : 1;
+  }
+  function type(x) {
+    const t = typeof x;
+    if (t !== "object")
+      return t;
+    if (ArrayBuffer.isView(x))
+      return "binary";
+    const tsTag = toStringTag(x);
+    return tsTag === "ArrayBuffer" ? "binary" : tsTag;
+  }
+  function getUint8Array(a) {
+    if (a instanceof Uint8Array)
+      return a;
+    if (ArrayBuffer.isView(a))
+      return new Uint8Array(a.buffer, a.byteOffset, a.byteLength);
+    return new Uint8Array(a);
+  }
+  var Collection = class {
+    _read(fn2, cb) {
+      var ctx = this._ctx;
+      return ctx.error ? ctx.table._trans(null, rejection.bind(null, ctx.error)) : ctx.table._trans("readonly", fn2).then(cb);
+    }
+    _write(fn2) {
+      var ctx = this._ctx;
+      return ctx.error ? ctx.table._trans(null, rejection.bind(null, ctx.error)) : ctx.table._trans("readwrite", fn2, "locked");
+    }
+    _addAlgorithm(fn2) {
+      var ctx = this._ctx;
+      ctx.algorithm = combine(ctx.algorithm, fn2);
+    }
+    _iterate(fn2, coreTrans) {
+      return iter(this._ctx, fn2, coreTrans, this._ctx.table.core);
+    }
+    clone(props2) {
+      var rv = Object.create(this.constructor.prototype), ctx = Object.create(this._ctx);
+      if (props2)
+        extend(ctx, props2);
+      rv._ctx = ctx;
+      return rv;
+    }
+    raw() {
+      this._ctx.valueMapper = null;
+      return this;
+    }
+    each(fn2) {
+      var ctx = this._ctx;
+      return this._read((trans) => iter(ctx, fn2, trans, ctx.table.core));
+    }
+    count(cb) {
+      return this._read((trans) => {
+        const ctx = this._ctx;
+        const coreTable = ctx.table.core;
+        if (isPlainKeyRange(ctx, true)) {
+          return coreTable.count({
+            trans,
+            query: {
+              index: getIndexOrStore(ctx, coreTable.schema),
+              range: ctx.range
+            }
+          }).then((count2) => Math.min(count2, ctx.limit));
+        } else {
+          var count = 0;
+          return iter(ctx, () => {
+            ++count;
+            return false;
+          }, trans, coreTable).then(() => count);
+        }
+      }).then(cb);
+    }
+    sortBy(keyPath, cb) {
+      const parts = keyPath.split(".").reverse(), lastPart = parts[0], lastIndex = parts.length - 1;
+      function getval(obj, i) {
+        if (i)
+          return getval(obj[parts[i]], i - 1);
+        return obj[lastPart];
+      }
+      var order2 = this._ctx.dir === "next" ? 1 : -1;
+      function sorter(a, b) {
+        var aVal = getval(a, lastIndex), bVal = getval(b, lastIndex);
+        return aVal < bVal ? -order2 : aVal > bVal ? order2 : 0;
+      }
+      return this.toArray(function(a) {
+        return a.sort(sorter);
+      }).then(cb);
+    }
+    toArray(cb) {
+      return this._read((trans) => {
+        var ctx = this._ctx;
+        if (ctx.dir === "next" && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+          const { valueMapper } = ctx;
+          const index = getIndexOrStore(ctx, ctx.table.core.schema);
+          return ctx.table.core.query({
+            trans,
+            limit: ctx.limit,
+            values: true,
+            query: {
+              index,
+              range: ctx.range
+            }
+          }).then(({ result }) => valueMapper ? result.map(valueMapper) : result);
+        } else {
+          const a = [];
+          return iter(ctx, (item) => a.push(item), trans, ctx.table.core).then(() => a);
+        }
+      }, cb);
+    }
+    offset(offset2) {
+      var ctx = this._ctx;
+      if (offset2 <= 0)
+        return this;
+      ctx.offset += offset2;
+      if (isPlainKeyRange(ctx)) {
+        addReplayFilter(ctx, () => {
+          var offsetLeft = offset2;
+          return (cursor, advance) => {
+            if (offsetLeft === 0)
+              return true;
+            if (offsetLeft === 1) {
+              --offsetLeft;
+              return false;
+            }
+            advance(() => {
+              cursor.advance(offsetLeft);
+              offsetLeft = 0;
+            });
+            return false;
+          };
+        });
+      } else {
+        addReplayFilter(ctx, () => {
+          var offsetLeft = offset2;
+          return () => --offsetLeft < 0;
+        });
+      }
+      return this;
+    }
+    limit(numRows) {
+      this._ctx.limit = Math.min(this._ctx.limit, numRows);
+      addReplayFilter(this._ctx, () => {
+        var rowsLeft = numRows;
+        return function(cursor, advance, resolve) {
+          if (--rowsLeft <= 0)
+            advance(resolve);
+          return rowsLeft >= 0;
+        };
+      }, true);
+      return this;
+    }
+    until(filterFunction, bIncludeStopEntry) {
+      addFilter(this._ctx, function(cursor, advance, resolve) {
+        if (filterFunction(cursor.value)) {
+          advance(resolve);
+          return bIncludeStopEntry;
+        } else {
+          return true;
+        }
+      });
+      return this;
+    }
+    first(cb) {
+      return this.limit(1).toArray(function(a) {
+        return a[0];
+      }).then(cb);
+    }
+    last(cb) {
+      return this.reverse().first(cb);
+    }
+    filter(filterFunction) {
+      addFilter(this._ctx, function(cursor) {
+        return filterFunction(cursor.value);
+      });
+      addMatchFilter(this._ctx, filterFunction);
+      return this;
+    }
+    and(filter) {
+      return this.filter(filter);
+    }
+    or(indexName) {
+      return new this.db.WhereClause(this._ctx.table, indexName, this);
+    }
+    reverse() {
+      this._ctx.dir = this._ctx.dir === "prev" ? "next" : "prev";
+      if (this._ondirectionchange)
+        this._ondirectionchange(this._ctx.dir);
+      return this;
+    }
+    desc() {
+      return this.reverse();
+    }
+    eachKey(cb) {
+      var ctx = this._ctx;
+      ctx.keysOnly = !ctx.isMatch;
+      return this.each(function(val, cursor) {
+        cb(cursor.key, cursor);
+      });
+    }
+    eachUniqueKey(cb) {
+      this._ctx.unique = "unique";
+      return this.eachKey(cb);
+    }
+    eachPrimaryKey(cb) {
+      var ctx = this._ctx;
+      ctx.keysOnly = !ctx.isMatch;
+      return this.each(function(val, cursor) {
+        cb(cursor.primaryKey, cursor);
+      });
+    }
+    keys(cb) {
+      var ctx = this._ctx;
+      ctx.keysOnly = !ctx.isMatch;
+      var a = [];
+      return this.each(function(item, cursor) {
+        a.push(cursor.key);
+      }).then(function() {
+        return a;
+      }).then(cb);
+    }
+    primaryKeys(cb) {
+      var ctx = this._ctx;
+      if (ctx.dir === "next" && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+        return this._read((trans) => {
+          var index = getIndexOrStore(ctx, ctx.table.core.schema);
+          return ctx.table.core.query({
+            trans,
+            values: false,
+            limit: ctx.limit,
+            query: {
+              index,
+              range: ctx.range
+            }
+          });
+        }).then(({ result }) => result).then(cb);
+      }
+      ctx.keysOnly = !ctx.isMatch;
+      var a = [];
+      return this.each(function(item, cursor) {
+        a.push(cursor.primaryKey);
+      }).then(function() {
+        return a;
+      }).then(cb);
+    }
+    uniqueKeys(cb) {
+      this._ctx.unique = "unique";
+      return this.keys(cb);
+    }
+    firstKey(cb) {
+      return this.limit(1).keys(function(a) {
+        return a[0];
+      }).then(cb);
+    }
+    lastKey(cb) {
+      return this.reverse().firstKey(cb);
+    }
+    distinct() {
+      var ctx = this._ctx, idx = ctx.index && ctx.table.schema.idxByName[ctx.index];
+      if (!idx || !idx.multi)
+        return this;
+      var set = {};
+      addFilter(this._ctx, function(cursor) {
+        var strKey = cursor.primaryKey.toString();
+        var found = hasOwn(set, strKey);
+        set[strKey] = true;
+        return !found;
+      });
+      return this;
+    }
+    modify(changes) {
+      var ctx = this._ctx;
+      return this._write((trans) => {
+        var modifyer;
+        if (typeof changes === "function") {
+          modifyer = changes;
+        } else {
+          var keyPaths = keys(changes);
+          var numKeys = keyPaths.length;
+          modifyer = function(item) {
+            var anythingModified = false;
+            for (var i = 0; i < numKeys; ++i) {
+              var keyPath = keyPaths[i], val = changes[keyPath];
+              if (getByKeyPath(item, keyPath) !== val) {
+                setByKeyPath(item, keyPath, val);
+                anythingModified = true;
+              }
+            }
+            return anythingModified;
+          };
+        }
+        const coreTable = ctx.table.core;
+        const { outbound, extractKey } = coreTable.schema.primaryKey;
+        const limit = this.db._options.modifyChunkSize || 200;
+        const totalFailures = [];
+        let successCount = 0;
+        const failedKeys = [];
+        const applyMutateResult = (expectedCount, res) => {
+          const { failures, numFailures } = res;
+          successCount += expectedCount - numFailures;
+          for (let pos of keys(failures)) {
+            totalFailures.push(failures[pos]);
+          }
+        };
+        return this.clone().primaryKeys().then((keys2) => {
+          const nextChunk = (offset2) => {
+            const count = Math.min(limit, keys2.length - offset2);
+            return coreTable.getMany({
+              trans,
+              keys: keys2.slice(offset2, offset2 + count),
+              cache: "immutable"
+            }).then((values) => {
+              const addValues = [];
+              const putValues = [];
+              const putKeys = outbound ? [] : null;
+              const deleteKeys = [];
+              for (let i = 0; i < count; ++i) {
+                const origValue = values[i];
+                const ctx2 = {
+                  value: deepClone(origValue),
+                  primKey: keys2[offset2 + i]
+                };
+                if (modifyer.call(ctx2, ctx2.value, ctx2) !== false) {
+                  if (ctx2.value == null) {
+                    deleteKeys.push(keys2[offset2 + i]);
+                  } else if (!outbound && cmp(extractKey(origValue), extractKey(ctx2.value)) !== 0) {
+                    deleteKeys.push(keys2[offset2 + i]);
+                    addValues.push(ctx2.value);
+                  } else {
+                    putValues.push(ctx2.value);
+                    if (outbound)
+                      putKeys.push(keys2[offset2 + i]);
+                  }
+                }
+              }
+              const criteria = isPlainKeyRange(ctx) && ctx.limit === Infinity && (typeof changes !== "function" || changes === deleteCallback) && {
+                index: ctx.index,
+                range: ctx.range
+              };
+              return Promise.resolve(addValues.length > 0 && coreTable.mutate({ trans, type: "add", values: addValues }).then((res) => {
+                for (let pos in res.failures) {
+                  deleteKeys.splice(parseInt(pos), 1);
+                }
+                applyMutateResult(addValues.length, res);
+              })).then(() => (putValues.length > 0 || criteria && typeof changes === "object") && coreTable.mutate({
+                trans,
+                type: "put",
+                keys: putKeys,
+                values: putValues,
+                criteria,
+                changeSpec: typeof changes !== "function" && changes
+              }).then((res) => applyMutateResult(putValues.length, res))).then(() => (deleteKeys.length > 0 || criteria && changes === deleteCallback) && coreTable.mutate({
+                trans,
+                type: "delete",
+                keys: deleteKeys,
+                criteria
+              }).then((res) => applyMutateResult(deleteKeys.length, res))).then(() => {
+                return keys2.length > offset2 + count && nextChunk(offset2 + limit);
+              });
+            });
+          };
+          return nextChunk(0).then(() => {
+            if (totalFailures.length > 0)
+              throw new ModifyError("Error modifying one or more objects", totalFailures, successCount, failedKeys);
+            return keys2.length;
+          });
+        });
+      });
+    }
+    delete() {
+      var ctx = this._ctx, range = ctx.range;
+      if (isPlainKeyRange(ctx) && (ctx.isPrimKey && !hangsOnDeleteLargeKeyRange || range.type === 3)) {
+        return this._write((trans) => {
+          const { primaryKey } = ctx.table.core.schema;
+          const coreRange = range;
+          return ctx.table.core.count({ trans, query: { index: primaryKey, range: coreRange } }).then((count) => {
+            return ctx.table.core.mutate({ trans, type: "deleteRange", range: coreRange }).then(({ failures, lastResult, results, numFailures }) => {
+              if (numFailures)
+                throw new ModifyError("Could not delete some values", Object.keys(failures).map((pos) => failures[pos]), count - numFailures);
+              return count - numFailures;
+            });
+          });
+        });
+      }
+      return this.modify(deleteCallback);
+    }
+  };
+  var deleteCallback = (value, ctx) => ctx.value = null;
+  function createCollectionConstructor(db) {
+    return makeClassConstructor(Collection.prototype, function Collection2(whereClause, keyRangeGenerator) {
+      this.db = db;
+      let keyRange = AnyRange, error = null;
+      if (keyRangeGenerator)
+        try {
+          keyRange = keyRangeGenerator();
+        } catch (ex) {
+          error = ex;
+        }
+      const whereCtx = whereClause._ctx;
+      const table = whereCtx.table;
+      const readingHook = table.hook.reading.fire;
+      this._ctx = {
+        table,
+        index: whereCtx.index,
+        isPrimKey: !whereCtx.index || table.schema.primKey.keyPath && whereCtx.index === table.schema.primKey.name,
+        range: keyRange,
+        keysOnly: false,
+        dir: "next",
+        unique: "",
+        algorithm: null,
+        filter: null,
+        replayFilter: null,
+        justLimit: true,
+        isMatch: null,
+        offset: 0,
+        limit: Infinity,
+        error,
+        or: whereCtx.or,
+        valueMapper: readingHook !== mirror ? readingHook : null
+      };
+    });
+  }
+  function simpleCompare(a, b) {
+    return a < b ? -1 : a === b ? 0 : 1;
+  }
+  function simpleCompareReverse(a, b) {
+    return a > b ? -1 : a === b ? 0 : 1;
+  }
+  function fail(collectionOrWhereClause, err, T) {
+    var collection = collectionOrWhereClause instanceof WhereClause ? new collectionOrWhereClause.Collection(collectionOrWhereClause) : collectionOrWhereClause;
+    collection._ctx.error = T ? new T(err) : new TypeError(err);
+    return collection;
+  }
+  function emptyCollection(whereClause) {
+    return new whereClause.Collection(whereClause, () => rangeEqual("")).limit(0);
+  }
+  function upperFactory(dir) {
+    return dir === "next" ? (s) => s.toUpperCase() : (s) => s.toLowerCase();
+  }
+  function lowerFactory(dir) {
+    return dir === "next" ? (s) => s.toLowerCase() : (s) => s.toUpperCase();
+  }
+  function nextCasing(key, lowerKey, upperNeedle, lowerNeedle, cmp2, dir) {
+    var length = Math.min(key.length, lowerNeedle.length);
+    var llp = -1;
+    for (var i = 0; i < length; ++i) {
+      var lwrKeyChar = lowerKey[i];
+      if (lwrKeyChar !== lowerNeedle[i]) {
+        if (cmp2(key[i], upperNeedle[i]) < 0)
+          return key.substr(0, i) + upperNeedle[i] + upperNeedle.substr(i + 1);
+        if (cmp2(key[i], lowerNeedle[i]) < 0)
+          return key.substr(0, i) + lowerNeedle[i] + upperNeedle.substr(i + 1);
+        if (llp >= 0)
+          return key.substr(0, llp) + lowerKey[llp] + upperNeedle.substr(llp + 1);
+        return null;
+      }
+      if (cmp2(key[i], lwrKeyChar) < 0)
+        llp = i;
+    }
+    if (length < lowerNeedle.length && dir === "next")
+      return key + upperNeedle.substr(key.length);
+    if (length < key.length && dir === "prev")
+      return key.substr(0, upperNeedle.length);
+    return llp < 0 ? null : key.substr(0, llp) + lowerNeedle[llp] + upperNeedle.substr(llp + 1);
+  }
+  function addIgnoreCaseAlgorithm(whereClause, match, needles, suffix) {
+    var upper, lower, compare, upperNeedles, lowerNeedles, direction, nextKeySuffix, needlesLen = needles.length;
+    if (!needles.every((s) => typeof s === "string")) {
+      return fail(whereClause, STRING_EXPECTED);
+    }
+    function initDirection(dir) {
+      upper = upperFactory(dir);
+      lower = lowerFactory(dir);
+      compare = dir === "next" ? simpleCompare : simpleCompareReverse;
+      var needleBounds = needles.map(function(needle) {
+        return { lower: lower(needle), upper: upper(needle) };
+      }).sort(function(a, b) {
+        return compare(a.lower, b.lower);
+      });
+      upperNeedles = needleBounds.map(function(nb) {
+        return nb.upper;
+      });
+      lowerNeedles = needleBounds.map(function(nb) {
+        return nb.lower;
+      });
+      direction = dir;
+      nextKeySuffix = dir === "next" ? "" : suffix;
+    }
+    initDirection("next");
+    var c = new whereClause.Collection(whereClause, () => createRange(upperNeedles[0], lowerNeedles[needlesLen - 1] + suffix));
+    c._ondirectionchange = function(direction2) {
+      initDirection(direction2);
+    };
+    var firstPossibleNeedle = 0;
+    c._addAlgorithm(function(cursor, advance, resolve) {
+      var key = cursor.key;
+      if (typeof key !== "string")
+        return false;
+      var lowerKey = lower(key);
+      if (match(lowerKey, lowerNeedles, firstPossibleNeedle)) {
+        return true;
+      } else {
+        var lowestPossibleCasing = null;
+        for (var i = firstPossibleNeedle; i < needlesLen; ++i) {
+          var casing = nextCasing(key, lowerKey, upperNeedles[i], lowerNeedles[i], compare, direction);
+          if (casing === null && lowestPossibleCasing === null)
+            firstPossibleNeedle = i + 1;
+          else if (lowestPossibleCasing === null || compare(lowestPossibleCasing, casing) > 0) {
+            lowestPossibleCasing = casing;
+          }
+        }
+        if (lowestPossibleCasing !== null) {
+          advance(function() {
+            cursor.continue(lowestPossibleCasing + nextKeySuffix);
+          });
+        } else {
+          advance(resolve);
+        }
+        return false;
+      }
+    });
+    return c;
+  }
+  function createRange(lower, upper, lowerOpen, upperOpen) {
+    return {
+      type: 2,
+      lower,
+      upper,
+      lowerOpen,
+      upperOpen
+    };
+  }
+  function rangeEqual(value) {
+    return {
+      type: 1,
+      lower: value,
+      upper: value
+    };
+  }
+  var WhereClause = class {
+    get Collection() {
+      return this._ctx.table.db.Collection;
+    }
+    between(lower, upper, includeLower, includeUpper) {
+      includeLower = includeLower !== false;
+      includeUpper = includeUpper === true;
+      try {
+        if (this._cmp(lower, upper) > 0 || this._cmp(lower, upper) === 0 && (includeLower || includeUpper) && !(includeLower && includeUpper))
+          return emptyCollection(this);
+        return new this.Collection(this, () => createRange(lower, upper, !includeLower, !includeUpper));
+      } catch (e) {
+        return fail(this, INVALID_KEY_ARGUMENT);
+      }
+    }
+    equals(value) {
+      if (value == null)
+        return fail(this, INVALID_KEY_ARGUMENT);
+      return new this.Collection(this, () => rangeEqual(value));
+    }
+    above(value) {
+      if (value == null)
+        return fail(this, INVALID_KEY_ARGUMENT);
+      return new this.Collection(this, () => createRange(value, void 0, true));
+    }
+    aboveOrEqual(value) {
+      if (value == null)
+        return fail(this, INVALID_KEY_ARGUMENT);
+      return new this.Collection(this, () => createRange(value, void 0, false));
+    }
+    below(value) {
+      if (value == null)
+        return fail(this, INVALID_KEY_ARGUMENT);
+      return new this.Collection(this, () => createRange(void 0, value, false, true));
+    }
+    belowOrEqual(value) {
+      if (value == null)
+        return fail(this, INVALID_KEY_ARGUMENT);
+      return new this.Collection(this, () => createRange(void 0, value));
+    }
+    startsWith(str) {
+      if (typeof str !== "string")
+        return fail(this, STRING_EXPECTED);
+      return this.between(str, str + maxString, true, true);
+    }
+    startsWithIgnoreCase(str) {
+      if (str === "")
+        return this.startsWith(str);
+      return addIgnoreCaseAlgorithm(this, (x, a) => x.indexOf(a[0]) === 0, [str], maxString);
+    }
+    equalsIgnoreCase(str) {
+      return addIgnoreCaseAlgorithm(this, (x, a) => x === a[0], [str], "");
+    }
+    anyOfIgnoreCase() {
+      var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+      if (set.length === 0)
+        return emptyCollection(this);
+      return addIgnoreCaseAlgorithm(this, (x, a) => a.indexOf(x) !== -1, set, "");
+    }
+    startsWithAnyOfIgnoreCase() {
+      var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+      if (set.length === 0)
+        return emptyCollection(this);
+      return addIgnoreCaseAlgorithm(this, (x, a) => a.some((n) => x.indexOf(n) === 0), set, maxString);
+    }
+    anyOf() {
+      const set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+      let compare = this._cmp;
+      try {
+        set.sort(compare);
+      } catch (e) {
+        return fail(this, INVALID_KEY_ARGUMENT);
+      }
+      if (set.length === 0)
+        return emptyCollection(this);
+      const c = new this.Collection(this, () => createRange(set[0], set[set.length - 1]));
+      c._ondirectionchange = (direction) => {
+        compare = direction === "next" ? this._ascending : this._descending;
+        set.sort(compare);
+      };
+      let i = 0;
+      c._addAlgorithm((cursor, advance, resolve) => {
+        const key = cursor.key;
+        while (compare(key, set[i]) > 0) {
+          ++i;
+          if (i === set.length) {
+            advance(resolve);
+            return false;
+          }
+        }
+        if (compare(key, set[i]) === 0) {
+          return true;
+        } else {
+          advance(() => {
+            cursor.continue(set[i]);
+          });
+          return false;
+        }
+      });
+      return c;
+    }
+    notEqual(value) {
+      return this.inAnyRange([[minKey, value], [value, this.db._maxKey]], { includeLowers: false, includeUppers: false });
+    }
+    noneOf() {
+      const set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+      if (set.length === 0)
+        return new this.Collection(this);
+      try {
+        set.sort(this._ascending);
+      } catch (e) {
+        return fail(this, INVALID_KEY_ARGUMENT);
+      }
+      const ranges = set.reduce((res, val) => res ? res.concat([[res[res.length - 1][1], val]]) : [[minKey, val]], null);
+      ranges.push([set[set.length - 1], this.db._maxKey]);
+      return this.inAnyRange(ranges, { includeLowers: false, includeUppers: false });
+    }
+    inAnyRange(ranges, options) {
+      const cmp2 = this._cmp, ascending = this._ascending, descending = this._descending, min2 = this._min, max2 = this._max;
+      if (ranges.length === 0)
+        return emptyCollection(this);
+      if (!ranges.every((range) => range[0] !== void 0 && range[1] !== void 0 && ascending(range[0], range[1]) <= 0)) {
+        return fail(this, "First argument to inAnyRange() must be an Array of two-value Arrays [lower,upper] where upper must not be lower than lower", exceptions.InvalidArgument);
+      }
+      const includeLowers = !options || options.includeLowers !== false;
+      const includeUppers = options && options.includeUppers === true;
+      function addRange2(ranges2, newRange) {
+        let i = 0, l = ranges2.length;
+        for (; i < l; ++i) {
+          const range = ranges2[i];
+          if (cmp2(newRange[0], range[1]) < 0 && cmp2(newRange[1], range[0]) > 0) {
+            range[0] = min2(range[0], newRange[0]);
+            range[1] = max2(range[1], newRange[1]);
+            break;
+          }
+        }
+        if (i === l)
+          ranges2.push(newRange);
+        return ranges2;
+      }
+      let sortDirection = ascending;
+      function rangeSorter(a, b) {
+        return sortDirection(a[0], b[0]);
+      }
+      let set;
+      try {
+        set = ranges.reduce(addRange2, []);
+        set.sort(rangeSorter);
+      } catch (ex) {
+        return fail(this, INVALID_KEY_ARGUMENT);
+      }
+      let rangePos = 0;
+      const keyIsBeyondCurrentEntry = includeUppers ? (key) => ascending(key, set[rangePos][1]) > 0 : (key) => ascending(key, set[rangePos][1]) >= 0;
+      const keyIsBeforeCurrentEntry = includeLowers ? (key) => descending(key, set[rangePos][0]) > 0 : (key) => descending(key, set[rangePos][0]) >= 0;
+      function keyWithinCurrentRange(key) {
+        return !keyIsBeyondCurrentEntry(key) && !keyIsBeforeCurrentEntry(key);
+      }
+      let checkKey = keyIsBeyondCurrentEntry;
+      const c = new this.Collection(this, () => createRange(set[0][0], set[set.length - 1][1], !includeLowers, !includeUppers));
+      c._ondirectionchange = (direction) => {
+        if (direction === "next") {
+          checkKey = keyIsBeyondCurrentEntry;
+          sortDirection = ascending;
+        } else {
+          checkKey = keyIsBeforeCurrentEntry;
+          sortDirection = descending;
+        }
+        set.sort(rangeSorter);
+      };
+      c._addAlgorithm((cursor, advance, resolve) => {
+        var key = cursor.key;
+        while (checkKey(key)) {
+          ++rangePos;
+          if (rangePos === set.length) {
+            advance(resolve);
+            return false;
+          }
+        }
+        if (keyWithinCurrentRange(key)) {
+          return true;
+        } else if (this._cmp(key, set[rangePos][1]) === 0 || this._cmp(key, set[rangePos][0]) === 0) {
+          return false;
+        } else {
+          advance(() => {
+            if (sortDirection === ascending)
+              cursor.continue(set[rangePos][0]);
+            else
+              cursor.continue(set[rangePos][1]);
+          });
+          return false;
+        }
+      });
+      return c;
+    }
+    startsWithAnyOf() {
+      const set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+      if (!set.every((s) => typeof s === "string")) {
+        return fail(this, "startsWithAnyOf() only works with strings");
+      }
+      if (set.length === 0)
+        return emptyCollection(this);
+      return this.inAnyRange(set.map((str) => [str, str + maxString]));
+    }
+  };
+  function createWhereClauseConstructor(db) {
+    return makeClassConstructor(WhereClause.prototype, function WhereClause2(table, index, orCollection) {
+      this.db = db;
+      this._ctx = {
+        table,
+        index: index === ":id" ? null : index,
+        or: orCollection
+      };
+      const indexedDB2 = db._deps.indexedDB;
+      if (!indexedDB2)
+        throw new exceptions.MissingAPI();
+      this._cmp = this._ascending = indexedDB2.cmp.bind(indexedDB2);
+      this._descending = (a, b) => indexedDB2.cmp(b, a);
+      this._max = (a, b) => indexedDB2.cmp(a, b) > 0 ? a : b;
+      this._min = (a, b) => indexedDB2.cmp(a, b) < 0 ? a : b;
+      this._IDBKeyRange = db._deps.IDBKeyRange;
+    });
+  }
+  function eventRejectHandler(reject) {
+    return wrap(function(event) {
+      preventDefault(event);
+      reject(event.target.error);
+      return false;
+    });
+  }
+  function preventDefault(event) {
+    if (event.stopPropagation)
+      event.stopPropagation();
+    if (event.preventDefault)
+      event.preventDefault();
+  }
+  var DEXIE_STORAGE_MUTATED_EVENT_NAME = "storagemutated";
+  var STORAGE_MUTATED_DOM_EVENT_NAME = "x-storagemutated-1";
+  var globalEvents = Events(null, DEXIE_STORAGE_MUTATED_EVENT_NAME);
+  var Transaction = class {
+    _lock() {
+      assert(!PSD.global);
+      ++this._reculock;
+      if (this._reculock === 1 && !PSD.global)
+        PSD.lockOwnerFor = this;
+      return this;
+    }
+    _unlock() {
+      assert(!PSD.global);
+      if (--this._reculock === 0) {
+        if (!PSD.global)
+          PSD.lockOwnerFor = null;
+        while (this._blockedFuncs.length > 0 && !this._locked()) {
+          var fnAndPSD = this._blockedFuncs.shift();
+          try {
+            usePSD(fnAndPSD[1], fnAndPSD[0]);
+          } catch (e) {
+          }
+        }
+      }
+      return this;
+    }
+    _locked() {
+      return this._reculock && PSD.lockOwnerFor !== this;
+    }
+    create(idbtrans) {
+      if (!this.mode)
+        return this;
+      const idbdb = this.db.idbdb;
+      const dbOpenError = this.db._state.dbOpenError;
+      assert(!this.idbtrans);
+      if (!idbtrans && !idbdb) {
+        switch (dbOpenError && dbOpenError.name) {
+          case "DatabaseClosedError":
+            throw new exceptions.DatabaseClosed(dbOpenError);
+          case "MissingAPIError":
+            throw new exceptions.MissingAPI(dbOpenError.message, dbOpenError);
+          default:
+            throw new exceptions.OpenFailed(dbOpenError);
+        }
+      }
+      if (!this.active)
+        throw new exceptions.TransactionInactive();
+      assert(this._completion._state === null);
+      idbtrans = this.idbtrans = idbtrans || (this.db.core ? this.db.core.transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability }) : idbdb.transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability }));
+      idbtrans.onerror = wrap((ev) => {
+        preventDefault(ev);
+        this._reject(idbtrans.error);
+      });
+      idbtrans.onabort = wrap((ev) => {
+        preventDefault(ev);
+        this.active && this._reject(new exceptions.Abort(idbtrans.error));
+        this.active = false;
+        this.on("abort").fire(ev);
+      });
+      idbtrans.oncomplete = wrap(() => {
+        this.active = false;
+        this._resolve();
+        if ("mutatedParts" in idbtrans) {
+          globalEvents.storagemutated.fire(idbtrans["mutatedParts"]);
+        }
+      });
+      return this;
+    }
+    _promise(mode, fn2, bWriteLock) {
+      if (mode === "readwrite" && this.mode !== "readwrite")
+        return rejection(new exceptions.ReadOnly("Transaction is readonly"));
+      if (!this.active)
+        return rejection(new exceptions.TransactionInactive());
+      if (this._locked()) {
+        return new DexiePromise((resolve, reject) => {
+          this._blockedFuncs.push([() => {
+            this._promise(mode, fn2, bWriteLock).then(resolve, reject);
+          }, PSD]);
+        });
+      } else if (bWriteLock) {
+        return newScope(() => {
+          var p2 = new DexiePromise((resolve, reject) => {
+            this._lock();
+            const rv = fn2(resolve, reject, this);
+            if (rv && rv.then)
+              rv.then(resolve, reject);
+          });
+          p2.finally(() => this._unlock());
+          p2._lib = true;
+          return p2;
+        });
+      } else {
+        var p = new DexiePromise((resolve, reject) => {
+          var rv = fn2(resolve, reject, this);
+          if (rv && rv.then)
+            rv.then(resolve, reject);
+        });
+        p._lib = true;
+        return p;
+      }
+    }
+    _root() {
+      return this.parent ? this.parent._root() : this;
+    }
+    waitFor(promiseLike) {
+      var root = this._root();
+      const promise = DexiePromise.resolve(promiseLike);
+      if (root._waitingFor) {
+        root._waitingFor = root._waitingFor.then(() => promise);
+      } else {
+        root._waitingFor = promise;
+        root._waitingQueue = [];
+        var store = root.idbtrans.objectStore(root.storeNames[0]);
+        (function spin() {
+          ++root._spinCount;
+          while (root._waitingQueue.length)
+            root._waitingQueue.shift()();
+          if (root._waitingFor)
+            store.get(-Infinity).onsuccess = spin;
+        })();
+      }
+      var currentWaitPromise = root._waitingFor;
+      return new DexiePromise((resolve, reject) => {
+        promise.then((res) => root._waitingQueue.push(wrap(resolve.bind(null, res))), (err) => root._waitingQueue.push(wrap(reject.bind(null, err)))).finally(() => {
+          if (root._waitingFor === currentWaitPromise) {
+            root._waitingFor = null;
+          }
+        });
+      });
+    }
+    abort() {
+      if (this.active) {
+        this.active = false;
+        if (this.idbtrans)
+          this.idbtrans.abort();
+        this._reject(new exceptions.Abort());
+      }
+    }
+    table(tableName) {
+      const memoizedTables = this._memoizedTables || (this._memoizedTables = {});
+      if (hasOwn(memoizedTables, tableName))
+        return memoizedTables[tableName];
+      const tableSchema = this.schema[tableName];
+      if (!tableSchema) {
+        throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
+      }
+      const transactionBoundTable = new this.db.Table(tableName, tableSchema, this);
+      transactionBoundTable.core = this.db.core.table(tableName);
+      memoizedTables[tableName] = transactionBoundTable;
+      return transactionBoundTable;
+    }
+  };
+  function createTransactionConstructor(db) {
+    return makeClassConstructor(Transaction.prototype, function Transaction2(mode, storeNames, dbschema, chromeTransactionDurability, parent) {
+      this.db = db;
+      this.mode = mode;
+      this.storeNames = storeNames;
+      this.schema = dbschema;
+      this.chromeTransactionDurability = chromeTransactionDurability;
+      this.idbtrans = null;
+      this.on = Events(this, "complete", "error", "abort");
+      this.parent = parent || null;
+      this.active = true;
+      this._reculock = 0;
+      this._blockedFuncs = [];
+      this._resolve = null;
+      this._reject = null;
+      this._waitingFor = null;
+      this._waitingQueue = null;
+      this._spinCount = 0;
+      this._completion = new DexiePromise((resolve, reject) => {
+        this._resolve = resolve;
+        this._reject = reject;
+      });
+      this._completion.then(() => {
+        this.active = false;
+        this.on.complete.fire();
+      }, (e) => {
+        var wasActive = this.active;
+        this.active = false;
+        this.on.error.fire(e);
+        this.parent ? this.parent._reject(e) : wasActive && this.idbtrans && this.idbtrans.abort();
+        return rejection(e);
+      });
+    });
+  }
+  function createIndexSpec(name, keyPath, unique, multi, auto2, compound, isPrimKey) {
+    return {
+      name,
+      keyPath,
+      unique,
+      multi,
+      auto: auto2,
+      compound,
+      src: (unique && !isPrimKey ? "&" : "") + (multi ? "*" : "") + (auto2 ? "++" : "") + nameFromKeyPath(keyPath)
+    };
+  }
+  function nameFromKeyPath(keyPath) {
+    return typeof keyPath === "string" ? keyPath : keyPath ? "[" + [].join.call(keyPath, "+") + "]" : "";
+  }
+  function createTableSchema(name, primKey, indexes) {
+    return {
+      name,
+      primKey,
+      indexes,
+      mappedClass: null,
+      idxByName: arrayToObject(indexes, (index) => [index.name, index])
+    };
+  }
+  function safariMultiStoreFix(storeNames) {
+    return storeNames.length === 1 ? storeNames[0] : storeNames;
+  }
+  var getMaxKey = (IdbKeyRange) => {
+    try {
+      IdbKeyRange.only([[]]);
+      getMaxKey = () => [[]];
+      return [[]];
+    } catch (e) {
+      getMaxKey = () => maxString;
+      return maxString;
+    }
+  };
+  function getKeyExtractor(keyPath) {
+    if (keyPath == null) {
+      return () => void 0;
+    } else if (typeof keyPath === "string") {
+      return getSinglePathKeyExtractor(keyPath);
+    } else {
+      return (obj) => getByKeyPath(obj, keyPath);
+    }
+  }
+  function getSinglePathKeyExtractor(keyPath) {
+    const split = keyPath.split(".");
+    if (split.length === 1) {
+      return (obj) => obj[keyPath];
+    } else {
+      return (obj) => getByKeyPath(obj, keyPath);
+    }
+  }
+  function arrayify(arrayLike) {
+    return [].slice.call(arrayLike);
+  }
+  var _id_counter = 0;
+  function getKeyPathAlias(keyPath) {
+    return keyPath == null ? ":id" : typeof keyPath === "string" ? keyPath : `[${keyPath.join("+")}]`;
+  }
+  function createDBCore(db, IdbKeyRange, tmpTrans) {
+    function extractSchema(db2, trans) {
+      const tables2 = arrayify(db2.objectStoreNames);
+      return {
+        schema: {
+          name: db2.name,
+          tables: tables2.map((table) => trans.objectStore(table)).map((store) => {
+            const { keyPath, autoIncrement } = store;
+            const compound = isArray(keyPath);
+            const outbound = keyPath == null;
+            const indexByKeyPath = {};
+            const result = {
+              name: store.name,
+              primaryKey: {
+                name: null,
+                isPrimaryKey: true,
+                outbound,
+                compound,
+                keyPath,
+                autoIncrement,
+                unique: true,
+                extractKey: getKeyExtractor(keyPath)
+              },
+              indexes: arrayify(store.indexNames).map((indexName) => store.index(indexName)).map((index) => {
+                const { name, unique, multiEntry, keyPath: keyPath2 } = index;
+                const compound2 = isArray(keyPath2);
+                const result2 = {
+                  name,
+                  compound: compound2,
+                  keyPath: keyPath2,
+                  unique,
+                  multiEntry,
+                  extractKey: getKeyExtractor(keyPath2)
+                };
+                indexByKeyPath[getKeyPathAlias(keyPath2)] = result2;
+                return result2;
+              }),
+              getIndexByKeyPath: (keyPath2) => indexByKeyPath[getKeyPathAlias(keyPath2)]
+            };
+            indexByKeyPath[":id"] = result.primaryKey;
+            if (keyPath != null) {
+              indexByKeyPath[getKeyPathAlias(keyPath)] = result.primaryKey;
+            }
+            return result;
+          })
+        },
+        hasGetAll: tables2.length > 0 && "getAll" in trans.objectStore(tables2[0]) && !(typeof navigator !== "undefined" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604)
+      };
+    }
+    function makeIDBKeyRange(range) {
+      if (range.type === 3)
+        return null;
+      if (range.type === 4)
+        throw new Error("Cannot convert never type to IDBKeyRange");
+      const { lower, upper, lowerOpen, upperOpen } = range;
+      const idbRange = lower === void 0 ? upper === void 0 ? null : IdbKeyRange.upperBound(upper, !!upperOpen) : upper === void 0 ? IdbKeyRange.lowerBound(lower, !!lowerOpen) : IdbKeyRange.bound(lower, upper, !!lowerOpen, !!upperOpen);
+      return idbRange;
+    }
+    function createDbCoreTable(tableSchema) {
+      const tableName = tableSchema.name;
+      function mutate({ trans, type: type2, keys: keys2, values, range }) {
+        return new Promise((resolve, reject) => {
+          resolve = wrap(resolve);
+          const store = trans.objectStore(tableName);
+          const outbound = store.keyPath == null;
+          const isAddOrPut = type2 === "put" || type2 === "add";
+          if (!isAddOrPut && type2 !== "delete" && type2 !== "deleteRange")
+            throw new Error("Invalid operation type: " + type2);
+          const { length } = keys2 || values || { length: 1 };
+          if (keys2 && values && keys2.length !== values.length) {
+            throw new Error("Given keys array must have same length as given values array.");
+          }
+          if (length === 0)
+            return resolve({ numFailures: 0, failures: {}, results: [], lastResult: void 0 });
+          let req;
+          const reqs = [];
+          const failures = [];
+          let numFailures = 0;
+          const errorHandler = (event) => {
+            ++numFailures;
+            preventDefault(event);
+          };
+          if (type2 === "deleteRange") {
+            if (range.type === 4)
+              return resolve({ numFailures, failures, results: [], lastResult: void 0 });
+            if (range.type === 3)
+              reqs.push(req = store.clear());
+            else
+              reqs.push(req = store.delete(makeIDBKeyRange(range)));
+          } else {
+            const [args1, args2] = isAddOrPut ? outbound ? [values, keys2] : [values, null] : [keys2, null];
+            if (isAddOrPut) {
+              for (let i = 0; i < length; ++i) {
+                reqs.push(req = args2 && args2[i] !== void 0 ? store[type2](args1[i], args2[i]) : store[type2](args1[i]));
+                req.onerror = errorHandler;
+              }
+            } else {
+              for (let i = 0; i < length; ++i) {
+                reqs.push(req = store[type2](args1[i]));
+                req.onerror = errorHandler;
+              }
+            }
+          }
+          const done = (event) => {
+            const lastResult = event.target.result;
+            reqs.forEach((req2, i) => req2.error != null && (failures[i] = req2.error));
+            resolve({
+              numFailures,
+              failures,
+              results: type2 === "delete" ? keys2 : reqs.map((req2) => req2.result),
+              lastResult
+            });
+          };
+          req.onerror = (event) => {
+            errorHandler(event);
+            done(event);
+          };
+          req.onsuccess = done;
+        });
+      }
+      function openCursor2({ trans, values, query: query2, reverse, unique }) {
+        return new Promise((resolve, reject) => {
+          resolve = wrap(resolve);
+          const { index, range } = query2;
+          const store = trans.objectStore(tableName);
+          const source = index.isPrimaryKey ? store : store.index(index.name);
+          const direction = reverse ? unique ? "prevunique" : "prev" : unique ? "nextunique" : "next";
+          const req = values || !("openKeyCursor" in source) ? source.openCursor(makeIDBKeyRange(range), direction) : source.openKeyCursor(makeIDBKeyRange(range), direction);
+          req.onerror = eventRejectHandler(reject);
+          req.onsuccess = wrap((ev) => {
+            const cursor = req.result;
+            if (!cursor) {
+              resolve(null);
+              return;
+            }
+            cursor.___id = ++_id_counter;
+            cursor.done = false;
+            const _cursorContinue = cursor.continue.bind(cursor);
+            let _cursorContinuePrimaryKey = cursor.continuePrimaryKey;
+            if (_cursorContinuePrimaryKey)
+              _cursorContinuePrimaryKey = _cursorContinuePrimaryKey.bind(cursor);
+            const _cursorAdvance = cursor.advance.bind(cursor);
+            const doThrowCursorIsNotStarted = () => {
+              throw new Error("Cursor not started");
+            };
+            const doThrowCursorIsStopped = () => {
+              throw new Error("Cursor not stopped");
+            };
+            cursor.trans = trans;
+            cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsNotStarted;
+            cursor.fail = wrap(reject);
+            cursor.next = function() {
+              let gotOne = 1;
+              return this.start(() => gotOne-- ? this.continue() : this.stop()).then(() => this);
+            };
+            cursor.start = (callback) => {
+              const iterationPromise = new Promise((resolveIteration, rejectIteration) => {
+                resolveIteration = wrap(resolveIteration);
+                req.onerror = eventRejectHandler(rejectIteration);
+                cursor.fail = rejectIteration;
+                cursor.stop = (value) => {
+                  cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsStopped;
+                  resolveIteration(value);
+                };
+              });
+              const guardedCallback = () => {
+                if (req.result) {
+                  try {
+                    callback();
+                  } catch (err) {
+                    cursor.fail(err);
+                  }
+                } else {
+                  cursor.done = true;
+                  cursor.start = () => {
+                    throw new Error("Cursor behind last entry");
+                  };
+                  cursor.stop();
+                }
+              };
+              req.onsuccess = wrap((ev2) => {
+                req.onsuccess = guardedCallback;
+                guardedCallback();
+              });
+              cursor.continue = _cursorContinue;
+              cursor.continuePrimaryKey = _cursorContinuePrimaryKey;
+              cursor.advance = _cursorAdvance;
+              guardedCallback();
+              return iterationPromise;
+            };
+            resolve(cursor);
+          }, reject);
+        });
+      }
+      function query(hasGetAll2) {
+        return (request) => {
+          return new Promise((resolve, reject) => {
+            resolve = wrap(resolve);
+            const { trans, values, limit, query: query2 } = request;
+            const nonInfinitLimit = limit === Infinity ? void 0 : limit;
+            const { index, range } = query2;
+            const store = trans.objectStore(tableName);
+            const source = index.isPrimaryKey ? store : store.index(index.name);
+            const idbKeyRange = makeIDBKeyRange(range);
+            if (limit === 0)
+              return resolve({ result: [] });
+            if (hasGetAll2) {
+              const req = values ? source.getAll(idbKeyRange, nonInfinitLimit) : source.getAllKeys(idbKeyRange, nonInfinitLimit);
+              req.onsuccess = (event) => resolve({ result: event.target.result });
+              req.onerror = eventRejectHandler(reject);
+            } else {
+              let count = 0;
+              const req = values || !("openKeyCursor" in source) ? source.openCursor(idbKeyRange) : source.openKeyCursor(idbKeyRange);
+              const result = [];
+              req.onsuccess = (event) => {
+                const cursor = req.result;
+                if (!cursor)
+                  return resolve({ result });
+                result.push(values ? cursor.value : cursor.primaryKey);
+                if (++count === limit)
+                  return resolve({ result });
+                cursor.continue();
+              };
+              req.onerror = eventRejectHandler(reject);
+            }
+          });
+        };
+      }
+      return {
+        name: tableName,
+        schema: tableSchema,
+        mutate,
+        getMany({ trans, keys: keys2 }) {
+          return new Promise((resolve, reject) => {
+            resolve = wrap(resolve);
+            const store = trans.objectStore(tableName);
+            const length = keys2.length;
+            const result = new Array(length);
+            let keyCount = 0;
+            let callbackCount = 0;
+            let req;
+            const successHandler = (event) => {
+              const req2 = event.target;
+              if ((result[req2._pos] = req2.result) != null)
+                ;
+              if (++callbackCount === keyCount)
+                resolve(result);
+            };
+            const errorHandler = eventRejectHandler(reject);
+            for (let i = 0; i < length; ++i) {
+              const key = keys2[i];
+              if (key != null) {
+                req = store.get(keys2[i]);
+                req._pos = i;
+                req.onsuccess = successHandler;
+                req.onerror = errorHandler;
+                ++keyCount;
+              }
+            }
+            if (keyCount === 0)
+              resolve(result);
+          });
+        },
+        get({ trans, key }) {
+          return new Promise((resolve, reject) => {
+            resolve = wrap(resolve);
+            const store = trans.objectStore(tableName);
+            const req = store.get(key);
+            req.onsuccess = (event) => resolve(event.target.result);
+            req.onerror = eventRejectHandler(reject);
+          });
+        },
+        query: query(hasGetAll),
+        openCursor: openCursor2,
+        count({ query: query2, trans }) {
+          const { index, range } = query2;
+          return new Promise((resolve, reject) => {
+            const store = trans.objectStore(tableName);
+            const source = index.isPrimaryKey ? store : store.index(index.name);
+            const idbKeyRange = makeIDBKeyRange(range);
+            const req = idbKeyRange ? source.count(idbKeyRange) : source.count();
+            req.onsuccess = wrap((ev) => resolve(ev.target.result));
+            req.onerror = eventRejectHandler(reject);
+          });
+        }
+      };
+    }
+    const { schema, hasGetAll } = extractSchema(db, tmpTrans);
+    const tables = schema.tables.map((tableSchema) => createDbCoreTable(tableSchema));
+    const tableMap = {};
+    tables.forEach((table) => tableMap[table.name] = table);
+    return {
+      stack: "dbcore",
+      transaction: db.transaction.bind(db),
+      table(name) {
+        const result = tableMap[name];
+        if (!result)
+          throw new Error(`Table '${name}' not found`);
+        return tableMap[name];
+      },
+      MIN_KEY: -Infinity,
+      MAX_KEY: getMaxKey(IdbKeyRange),
+      schema
+    };
+  }
+  function createMiddlewareStack(stackImpl, middlewares) {
+    return middlewares.reduce((down, { create }) => ({ ...down, ...create(down) }), stackImpl);
+  }
+  function createMiddlewareStacks(middlewares, idbdb, { IDBKeyRange, indexedDB: indexedDB2 }, tmpTrans) {
+    const dbcore = createMiddlewareStack(createDBCore(idbdb, IDBKeyRange, tmpTrans), middlewares.dbcore);
+    return {
+      dbcore
+    };
+  }
+  function generateMiddlewareStacks({ _novip: db }, tmpTrans) {
+    const idbdb = tmpTrans.db;
+    const stacks = createMiddlewareStacks(db._middlewares, idbdb, db._deps, tmpTrans);
+    db.core = stacks.dbcore;
+    db.tables.forEach((table) => {
+      const tableName = table.name;
+      if (db.core.schema.tables.some((tbl) => tbl.name === tableName)) {
+        table.core = db.core.table(tableName);
+        if (db[tableName] instanceof db.Table) {
+          db[tableName].core = table.core;
+        }
+      }
+    });
+  }
+  function setApiOnPlace({ _novip: db }, objs, tableNames, dbschema) {
+    tableNames.forEach((tableName) => {
+      const schema = dbschema[tableName];
+      objs.forEach((obj) => {
+        const propDesc = getPropertyDescriptor(obj, tableName);
+        if (!propDesc || "value" in propDesc && propDesc.value === void 0) {
+          if (obj === db.Transaction.prototype || obj instanceof db.Transaction) {
+            setProp(obj, tableName, {
+              get() {
+                return this.table(tableName);
+              },
+              set(value) {
+                defineProperty(this, tableName, { value, writable: true, configurable: true, enumerable: true });
+              }
+            });
+          } else {
+            obj[tableName] = new db.Table(tableName, schema);
+          }
+        }
+      });
+    });
+  }
+  function removeTablesApi({ _novip: db }, objs) {
+    objs.forEach((obj) => {
+      for (let key in obj) {
+        if (obj[key] instanceof db.Table)
+          delete obj[key];
+      }
+    });
+  }
+  function lowerVersionFirst(a, b) {
+    return a._cfg.version - b._cfg.version;
+  }
+  function runUpgraders(db, oldVersion, idbUpgradeTrans, reject) {
+    const globalSchema = db._dbSchema;
+    const trans = db._createTransaction("readwrite", db._storeNames, globalSchema);
+    trans.create(idbUpgradeTrans);
+    trans._completion.catch(reject);
+    const rejectTransaction = trans._reject.bind(trans);
+    const transless = PSD.transless || PSD;
+    newScope(() => {
+      PSD.trans = trans;
+      PSD.transless = transless;
+      if (oldVersion === 0) {
+        keys(globalSchema).forEach((tableName) => {
+          createTable(idbUpgradeTrans, tableName, globalSchema[tableName].primKey, globalSchema[tableName].indexes);
+        });
+        generateMiddlewareStacks(db, idbUpgradeTrans);
+        DexiePromise.follow(() => db.on.populate.fire(trans)).catch(rejectTransaction);
+      } else
+        updateTablesAndIndexes(db, oldVersion, trans, idbUpgradeTrans).catch(rejectTransaction);
+    });
+  }
+  function updateTablesAndIndexes({ _novip: db }, oldVersion, trans, idbUpgradeTrans) {
+    const queue = [];
+    const versions = db._versions;
+    let globalSchema = db._dbSchema = buildGlobalSchema(db, db.idbdb, idbUpgradeTrans);
+    let anyContentUpgraderHasRun = false;
+    const versToRun = versions.filter((v) => v._cfg.version >= oldVersion);
+    versToRun.forEach((version) => {
+      queue.push(() => {
+        const oldSchema = globalSchema;
+        const newSchema = version._cfg.dbschema;
+        adjustToExistingIndexNames(db, oldSchema, idbUpgradeTrans);
+        adjustToExistingIndexNames(db, newSchema, idbUpgradeTrans);
+        globalSchema = db._dbSchema = newSchema;
+        const diff = getSchemaDiff(oldSchema, newSchema);
+        diff.add.forEach((tuple) => {
+          createTable(idbUpgradeTrans, tuple[0], tuple[1].primKey, tuple[1].indexes);
+        });
+        diff.change.forEach((change) => {
+          if (change.recreate) {
+            throw new exceptions.Upgrade("Not yet support for changing primary key");
+          } else {
+            const store = idbUpgradeTrans.objectStore(change.name);
+            change.add.forEach((idx) => addIndex(store, idx));
+            change.change.forEach((idx) => {
+              store.deleteIndex(idx.name);
+              addIndex(store, idx);
+            });
+            change.del.forEach((idxName) => store.deleteIndex(idxName));
+          }
+        });
+        const contentUpgrade = version._cfg.contentUpgrade;
+        if (contentUpgrade && version._cfg.version > oldVersion) {
+          generateMiddlewareStacks(db, idbUpgradeTrans);
+          trans._memoizedTables = {};
+          anyContentUpgraderHasRun = true;
+          let upgradeSchema = shallowClone(newSchema);
+          diff.del.forEach((table) => {
+            upgradeSchema[table] = oldSchema[table];
+          });
+          removeTablesApi(db, [db.Transaction.prototype]);
+          setApiOnPlace(db, [db.Transaction.prototype], keys(upgradeSchema), upgradeSchema);
+          trans.schema = upgradeSchema;
+          const contentUpgradeIsAsync = isAsyncFunction(contentUpgrade);
+          if (contentUpgradeIsAsync) {
+            incrementExpectedAwaits();
+          }
+          let returnValue;
+          const promiseFollowed = DexiePromise.follow(() => {
+            returnValue = contentUpgrade(trans);
+            if (returnValue) {
+              if (contentUpgradeIsAsync) {
+                var decrementor = decrementExpectedAwaits.bind(null, null);
+                returnValue.then(decrementor, decrementor);
+              }
+            }
+          });
+          return returnValue && typeof returnValue.then === "function" ? DexiePromise.resolve(returnValue) : promiseFollowed.then(() => returnValue);
+        }
+      });
+      queue.push((idbtrans) => {
+        if (!anyContentUpgraderHasRun || !hasIEDeleteObjectStoreBug) {
+          const newSchema = version._cfg.dbschema;
+          deleteRemovedTables(newSchema, idbtrans);
+        }
+        removeTablesApi(db, [db.Transaction.prototype]);
+        setApiOnPlace(db, [db.Transaction.prototype], db._storeNames, db._dbSchema);
+        trans.schema = db._dbSchema;
+      });
+    });
+    function runQueue() {
+      return queue.length ? DexiePromise.resolve(queue.shift()(trans.idbtrans)).then(runQueue) : DexiePromise.resolve();
+    }
+    return runQueue().then(() => {
+      createMissingTables(globalSchema, idbUpgradeTrans);
+    });
+  }
+  function getSchemaDiff(oldSchema, newSchema) {
+    const diff = {
+      del: [],
+      add: [],
+      change: []
+    };
+    let table;
+    for (table in oldSchema) {
+      if (!newSchema[table])
+        diff.del.push(table);
+    }
+    for (table in newSchema) {
+      const oldDef = oldSchema[table], newDef = newSchema[table];
+      if (!oldDef) {
+        diff.add.push([table, newDef]);
+      } else {
+        const change = {
+          name: table,
+          def: newDef,
+          recreate: false,
+          del: [],
+          add: [],
+          change: []
+        };
+        if ("" + (oldDef.primKey.keyPath || "") !== "" + (newDef.primKey.keyPath || "") || oldDef.primKey.auto !== newDef.primKey.auto && !isIEOrEdge) {
+          change.recreate = true;
+          diff.change.push(change);
+        } else {
+          const oldIndexes = oldDef.idxByName;
+          const newIndexes = newDef.idxByName;
+          let idxName;
+          for (idxName in oldIndexes) {
+            if (!newIndexes[idxName])
+              change.del.push(idxName);
+          }
+          for (idxName in newIndexes) {
+            const oldIdx = oldIndexes[idxName], newIdx = newIndexes[idxName];
+            if (!oldIdx)
+              change.add.push(newIdx);
+            else if (oldIdx.src !== newIdx.src)
+              change.change.push(newIdx);
+          }
+          if (change.del.length > 0 || change.add.length > 0 || change.change.length > 0) {
+            diff.change.push(change);
+          }
+        }
+      }
+    }
+    return diff;
+  }
+  function createTable(idbtrans, tableName, primKey, indexes) {
+    const store = idbtrans.db.createObjectStore(tableName, primKey.keyPath ? { keyPath: primKey.keyPath, autoIncrement: primKey.auto } : { autoIncrement: primKey.auto });
+    indexes.forEach((idx) => addIndex(store, idx));
+    return store;
+  }
+  function createMissingTables(newSchema, idbtrans) {
+    keys(newSchema).forEach((tableName) => {
+      if (!idbtrans.db.objectStoreNames.contains(tableName)) {
+        createTable(idbtrans, tableName, newSchema[tableName].primKey, newSchema[tableName].indexes);
+      }
+    });
+  }
+  function deleteRemovedTables(newSchema, idbtrans) {
+    [].slice.call(idbtrans.db.objectStoreNames).forEach((storeName) => newSchema[storeName] == null && idbtrans.db.deleteObjectStore(storeName));
+  }
+  function addIndex(store, idx) {
+    store.createIndex(idx.name, idx.keyPath, { unique: idx.unique, multiEntry: idx.multi });
+  }
+  function buildGlobalSchema(db, idbdb, tmpTrans) {
+    const globalSchema = {};
+    const dbStoreNames = slice(idbdb.objectStoreNames, 0);
+    dbStoreNames.forEach((storeName) => {
+      const store = tmpTrans.objectStore(storeName);
+      let keyPath = store.keyPath;
+      const primKey = createIndexSpec(nameFromKeyPath(keyPath), keyPath || "", false, false, !!store.autoIncrement, keyPath && typeof keyPath !== "string", true);
+      const indexes = [];
+      for (let j = 0; j < store.indexNames.length; ++j) {
+        const idbindex = store.index(store.indexNames[j]);
+        keyPath = idbindex.keyPath;
+        var index = createIndexSpec(idbindex.name, keyPath, !!idbindex.unique, !!idbindex.multiEntry, false, keyPath && typeof keyPath !== "string", false);
+        indexes.push(index);
+      }
+      globalSchema[storeName] = createTableSchema(storeName, primKey, indexes);
+    });
+    return globalSchema;
+  }
+  function readGlobalSchema({ _novip: db }, idbdb, tmpTrans) {
+    db.verno = idbdb.version / 10;
+    const globalSchema = db._dbSchema = buildGlobalSchema(db, idbdb, tmpTrans);
+    db._storeNames = slice(idbdb.objectStoreNames, 0);
+    setApiOnPlace(db, [db._allTables], keys(globalSchema), globalSchema);
+  }
+  function verifyInstalledSchema(db, tmpTrans) {
+    const installedSchema = buildGlobalSchema(db, db.idbdb, tmpTrans);
+    const diff = getSchemaDiff(installedSchema, db._dbSchema);
+    return !(diff.add.length || diff.change.some((ch) => ch.add.length || ch.change.length));
+  }
+  function adjustToExistingIndexNames({ _novip: db }, schema, idbtrans) {
+    const storeNames = idbtrans.db.objectStoreNames;
+    for (let i = 0; i < storeNames.length; ++i) {
+      const storeName = storeNames[i];
+      const store = idbtrans.objectStore(storeName);
+      db._hasGetAll = "getAll" in store;
+      for (let j = 0; j < store.indexNames.length; ++j) {
+        const indexName = store.indexNames[j];
+        const keyPath = store.index(indexName).keyPath;
+        const dexieName = typeof keyPath === "string" ? keyPath : "[" + slice(keyPath).join("+") + "]";
+        if (schema[storeName]) {
+          const indexSpec = schema[storeName].idxByName[dexieName];
+          if (indexSpec) {
+            indexSpec.name = indexName;
+            delete schema[storeName].idxByName[dexieName];
+            schema[storeName].idxByName[indexName] = indexSpec;
+          }
+        }
+      }
+    }
+    if (typeof navigator !== "undefined" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && _global.WorkerGlobalScope && _global instanceof _global.WorkerGlobalScope && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604) {
+      db._hasGetAll = false;
+    }
+  }
+  function parseIndexSyntax(primKeyAndIndexes) {
+    return primKeyAndIndexes.split(",").map((index, indexNum) => {
+      index = index.trim();
+      const name = index.replace(/([&*]|\+\+)/g, "");
+      const keyPath = /^\[/.test(name) ? name.match(/^\[(.*)\]$/)[1].split("+") : name;
+      return createIndexSpec(name, keyPath || null, /\&/.test(index), /\*/.test(index), /\+\+/.test(index), isArray(keyPath), indexNum === 0);
+    });
+  }
+  var Version = class {
+    _parseStoresSpec(stores, outSchema) {
+      keys(stores).forEach((tableName) => {
+        if (stores[tableName] !== null) {
+          var indexes = parseIndexSyntax(stores[tableName]);
+          var primKey = indexes.shift();
+          if (primKey.multi)
+            throw new exceptions.Schema("Primary key cannot be multi-valued");
+          indexes.forEach((idx) => {
+            if (idx.auto)
+              throw new exceptions.Schema("Only primary key can be marked as autoIncrement (++)");
+            if (!idx.keyPath)
+              throw new exceptions.Schema("Index must have a name and cannot be an empty string");
+          });
+          outSchema[tableName] = createTableSchema(tableName, primKey, indexes);
+        }
+      });
+    }
+    stores(stores) {
+      const db = this.db;
+      this._cfg.storesSource = this._cfg.storesSource ? extend(this._cfg.storesSource, stores) : stores;
+      const versions = db._versions;
+      const storesSpec = {};
+      let dbschema = {};
+      versions.forEach((version) => {
+        extend(storesSpec, version._cfg.storesSource);
+        dbschema = version._cfg.dbschema = {};
+        version._parseStoresSpec(storesSpec, dbschema);
+      });
+      db._dbSchema = dbschema;
+      removeTablesApi(db, [db._allTables, db, db.Transaction.prototype]);
+      setApiOnPlace(db, [db._allTables, db, db.Transaction.prototype, this._cfg.tables], keys(dbschema), dbschema);
+      db._storeNames = keys(dbschema);
+      return this;
+    }
+    upgrade(upgradeFunction) {
+      this._cfg.contentUpgrade = promisableChain(this._cfg.contentUpgrade || nop, upgradeFunction);
+      return this;
+    }
+  };
+  function createVersionConstructor(db) {
+    return makeClassConstructor(Version.prototype, function Version2(versionNumber) {
+      this.db = db;
+      this._cfg = {
+        version: versionNumber,
+        storesSource: null,
+        dbschema: {},
+        tables: {},
+        contentUpgrade: null
+      };
+    });
+  }
+  function getDbNamesTable(indexedDB2, IDBKeyRange) {
+    let dbNamesDB = indexedDB2["_dbNamesDB"];
+    if (!dbNamesDB) {
+      dbNamesDB = indexedDB2["_dbNamesDB"] = new Dexie$1(DBNAMES_DB, {
+        addons: [],
+        indexedDB: indexedDB2,
+        IDBKeyRange
+      });
+      dbNamesDB.version(1).stores({ dbnames: "name" });
+    }
+    return dbNamesDB.table("dbnames");
+  }
+  function hasDatabasesNative(indexedDB2) {
+    return indexedDB2 && typeof indexedDB2.databases === "function";
+  }
+  function getDatabaseNames({ indexedDB: indexedDB2, IDBKeyRange }) {
+    return hasDatabasesNative(indexedDB2) ? Promise.resolve(indexedDB2.databases()).then((infos) => infos.map((info) => info.name).filter((name) => name !== DBNAMES_DB)) : getDbNamesTable(indexedDB2, IDBKeyRange).toCollection().primaryKeys();
+  }
+  function _onDatabaseCreated({ indexedDB: indexedDB2, IDBKeyRange }, name) {
+    !hasDatabasesNative(indexedDB2) && name !== DBNAMES_DB && getDbNamesTable(indexedDB2, IDBKeyRange).put({ name }).catch(nop);
+  }
+  function _onDatabaseDeleted({ indexedDB: indexedDB2, IDBKeyRange }, name) {
+    !hasDatabasesNative(indexedDB2) && name !== DBNAMES_DB && getDbNamesTable(indexedDB2, IDBKeyRange).delete(name).catch(nop);
+  }
+  function vip(fn2) {
+    return newScope(function() {
+      PSD.letThrough = true;
+      return fn2();
+    });
+  }
+  function idbReady() {
+    var isSafari = !navigator.userAgentData && /Safari\//.test(navigator.userAgent) && !/Chrom(e|ium)\//.test(navigator.userAgent);
+    if (!isSafari || !indexedDB.databases)
+      return Promise.resolve();
+    var intervalId;
+    return new Promise(function(resolve) {
+      var tryIdb = function() {
+        return indexedDB.databases().finally(resolve);
+      };
+      intervalId = setInterval(tryIdb, 100);
+      tryIdb();
+    }).finally(function() {
+      return clearInterval(intervalId);
+    });
+  }
+  function dexieOpen(db) {
+    const state = db._state;
+    const { indexedDB: indexedDB2 } = db._deps;
+    if (state.isBeingOpened || db.idbdb)
+      return state.dbReadyPromise.then(() => state.dbOpenError ? rejection(state.dbOpenError) : db);
+    debug && (state.openCanceller._stackHolder = getErrorWithStack());
+    state.isBeingOpened = true;
+    state.dbOpenError = null;
+    state.openComplete = false;
+    const openCanceller = state.openCanceller;
+    function throwIfCancelled() {
+      if (state.openCanceller !== openCanceller)
+        throw new exceptions.DatabaseClosed("db.open() was cancelled");
+    }
+    let resolveDbReady = state.dbReadyResolve, upgradeTransaction = null, wasCreated = false;
+    return DexiePromise.race([openCanceller, (typeof navigator === "undefined" ? DexiePromise.resolve() : idbReady()).then(() => new DexiePromise((resolve, reject) => {
+      throwIfCancelled();
+      if (!indexedDB2)
+        throw new exceptions.MissingAPI();
+      const dbName = db.name;
+      const req = state.autoSchema ? indexedDB2.open(dbName) : indexedDB2.open(dbName, Math.round(db.verno * 10));
+      if (!req)
+        throw new exceptions.MissingAPI();
+      req.onerror = eventRejectHandler(reject);
+      req.onblocked = wrap(db._fireOnBlocked);
+      req.onupgradeneeded = wrap((e) => {
+        upgradeTransaction = req.transaction;
+        if (state.autoSchema && !db._options.allowEmptyDB) {
+          req.onerror = preventDefault;
+          upgradeTransaction.abort();
+          req.result.close();
+          const delreq = indexedDB2.deleteDatabase(dbName);
+          delreq.onsuccess = delreq.onerror = wrap(() => {
+            reject(new exceptions.NoSuchDatabase(`Database ${dbName} doesnt exist`));
+          });
+        } else {
+          upgradeTransaction.onerror = eventRejectHandler(reject);
+          var oldVer = e.oldVersion > Math.pow(2, 62) ? 0 : e.oldVersion;
+          wasCreated = oldVer < 1;
+          db._novip.idbdb = req.result;
+          runUpgraders(db, oldVer / 10, upgradeTransaction, reject);
+        }
+      }, reject);
+      req.onsuccess = wrap(() => {
+        upgradeTransaction = null;
+        const idbdb = db._novip.idbdb = req.result;
+        const objectStoreNames = slice(idbdb.objectStoreNames);
+        if (objectStoreNames.length > 0)
+          try {
+            const tmpTrans = idbdb.transaction(safariMultiStoreFix(objectStoreNames), "readonly");
+            if (state.autoSchema)
+              readGlobalSchema(db, idbdb, tmpTrans);
+            else {
+              adjustToExistingIndexNames(db, db._dbSchema, tmpTrans);
+              if (!verifyInstalledSchema(db, tmpTrans)) {
+                console.warn(`Dexie SchemaDiff: Schema was extended without increasing the number passed to db.version(). Some queries may fail.`);
+              }
+            }
+            generateMiddlewareStacks(db, tmpTrans);
+          } catch (e) {
+          }
+        connections.push(db);
+        idbdb.onversionchange = wrap((ev) => {
+          state.vcFired = true;
+          db.on("versionchange").fire(ev);
+        });
+        idbdb.onclose = wrap((ev) => {
+          db.on("close").fire(ev);
+        });
+        if (wasCreated)
+          _onDatabaseCreated(db._deps, dbName);
+        resolve();
+      }, reject);
+    }))]).then(() => {
+      throwIfCancelled();
+      state.onReadyBeingFired = [];
+      return DexiePromise.resolve(vip(() => db.on.ready.fire(db.vip))).then(function fireRemainders() {
+        if (state.onReadyBeingFired.length > 0) {
+          let remainders = state.onReadyBeingFired.reduce(promisableChain, nop);
+          state.onReadyBeingFired = [];
+          return DexiePromise.resolve(vip(() => remainders(db.vip))).then(fireRemainders);
+        }
+      });
+    }).finally(() => {
+      state.onReadyBeingFired = null;
+      state.isBeingOpened = false;
+    }).then(() => {
+      return db;
+    }).catch((err) => {
+      state.dbOpenError = err;
+      try {
+        upgradeTransaction && upgradeTransaction.abort();
+      } catch (_a) {
+      }
+      if (openCanceller === state.openCanceller) {
+        db._close();
+      }
+      return rejection(err);
+    }).finally(() => {
+      state.openComplete = true;
+      resolveDbReady();
+    });
+  }
+  function awaitIterator(iterator) {
+    var callNext = (result) => iterator.next(result), doThrow = (error) => iterator.throw(error), onSuccess = step(callNext), onError = step(doThrow);
+    function step(getNext) {
+      return (val) => {
+        var next = getNext(val), value = next.value;
+        return next.done ? value : !value || typeof value.then !== "function" ? isArray(value) ? Promise.all(value).then(onSuccess, onError) : onSuccess(value) : value.then(onSuccess, onError);
+      };
+    }
+    return step(callNext)();
+  }
+  function extractTransactionArgs(mode, _tableArgs_, scopeFunc) {
+    var i = arguments.length;
+    if (i < 2)
+      throw new exceptions.InvalidArgument("Too few arguments");
+    var args = new Array(i - 1);
+    while (--i)
+      args[i - 1] = arguments[i];
+    scopeFunc = args.pop();
+    var tables = flatten(args);
+    return [mode, tables, scopeFunc];
+  }
+  function enterTransactionScope(db, mode, storeNames, parentTransaction, scopeFunc) {
+    return DexiePromise.resolve().then(() => {
+      const transless = PSD.transless || PSD;
+      const trans = db._createTransaction(mode, storeNames, db._dbSchema, parentTransaction);
+      const zoneProps = {
+        trans,
+        transless
+      };
+      if (parentTransaction) {
+        trans.idbtrans = parentTransaction.idbtrans;
+      } else {
+        try {
+          trans.create();
+          db._state.PR1398_maxLoop = 3;
+        } catch (ex) {
+          if (ex.name === errnames.InvalidState && db.isOpen() && --db._state.PR1398_maxLoop > 0) {
+            console.warn("Dexie: Need to reopen db");
+            db._close();
+            return db.open().then(() => enterTransactionScope(db, mode, storeNames, null, scopeFunc));
+          }
+          return rejection(ex);
+        }
+      }
+      const scopeFuncIsAsync = isAsyncFunction(scopeFunc);
+      if (scopeFuncIsAsync) {
+        incrementExpectedAwaits();
+      }
+      let returnValue;
+      const promiseFollowed = DexiePromise.follow(() => {
+        returnValue = scopeFunc.call(trans, trans);
+        if (returnValue) {
+          if (scopeFuncIsAsync) {
+            var decrementor = decrementExpectedAwaits.bind(null, null);
+            returnValue.then(decrementor, decrementor);
+          } else if (typeof returnValue.next === "function" && typeof returnValue.throw === "function") {
+            returnValue = awaitIterator(returnValue);
+          }
+        }
+      }, zoneProps);
+      return (returnValue && typeof returnValue.then === "function" ? DexiePromise.resolve(returnValue).then((x) => trans.active ? x : rejection(new exceptions.PrematureCommit("Transaction committed too early. See http://bit.ly/2kdckMn"))) : promiseFollowed.then(() => returnValue)).then((x) => {
+        if (parentTransaction)
+          trans._resolve();
+        return trans._completion.then(() => x);
+      }).catch((e) => {
+        trans._reject(e);
+        return rejection(e);
+      });
+    });
+  }
+  function pad(a, value, count) {
+    const result = isArray(a) ? a.slice() : [a];
+    for (let i = 0; i < count; ++i)
+      result.push(value);
+    return result;
+  }
+  function createVirtualIndexMiddleware(down) {
+    return {
+      ...down,
+      table(tableName) {
+        const table = down.table(tableName);
+        const { schema } = table;
+        const indexLookup = {};
+        const allVirtualIndexes = [];
+        function addVirtualIndexes(keyPath, keyTail, lowLevelIndex) {
+          const keyPathAlias = getKeyPathAlias(keyPath);
+          const indexList = indexLookup[keyPathAlias] = indexLookup[keyPathAlias] || [];
+          const keyLength = keyPath == null ? 0 : typeof keyPath === "string" ? 1 : keyPath.length;
+          const isVirtual = keyTail > 0;
+          const virtualIndex = {
+            ...lowLevelIndex,
+            isVirtual,
+            keyTail,
+            keyLength,
+            extractKey: getKeyExtractor(keyPath),
+            unique: !isVirtual && lowLevelIndex.unique
+          };
+          indexList.push(virtualIndex);
+          if (!virtualIndex.isPrimaryKey) {
+            allVirtualIndexes.push(virtualIndex);
+          }
+          if (keyLength > 1) {
+            const virtualKeyPath = keyLength === 2 ? keyPath[0] : keyPath.slice(0, keyLength - 1);
+            addVirtualIndexes(virtualKeyPath, keyTail + 1, lowLevelIndex);
+          }
+          indexList.sort((a, b) => a.keyTail - b.keyTail);
+          return virtualIndex;
+        }
+        const primaryKey = addVirtualIndexes(schema.primaryKey.keyPath, 0, schema.primaryKey);
+        indexLookup[":id"] = [primaryKey];
+        for (const index of schema.indexes) {
+          addVirtualIndexes(index.keyPath, 0, index);
+        }
+        function findBestIndex(keyPath) {
+          const result2 = indexLookup[getKeyPathAlias(keyPath)];
+          return result2 && result2[0];
+        }
+        function translateRange(range, keyTail) {
+          return {
+            type: range.type === 1 ? 2 : range.type,
+            lower: pad(range.lower, range.lowerOpen ? down.MAX_KEY : down.MIN_KEY, keyTail),
+            lowerOpen: true,
+            upper: pad(range.upper, range.upperOpen ? down.MIN_KEY : down.MAX_KEY, keyTail),
+            upperOpen: true
+          };
+        }
+        function translateRequest(req) {
+          const index = req.query.index;
+          return index.isVirtual ? {
+            ...req,
+            query: {
+              index,
+              range: translateRange(req.query.range, index.keyTail)
+            }
+          } : req;
+        }
+        const result = {
+          ...table,
+          schema: {
+            ...schema,
+            primaryKey,
+            indexes: allVirtualIndexes,
+            getIndexByKeyPath: findBestIndex
+          },
+          count(req) {
+            return table.count(translateRequest(req));
+          },
+          query(req) {
+            return table.query(translateRequest(req));
+          },
+          openCursor(req) {
+            const { keyTail, isVirtual, keyLength } = req.query.index;
+            if (!isVirtual)
+              return table.openCursor(req);
+            function createVirtualCursor(cursor) {
+              function _continue(key) {
+                key != null ? cursor.continue(pad(key, req.reverse ? down.MAX_KEY : down.MIN_KEY, keyTail)) : req.unique ? cursor.continue(cursor.key.slice(0, keyLength).concat(req.reverse ? down.MIN_KEY : down.MAX_KEY, keyTail)) : cursor.continue();
+              }
+              const virtualCursor = Object.create(cursor, {
+                continue: { value: _continue },
+                continuePrimaryKey: {
+                  value(key, primaryKey2) {
+                    cursor.continuePrimaryKey(pad(key, down.MAX_KEY, keyTail), primaryKey2);
+                  }
+                },
+                primaryKey: {
+                  get() {
+                    return cursor.primaryKey;
+                  }
+                },
+                key: {
+                  get() {
+                    const key = cursor.key;
+                    return keyLength === 1 ? key[0] : key.slice(0, keyLength);
+                  }
+                },
+                value: {
+                  get() {
+                    return cursor.value;
+                  }
+                }
+              });
+              return virtualCursor;
+            }
+            return table.openCursor(translateRequest(req)).then((cursor) => cursor && createVirtualCursor(cursor));
+          }
+        };
+        return result;
+      }
+    };
+  }
+  var virtualIndexMiddleware = {
+    stack: "dbcore",
+    name: "VirtualIndexMiddleware",
+    level: 1,
+    create: createVirtualIndexMiddleware
+  };
+  function getObjectDiff(a, b, rv, prfx) {
+    rv = rv || {};
+    prfx = prfx || "";
+    keys(a).forEach((prop) => {
+      if (!hasOwn(b, prop)) {
+        rv[prfx + prop] = void 0;
+      } else {
+        var ap = a[prop], bp = b[prop];
+        if (typeof ap === "object" && typeof bp === "object" && ap && bp) {
+          const apTypeName = toStringTag(ap);
+          const bpTypeName = toStringTag(bp);
+          if (apTypeName !== bpTypeName) {
+            rv[prfx + prop] = b[prop];
+          } else if (apTypeName === "Object") {
+            getObjectDiff(ap, bp, rv, prfx + prop + ".");
+          } else if (ap !== bp) {
+            rv[prfx + prop] = b[prop];
+          }
+        } else if (ap !== bp)
+          rv[prfx + prop] = b[prop];
+      }
+    });
+    keys(b).forEach((prop) => {
+      if (!hasOwn(a, prop)) {
+        rv[prfx + prop] = b[prop];
+      }
+    });
+    return rv;
+  }
+  function getEffectiveKeys(primaryKey, req) {
+    if (req.type === "delete")
+      return req.keys;
+    return req.keys || req.values.map(primaryKey.extractKey);
+  }
+  var hooksMiddleware = {
+    stack: "dbcore",
+    name: "HooksMiddleware",
+    level: 2,
+    create: (downCore) => ({
+      ...downCore,
+      table(tableName) {
+        const downTable = downCore.table(tableName);
+        const { primaryKey } = downTable.schema;
+        const tableMiddleware = {
+          ...downTable,
+          mutate(req) {
+            const dxTrans = PSD.trans;
+            const { deleting, creating, updating } = dxTrans.table(tableName).hook;
+            switch (req.type) {
+              case "add":
+                if (creating.fire === nop)
+                  break;
+                return dxTrans._promise("readwrite", () => addPutOrDelete(req), true);
+              case "put":
+                if (creating.fire === nop && updating.fire === nop)
+                  break;
+                return dxTrans._promise("readwrite", () => addPutOrDelete(req), true);
+              case "delete":
+                if (deleting.fire === nop)
+                  break;
+                return dxTrans._promise("readwrite", () => addPutOrDelete(req), true);
+              case "deleteRange":
+                if (deleting.fire === nop)
+                  break;
+                return dxTrans._promise("readwrite", () => deleteRange(req), true);
+            }
+            return downTable.mutate(req);
+            function addPutOrDelete(req2) {
+              const dxTrans2 = PSD.trans;
+              const keys2 = req2.keys || getEffectiveKeys(primaryKey, req2);
+              if (!keys2)
+                throw new Error("Keys missing");
+              req2 = req2.type === "add" || req2.type === "put" ? { ...req2, keys: keys2 } : { ...req2 };
+              if (req2.type !== "delete")
+                req2.values = [...req2.values];
+              if (req2.keys)
+                req2.keys = [...req2.keys];
+              return getExistingValues(downTable, req2, keys2).then((existingValues) => {
+                const contexts = keys2.map((key, i) => {
+                  const existingValue = existingValues[i];
+                  const ctx = { onerror: null, onsuccess: null };
+                  if (req2.type === "delete") {
+                    deleting.fire.call(ctx, key, existingValue, dxTrans2);
+                  } else if (req2.type === "add" || existingValue === void 0) {
+                    const generatedPrimaryKey = creating.fire.call(ctx, key, req2.values[i], dxTrans2);
+                    if (key == null && generatedPrimaryKey != null) {
+                      key = generatedPrimaryKey;
+                      req2.keys[i] = key;
+                      if (!primaryKey.outbound) {
+                        setByKeyPath(req2.values[i], primaryKey.keyPath, key);
+                      }
+                    }
+                  } else {
+                    const objectDiff = getObjectDiff(existingValue, req2.values[i]);
+                    const additionalChanges = updating.fire.call(ctx, objectDiff, key, existingValue, dxTrans2);
+                    if (additionalChanges) {
+                      const requestedValue = req2.values[i];
+                      Object.keys(additionalChanges).forEach((keyPath) => {
+                        if (hasOwn(requestedValue, keyPath)) {
+                          requestedValue[keyPath] = additionalChanges[keyPath];
+                        } else {
+                          setByKeyPath(requestedValue, keyPath, additionalChanges[keyPath]);
+                        }
+                      });
+                    }
+                  }
+                  return ctx;
+                });
+                return downTable.mutate(req2).then(({ failures, results, numFailures, lastResult }) => {
+                  for (let i = 0; i < keys2.length; ++i) {
+                    const primKey = results ? results[i] : keys2[i];
+                    const ctx = contexts[i];
+                    if (primKey == null) {
+                      ctx.onerror && ctx.onerror(failures[i]);
+                    } else {
+                      ctx.onsuccess && ctx.onsuccess(
+                        req2.type === "put" && existingValues[i] ? req2.values[i] : primKey
+                      );
+                    }
+                  }
+                  return { failures, results, numFailures, lastResult };
+                }).catch((error) => {
+                  contexts.forEach((ctx) => ctx.onerror && ctx.onerror(error));
+                  return Promise.reject(error);
+                });
+              });
+            }
+            function deleteRange(req2) {
+              return deleteNextChunk(req2.trans, req2.range, 1e4);
+            }
+            function deleteNextChunk(trans, range, limit) {
+              return downTable.query({ trans, values: false, query: { index: primaryKey, range }, limit }).then(({ result }) => {
+                return addPutOrDelete({ type: "delete", keys: result, trans }).then((res) => {
+                  if (res.numFailures > 0)
+                    return Promise.reject(res.failures[0]);
+                  if (result.length < limit) {
+                    return { failures: [], numFailures: 0, lastResult: void 0 };
+                  } else {
+                    return deleteNextChunk(trans, { ...range, lower: result[result.length - 1], lowerOpen: true }, limit);
+                  }
+                });
+              });
+            }
+          }
+        };
+        return tableMiddleware;
+      }
+    })
+  };
+  function getExistingValues(table, req, effectiveKeys) {
+    return req.type === "add" ? Promise.resolve([]) : table.getMany({ trans: req.trans, keys: effectiveKeys, cache: "immutable" });
+  }
+  function getFromTransactionCache(keys2, cache, clone) {
+    try {
+      if (!cache)
+        return null;
+      if (cache.keys.length < keys2.length)
+        return null;
+      const result = [];
+      for (let i = 0, j = 0; i < cache.keys.length && j < keys2.length; ++i) {
+        if (cmp(cache.keys[i], keys2[j]) !== 0)
+          continue;
+        result.push(clone ? deepClone(cache.values[i]) : cache.values[i]);
+        ++j;
+      }
+      return result.length === keys2.length ? result : null;
+    } catch (_a) {
+      return null;
+    }
+  }
+  var cacheExistingValuesMiddleware = {
+    stack: "dbcore",
+    level: -1,
+    create: (core) => {
+      return {
+        table: (tableName) => {
+          const table = core.table(tableName);
+          return {
+            ...table,
+            getMany: (req) => {
+              if (!req.cache) {
+                return table.getMany(req);
+              }
+              const cachedResult = getFromTransactionCache(req.keys, req.trans["_cache"], req.cache === "clone");
+              if (cachedResult) {
+                return DexiePromise.resolve(cachedResult);
+              }
+              return table.getMany(req).then((res) => {
+                req.trans["_cache"] = {
+                  keys: req.keys,
+                  values: req.cache === "clone" ? deepClone(res) : res
+                };
+                return res;
+              });
+            },
+            mutate: (req) => {
+              if (req.type !== "add")
+                req.trans["_cache"] = null;
+              return table.mutate(req);
+            }
+          };
+        }
+      };
+    }
+  };
+  function isEmptyRange(node) {
+    return !("from" in node);
+  }
+  var RangeSet = function(fromOrTree, to) {
+    if (this) {
+      extend(this, arguments.length ? { d: 1, from: fromOrTree, to: arguments.length > 1 ? to : fromOrTree } : { d: 0 });
+    } else {
+      const rv = new RangeSet();
+      if (fromOrTree && "d" in fromOrTree) {
+        extend(rv, fromOrTree);
+      }
+      return rv;
+    }
+  };
+  props(RangeSet.prototype, {
+    add(rangeSet) {
+      mergeRanges(this, rangeSet);
+      return this;
+    },
+    addKey(key) {
+      addRange(this, key, key);
+      return this;
+    },
+    addKeys(keys2) {
+      keys2.forEach((key) => addRange(this, key, key));
+      return this;
+    },
+    [iteratorSymbol]() {
+      return getRangeSetIterator(this);
+    }
+  });
+  function addRange(target, from, to) {
+    const diff = cmp(from, to);
+    if (isNaN(diff))
+      return;
+    if (diff > 0)
+      throw RangeError();
+    if (isEmptyRange(target))
+      return extend(target, { from, to, d: 1 });
+    const left2 = target.l;
+    const right2 = target.r;
+    if (cmp(to, target.from) < 0) {
+      left2 ? addRange(left2, from, to) : target.l = { from, to, d: 1, l: null, r: null };
+      return rebalance(target);
+    }
+    if (cmp(from, target.to) > 0) {
+      right2 ? addRange(right2, from, to) : target.r = { from, to, d: 1, l: null, r: null };
+      return rebalance(target);
+    }
+    if (cmp(from, target.from) < 0) {
+      target.from = from;
+      target.l = null;
+      target.d = right2 ? right2.d + 1 : 1;
+    }
+    if (cmp(to, target.to) > 0) {
+      target.to = to;
+      target.r = null;
+      target.d = target.l ? target.l.d + 1 : 1;
+    }
+    const rightWasCutOff = !target.r;
+    if (left2 && !target.l) {
+      mergeRanges(target, left2);
+    }
+    if (right2 && rightWasCutOff) {
+      mergeRanges(target, right2);
+    }
+  }
+  function mergeRanges(target, newSet) {
+    function _addRangeSet(target2, { from, to, l, r }) {
+      addRange(target2, from, to);
+      if (l)
+        _addRangeSet(target2, l);
+      if (r)
+        _addRangeSet(target2, r);
+    }
+    if (!isEmptyRange(newSet))
+      _addRangeSet(target, newSet);
+  }
+  function rangesOverlap(rangeSet1, rangeSet2) {
+    const i1 = getRangeSetIterator(rangeSet2);
+    let nextResult1 = i1.next();
+    if (nextResult1.done)
+      return false;
+    let a = nextResult1.value;
+    const i2 = getRangeSetIterator(rangeSet1);
+    let nextResult2 = i2.next(a.from);
+    let b = nextResult2.value;
+    while (!nextResult1.done && !nextResult2.done) {
+      if (cmp(b.from, a.to) <= 0 && cmp(b.to, a.from) >= 0)
+        return true;
+      cmp(a.from, b.from) < 0 ? a = (nextResult1 = i1.next(b.from)).value : b = (nextResult2 = i2.next(a.from)).value;
+    }
+    return false;
+  }
+  function getRangeSetIterator(node) {
+    let state = isEmptyRange(node) ? null : { s: 0, n: node };
+    return {
+      next(key) {
+        const keyProvided = arguments.length > 0;
+        while (state) {
+          switch (state.s) {
+            case 0:
+              state.s = 1;
+              if (keyProvided) {
+                while (state.n.l && cmp(key, state.n.from) < 0)
+                  state = { up: state, n: state.n.l, s: 1 };
+              } else {
+                while (state.n.l)
+                  state = { up: state, n: state.n.l, s: 1 };
+              }
+            case 1:
+              state.s = 2;
+              if (!keyProvided || cmp(key, state.n.to) <= 0)
+                return { value: state.n, done: false };
+            case 2:
+              if (state.n.r) {
+                state.s = 3;
+                state = { up: state, n: state.n.r, s: 0 };
+                continue;
+              }
+            case 3:
+              state = state.up;
+          }
+        }
+        return { done: true };
+      }
+    };
+  }
+  function rebalance(target) {
+    var _a, _b;
+    const diff = (((_a = target.r) === null || _a === void 0 ? void 0 : _a.d) || 0) - (((_b = target.l) === null || _b === void 0 ? void 0 : _b.d) || 0);
+    const r = diff > 1 ? "r" : diff < -1 ? "l" : "";
+    if (r) {
+      const l = r === "r" ? "l" : "r";
+      const rootClone = { ...target };
+      const oldRootRight = target[r];
+      target.from = oldRootRight.from;
+      target.to = oldRootRight.to;
+      target[r] = oldRootRight[r];
+      rootClone[r] = oldRootRight[l];
+      target[l] = rootClone;
+      rootClone.d = computeDepth(rootClone);
+    }
+    target.d = computeDepth(target);
+  }
+  function computeDepth({ r, l }) {
+    return (r ? l ? Math.max(r.d, l.d) : r.d : l ? l.d : 0) + 1;
+  }
+  var observabilityMiddleware = {
+    stack: "dbcore",
+    level: 0,
+    create: (core) => {
+      const dbName = core.schema.name;
+      const FULL_RANGE = new RangeSet(core.MIN_KEY, core.MAX_KEY);
+      return {
+        ...core,
+        table: (tableName) => {
+          const table = core.table(tableName);
+          const { schema } = table;
+          const { primaryKey } = schema;
+          const { extractKey, outbound } = primaryKey;
+          const tableClone = {
+            ...table,
+            mutate: (req) => {
+              const trans = req.trans;
+              const mutatedParts = trans.mutatedParts || (trans.mutatedParts = {});
+              const getRangeSet = (indexName) => {
+                const part = `idb://${dbName}/${tableName}/${indexName}`;
+                return mutatedParts[part] || (mutatedParts[part] = new RangeSet());
+              };
+              const pkRangeSet = getRangeSet("");
+              const delsRangeSet = getRangeSet(":dels");
+              const { type: type2 } = req;
+              let [keys2, newObjs] = req.type === "deleteRange" ? [req.range] : req.type === "delete" ? [req.keys] : req.values.length < 50 ? [[], req.values] : [];
+              const oldCache = req.trans["_cache"];
+              return table.mutate(req).then((res) => {
+                if (isArray(keys2)) {
+                  if (type2 !== "delete")
+                    keys2 = res.results;
+                  pkRangeSet.addKeys(keys2);
+                  const oldObjs = getFromTransactionCache(keys2, oldCache);
+                  if (!oldObjs && type2 !== "add") {
+                    delsRangeSet.addKeys(keys2);
+                  }
+                  if (oldObjs || newObjs) {
+                    trackAffectedIndexes(getRangeSet, schema, oldObjs, newObjs);
+                  }
+                } else if (keys2) {
+                  const range = { from: keys2.lower, to: keys2.upper };
+                  delsRangeSet.add(range);
+                  pkRangeSet.add(range);
+                } else {
+                  pkRangeSet.add(FULL_RANGE);
+                  delsRangeSet.add(FULL_RANGE);
+                  schema.indexes.forEach((idx) => getRangeSet(idx.name).add(FULL_RANGE));
+                }
+                return res;
+              });
+            }
+          };
+          const getRange = ({ query: { index, range } }) => {
+            var _a, _b;
+            return [
+              index,
+              new RangeSet((_a = range.lower) !== null && _a !== void 0 ? _a : core.MIN_KEY, (_b = range.upper) !== null && _b !== void 0 ? _b : core.MAX_KEY)
+            ];
+          };
+          const readSubscribers = {
+            get: (req) => [primaryKey, new RangeSet(req.key)],
+            getMany: (req) => [primaryKey, new RangeSet().addKeys(req.keys)],
+            count: getRange,
+            query: getRange,
+            openCursor: getRange
+          };
+          keys(readSubscribers).forEach((method) => {
+            tableClone[method] = function(req) {
+              const { subscr } = PSD;
+              if (subscr) {
+                const getRangeSet = (indexName) => {
+                  const part = `idb://${dbName}/${tableName}/${indexName}`;
+                  return subscr[part] || (subscr[part] = new RangeSet());
+                };
+                const pkRangeSet = getRangeSet("");
+                const delsRangeSet = getRangeSet(":dels");
+                const [queriedIndex, queriedRanges] = readSubscribers[method](req);
+                getRangeSet(queriedIndex.name || "").add(queriedRanges);
+                if (!queriedIndex.isPrimaryKey) {
+                  if (method === "count") {
+                    delsRangeSet.add(FULL_RANGE);
+                  } else {
+                    const keysPromise = method === "query" && outbound && req.values && table.query({
+                      ...req,
+                      values: false
+                    });
+                    return table[method].apply(this, arguments).then((res) => {
+                      if (method === "query") {
+                        if (outbound && req.values) {
+                          return keysPromise.then(({ result: resultingKeys }) => {
+                            pkRangeSet.addKeys(resultingKeys);
+                            return res;
+                          });
+                        }
+                        const pKeys = req.values ? res.result.map(extractKey) : res.result;
+                        if (req.values) {
+                          pkRangeSet.addKeys(pKeys);
+                        } else {
+                          delsRangeSet.addKeys(pKeys);
+                        }
+                      } else if (method === "openCursor") {
+                        const cursor = res;
+                        const wantValues = req.values;
+                        return cursor && Object.create(cursor, {
+                          key: {
+                            get() {
+                              delsRangeSet.addKey(cursor.primaryKey);
+                              return cursor.key;
+                            }
+                          },
+                          primaryKey: {
+                            get() {
+                              const pkey = cursor.primaryKey;
+                              delsRangeSet.addKey(pkey);
+                              return pkey;
+                            }
+                          },
+                          value: {
+                            get() {
+                              wantValues && pkRangeSet.addKey(cursor.primaryKey);
+                              return cursor.value;
+                            }
+                          }
+                        });
+                      }
+                      return res;
+                    });
+                  }
+                }
+              }
+              return table[method].apply(this, arguments);
+            };
+          });
+          return tableClone;
+        }
+      };
+    }
+  };
+  function trackAffectedIndexes(getRangeSet, schema, oldObjs, newObjs) {
+    function addAffectedIndex(ix) {
+      const rangeSet = getRangeSet(ix.name || "");
+      function extractKey(obj) {
+        return obj != null ? ix.extractKey(obj) : null;
+      }
+      const addKeyOrKeys = (key) => ix.multiEntry && isArray(key) ? key.forEach((key2) => rangeSet.addKey(key2)) : rangeSet.addKey(key);
+      (oldObjs || newObjs).forEach((_, i) => {
+        const oldKey = oldObjs && extractKey(oldObjs[i]);
+        const newKey = newObjs && extractKey(newObjs[i]);
+        if (cmp(oldKey, newKey) !== 0) {
+          if (oldKey != null)
+            addKeyOrKeys(oldKey);
+          if (newKey != null)
+            addKeyOrKeys(newKey);
+        }
+      });
+    }
+    schema.indexes.forEach(addAffectedIndex);
+  }
+  var Dexie$1 = class _Dexie$1 {
+    constructor(name, options) {
+      this._middlewares = {};
+      this.verno = 0;
+      const deps = _Dexie$1.dependencies;
+      this._options = options = {
+        addons: _Dexie$1.addons,
+        autoOpen: true,
+        indexedDB: deps.indexedDB,
+        IDBKeyRange: deps.IDBKeyRange,
+        ...options
+      };
+      this._deps = {
+        indexedDB: options.indexedDB,
+        IDBKeyRange: options.IDBKeyRange
+      };
+      const { addons } = options;
+      this._dbSchema = {};
+      this._versions = [];
+      this._storeNames = [];
+      this._allTables = {};
+      this.idbdb = null;
+      this._novip = this;
+      const state = {
+        dbOpenError: null,
+        isBeingOpened: false,
+        onReadyBeingFired: null,
+        openComplete: false,
+        dbReadyResolve: nop,
+        dbReadyPromise: null,
+        cancelOpen: nop,
+        openCanceller: null,
+        autoSchema: true,
+        PR1398_maxLoop: 3
+      };
+      state.dbReadyPromise = new DexiePromise((resolve) => {
+        state.dbReadyResolve = resolve;
+      });
+      state.openCanceller = new DexiePromise((_, reject) => {
+        state.cancelOpen = reject;
+      });
+      this._state = state;
+      this.name = name;
+      this.on = Events(this, "populate", "blocked", "versionchange", "close", { ready: [promisableChain, nop] });
+      this.on.ready.subscribe = override(this.on.ready.subscribe, (subscribe) => {
+        return (subscriber, bSticky) => {
+          _Dexie$1.vip(() => {
+            const state2 = this._state;
+            if (state2.openComplete) {
+              if (!state2.dbOpenError)
+                DexiePromise.resolve().then(subscriber);
+              if (bSticky)
+                subscribe(subscriber);
+            } else if (state2.onReadyBeingFired) {
+              state2.onReadyBeingFired.push(subscriber);
+              if (bSticky)
+                subscribe(subscriber);
+            } else {
+              subscribe(subscriber);
+              const db = this;
+              if (!bSticky)
+                subscribe(function unsubscribe() {
+                  db.on.ready.unsubscribe(subscriber);
+                  db.on.ready.unsubscribe(unsubscribe);
+                });
+            }
+          });
+        };
+      });
+      this.Collection = createCollectionConstructor(this);
+      this.Table = createTableConstructor(this);
+      this.Transaction = createTransactionConstructor(this);
+      this.Version = createVersionConstructor(this);
+      this.WhereClause = createWhereClauseConstructor(this);
+      this.on("versionchange", (ev) => {
+        if (ev.newVersion > 0)
+          console.warn(`Another connection wants to upgrade database '${this.name}'. Closing db now to resume the upgrade.`);
+        else
+          console.warn(`Another connection wants to delete database '${this.name}'. Closing db now to resume the delete request.`);
+        this.close();
+      });
+      this.on("blocked", (ev) => {
+        if (!ev.newVersion || ev.newVersion < ev.oldVersion)
+          console.warn(`Dexie.delete('${this.name}') was blocked`);
+        else
+          console.warn(`Upgrade '${this.name}' blocked by other connection holding version ${ev.oldVersion / 10}`);
+      });
+      this._maxKey = getMaxKey(options.IDBKeyRange);
+      this._createTransaction = (mode, storeNames, dbschema, parentTransaction) => new this.Transaction(mode, storeNames, dbschema, this._options.chromeTransactionDurability, parentTransaction);
+      this._fireOnBlocked = (ev) => {
+        this.on("blocked").fire(ev);
+        connections.filter((c) => c.name === this.name && c !== this && !c._state.vcFired).map((c) => c.on("versionchange").fire(ev));
+      };
+      this.use(virtualIndexMiddleware);
+      this.use(hooksMiddleware);
+      this.use(observabilityMiddleware);
+      this.use(cacheExistingValuesMiddleware);
+      this.vip = Object.create(this, { _vip: { value: true } });
+      addons.forEach((addon) => addon(this));
+    }
+    version(versionNumber) {
+      if (isNaN(versionNumber) || versionNumber < 0.1)
+        throw new exceptions.Type(`Given version is not a positive number`);
+      versionNumber = Math.round(versionNumber * 10) / 10;
+      if (this.idbdb || this._state.isBeingOpened)
+        throw new exceptions.Schema("Cannot add version when database is open");
+      this.verno = Math.max(this.verno, versionNumber);
+      const versions = this._versions;
+      var versionInstance = versions.filter((v) => v._cfg.version === versionNumber)[0];
+      if (versionInstance)
+        return versionInstance;
+      versionInstance = new this.Version(versionNumber);
+      versions.push(versionInstance);
+      versions.sort(lowerVersionFirst);
+      versionInstance.stores({});
+      this._state.autoSchema = false;
+      return versionInstance;
+    }
+    _whenReady(fn2) {
+      return this.idbdb && (this._state.openComplete || PSD.letThrough || this._vip) ? fn2() : new DexiePromise((resolve, reject) => {
+        if (this._state.openComplete) {
+          return reject(new exceptions.DatabaseClosed(this._state.dbOpenError));
+        }
+        if (!this._state.isBeingOpened) {
+          if (!this._options.autoOpen) {
+            reject(new exceptions.DatabaseClosed());
+            return;
+          }
+          this.open().catch(nop);
+        }
+        this._state.dbReadyPromise.then(resolve, reject);
+      }).then(fn2);
+    }
+    use({ stack, create, level, name }) {
+      if (name)
+        this.unuse({ stack, name });
+      const middlewares = this._middlewares[stack] || (this._middlewares[stack] = []);
+      middlewares.push({ stack, create, level: level == null ? 10 : level, name });
+      middlewares.sort((a, b) => a.level - b.level);
+      return this;
+    }
+    unuse({ stack, name, create }) {
+      if (stack && this._middlewares[stack]) {
+        this._middlewares[stack] = this._middlewares[stack].filter((mw) => create ? mw.create !== create : name ? mw.name !== name : false);
+      }
+      return this;
+    }
+    open() {
+      return dexieOpen(this);
+    }
+    _close() {
+      const state = this._state;
+      const idx = connections.indexOf(this);
+      if (idx >= 0)
+        connections.splice(idx, 1);
+      if (this.idbdb) {
+        try {
+          this.idbdb.close();
+        } catch (e) {
+        }
+        this._novip.idbdb = null;
+      }
+      state.dbReadyPromise = new DexiePromise((resolve) => {
+        state.dbReadyResolve = resolve;
+      });
+      state.openCanceller = new DexiePromise((_, reject) => {
+        state.cancelOpen = reject;
+      });
+    }
+    close() {
+      this._close();
+      const state = this._state;
+      this._options.autoOpen = false;
+      state.dbOpenError = new exceptions.DatabaseClosed();
+      if (state.isBeingOpened)
+        state.cancelOpen(state.dbOpenError);
+    }
+    delete() {
+      const hasArguments = arguments.length > 0;
+      const state = this._state;
+      return new DexiePromise((resolve, reject) => {
+        const doDelete = () => {
+          this.close();
+          var req = this._deps.indexedDB.deleteDatabase(this.name);
+          req.onsuccess = wrap(() => {
+            _onDatabaseDeleted(this._deps, this.name);
+            resolve();
+          });
+          req.onerror = eventRejectHandler(reject);
+          req.onblocked = this._fireOnBlocked;
+        };
+        if (hasArguments)
+          throw new exceptions.InvalidArgument("Arguments not allowed in db.delete()");
+        if (state.isBeingOpened) {
+          state.dbReadyPromise.then(doDelete);
+        } else {
+          doDelete();
+        }
+      });
+    }
+    backendDB() {
+      return this.idbdb;
+    }
+    isOpen() {
+      return this.idbdb !== null;
+    }
+    hasBeenClosed() {
+      const dbOpenError = this._state.dbOpenError;
+      return dbOpenError && dbOpenError.name === "DatabaseClosed";
+    }
+    hasFailed() {
+      return this._state.dbOpenError !== null;
+    }
+    dynamicallyOpened() {
+      return this._state.autoSchema;
+    }
+    get tables() {
+      return keys(this._allTables).map((name) => this._allTables[name]);
+    }
+    transaction() {
+      const args = extractTransactionArgs.apply(this, arguments);
+      return this._transaction.apply(this, args);
+    }
+    _transaction(mode, tables, scopeFunc) {
+      let parentTransaction = PSD.trans;
+      if (!parentTransaction || parentTransaction.db !== this || mode.indexOf("!") !== -1)
+        parentTransaction = null;
+      const onlyIfCompatible = mode.indexOf("?") !== -1;
+      mode = mode.replace("!", "").replace("?", "");
+      let idbMode, storeNames;
+      try {
+        storeNames = tables.map((table) => {
+          var storeName = table instanceof this.Table ? table.name : table;
+          if (typeof storeName !== "string")
+            throw new TypeError("Invalid table argument to Dexie.transaction(). Only Table or String are allowed");
+          return storeName;
+        });
+        if (mode == "r" || mode === READONLY)
+          idbMode = READONLY;
+        else if (mode == "rw" || mode == READWRITE)
+          idbMode = READWRITE;
+        else
+          throw new exceptions.InvalidArgument("Invalid transaction mode: " + mode);
+        if (parentTransaction) {
+          if (parentTransaction.mode === READONLY && idbMode === READWRITE) {
+            if (onlyIfCompatible) {
+              parentTransaction = null;
+            } else
+              throw new exceptions.SubTransaction("Cannot enter a sub-transaction with READWRITE mode when parent transaction is READONLY");
+          }
+          if (parentTransaction) {
+            storeNames.forEach((storeName) => {
+              if (parentTransaction && parentTransaction.storeNames.indexOf(storeName) === -1) {
+                if (onlyIfCompatible) {
+                  parentTransaction = null;
+                } else
+                  throw new exceptions.SubTransaction("Table " + storeName + " not included in parent transaction.");
+              }
+            });
+          }
+          if (onlyIfCompatible && parentTransaction && !parentTransaction.active) {
+            parentTransaction = null;
+          }
+        }
+      } catch (e) {
+        return parentTransaction ? parentTransaction._promise(null, (_, reject) => {
+          reject(e);
+        }) : rejection(e);
+      }
+      const enterTransaction = enterTransactionScope.bind(null, this, idbMode, storeNames, parentTransaction, scopeFunc);
+      return parentTransaction ? parentTransaction._promise(idbMode, enterTransaction, "lock") : PSD.trans ? usePSD(PSD.transless, () => this._whenReady(enterTransaction)) : this._whenReady(enterTransaction);
+    }
+    table(tableName) {
+      if (!hasOwn(this._allTables, tableName)) {
+        throw new exceptions.InvalidTable(`Table ${tableName} does not exist`);
+      }
+      return this._allTables[tableName];
+    }
+  };
+  var symbolObservable = typeof Symbol !== "undefined" && "observable" in Symbol ? Symbol.observable : "@@observable";
+  var Observable = class {
+    constructor(subscribe) {
+      this._subscribe = subscribe;
+    }
+    subscribe(x, error, complete) {
+      return this._subscribe(!x || typeof x === "function" ? { next: x, error, complete } : x);
+    }
+    [symbolObservable]() {
+      return this;
+    }
+  };
+  function extendObservabilitySet(target, newSet) {
+    keys(newSet).forEach((part) => {
+      const rangeSet = target[part] || (target[part] = new RangeSet());
+      mergeRanges(rangeSet, newSet[part]);
+    });
+    return target;
+  }
+  function liveQuery(querier) {
+    let hasValue = false;
+    let currentValue = void 0;
+    const observable = new Observable((observer) => {
+      const scopeFuncIsAsync = isAsyncFunction(querier);
+      function execute(subscr) {
+        if (scopeFuncIsAsync) {
+          incrementExpectedAwaits();
+        }
+        const exec = () => newScope(querier, { subscr, trans: null });
+        const rv = PSD.trans ? usePSD(PSD.transless, exec) : exec();
+        if (scopeFuncIsAsync) {
+          rv.then(decrementExpectedAwaits, decrementExpectedAwaits);
+        }
+        return rv;
+      }
+      let closed = false;
+      let accumMuts = {};
+      let currentObs = {};
+      const subscription = {
+        get closed() {
+          return closed;
+        },
+        unsubscribe: () => {
+          closed = true;
+          globalEvents.storagemutated.unsubscribe(mutationListener);
+        }
+      };
+      observer.start && observer.start(subscription);
+      let querying = false, startedListening = false;
+      function shouldNotify() {
+        return keys(currentObs).some((key) => accumMuts[key] && rangesOverlap(accumMuts[key], currentObs[key]));
+      }
+      const mutationListener = (parts) => {
+        extendObservabilitySet(accumMuts, parts);
+        if (shouldNotify()) {
+          doQuery();
+        }
+      };
+      const doQuery = () => {
+        if (querying || closed)
+          return;
+        accumMuts = {};
+        const subscr = {};
+        const ret = execute(subscr);
+        if (!startedListening) {
+          globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, mutationListener);
+          startedListening = true;
+        }
+        querying = true;
+        Promise.resolve(ret).then((result) => {
+          hasValue = true;
+          currentValue = result;
+          querying = false;
+          if (closed)
+            return;
+          if (shouldNotify()) {
+            doQuery();
+          } else {
+            accumMuts = {};
+            currentObs = subscr;
+            observer.next && observer.next(result);
+          }
+        }, (err) => {
+          querying = false;
+          hasValue = false;
+          observer.error && observer.error(err);
+          subscription.unsubscribe();
+        });
+      };
+      doQuery();
+      return subscription;
+    });
+    observable.hasValue = () => hasValue;
+    observable.getValue = () => currentValue;
+    return observable;
+  }
+  var domDeps;
+  try {
+    domDeps = {
+      indexedDB: _global.indexedDB || _global.mozIndexedDB || _global.webkitIndexedDB || _global.msIndexedDB,
+      IDBKeyRange: _global.IDBKeyRange || _global.webkitIDBKeyRange
+    };
+  } catch (e) {
+    domDeps = { indexedDB: null, IDBKeyRange: null };
+  }
+  var Dexie = Dexie$1;
+  props(Dexie, {
+    ...fullNameExceptions,
+    delete(databaseName) {
+      const db = new Dexie(databaseName, { addons: [] });
+      return db.delete();
+    },
+    exists(name) {
+      return new Dexie(name, { addons: [] }).open().then((db) => {
+        db.close();
+        return true;
+      }).catch("NoSuchDatabaseError", () => false);
+    },
+    getDatabaseNames(cb) {
+      try {
+        return getDatabaseNames(Dexie.dependencies).then(cb);
+      } catch (_a) {
+        return rejection(new exceptions.MissingAPI());
+      }
+    },
+    defineClass() {
+      function Class(content) {
+        extend(this, content);
+      }
+      return Class;
+    },
+    ignoreTransaction(scopeFunc) {
+      return PSD.trans ? usePSD(PSD.transless, scopeFunc) : scopeFunc();
+    },
+    vip,
+    async: function(generatorFn) {
+      return function() {
+        try {
+          var rv = awaitIterator(generatorFn.apply(this, arguments));
+          if (!rv || typeof rv.then !== "function")
+            return DexiePromise.resolve(rv);
+          return rv;
+        } catch (e) {
+          return rejection(e);
+        }
+      };
+    },
+    spawn: function(generatorFn, args, thiz) {
+      try {
+        var rv = awaitIterator(generatorFn.apply(thiz, args || []));
+        if (!rv || typeof rv.then !== "function")
+          return DexiePromise.resolve(rv);
+        return rv;
+      } catch (e) {
+        return rejection(e);
+      }
+    },
+    currentTransaction: {
+      get: () => PSD.trans || null
+    },
+    waitFor: function(promiseOrFunction, optionalTimeout) {
+      const promise = DexiePromise.resolve(typeof promiseOrFunction === "function" ? Dexie.ignoreTransaction(promiseOrFunction) : promiseOrFunction).timeout(optionalTimeout || 6e4);
+      return PSD.trans ? PSD.trans.waitFor(promise) : promise;
+    },
+    Promise: DexiePromise,
+    debug: {
+      get: () => debug,
+      set: (value) => {
+        setDebug(value, value === "dexie" ? () => true : dexieStackFrameFilter);
+      }
+    },
+    derive,
+    extend,
+    props,
+    override,
+    Events,
+    on: globalEvents,
+    liveQuery,
+    extendObservabilitySet,
+    getByKeyPath,
+    setByKeyPath,
+    delByKeyPath,
+    shallowClone,
+    deepClone,
+    getObjectDiff,
+    cmp,
+    asap: asap$1,
+    minKey,
+    addons: [],
+    connections,
+    errnames,
+    dependencies: domDeps,
+    semVer: DEXIE_VERSION,
+    version: DEXIE_VERSION.split(".").map((n) => parseInt(n)).reduce((p, c, i) => p + c / Math.pow(10, i * 2))
+  });
+  Dexie.maxKey = getMaxKey(Dexie.dependencies.IDBKeyRange);
+  if (typeof dispatchEvent !== "undefined" && typeof addEventListener !== "undefined") {
+    globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, (updatedParts) => {
+      if (!propagatingLocally) {
+        let event;
+        if (isIEOrEdge) {
+          event = document.createEvent("CustomEvent");
+          event.initCustomEvent(STORAGE_MUTATED_DOM_EVENT_NAME, true, true, updatedParts);
+        } else {
+          event = new CustomEvent(STORAGE_MUTATED_DOM_EVENT_NAME, {
+            detail: updatedParts
+          });
+        }
+        propagatingLocally = true;
+        dispatchEvent(event);
+        propagatingLocally = false;
+      }
+    });
+    addEventListener(STORAGE_MUTATED_DOM_EVENT_NAME, ({ detail }) => {
+      if (!propagatingLocally) {
+        propagateLocally(detail);
+      }
+    });
+  }
+  function propagateLocally(updateParts) {
+    let wasMe = propagatingLocally;
+    try {
+      propagatingLocally = true;
+      globalEvents.storagemutated.fire(updateParts);
+    } finally {
+      propagatingLocally = wasMe;
+    }
+  }
+  var propagatingLocally = false;
+  if (typeof BroadcastChannel !== "undefined") {
+    const bc = new BroadcastChannel(STORAGE_MUTATED_DOM_EVENT_NAME);
+    if (typeof bc.unref === "function") {
+      bc.unref();
+    }
+    globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, (changedParts) => {
+      if (!propagatingLocally) {
+        bc.postMessage(changedParts);
+      }
+    });
+    bc.onmessage = (ev) => {
+      if (ev.data)
+        propagateLocally(ev.data);
+    };
+  } else if (typeof self !== "undefined" && typeof navigator !== "undefined") {
+    globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, (changedParts) => {
+      try {
+        if (!propagatingLocally) {
+          if (typeof localStorage !== "undefined") {
+            localStorage.setItem(STORAGE_MUTATED_DOM_EVENT_NAME, JSON.stringify({
+              trig: Math.random(),
+              changedParts
+            }));
+          }
+          if (typeof self["clients"] === "object") {
+            [...self["clients"].matchAll({ includeUncontrolled: true })].forEach((client) => client.postMessage({
+              type: STORAGE_MUTATED_DOM_EVENT_NAME,
+              changedParts
+            }));
+          }
+        }
+      } catch (_a) {
+      }
+    });
+    if (typeof addEventListener !== "undefined") {
+      addEventListener("storage", (ev) => {
+        if (ev.key === STORAGE_MUTATED_DOM_EVENT_NAME) {
+          const data = JSON.parse(ev.newValue);
+          if (data)
+            propagateLocally(data.changedParts);
+        }
+      });
+    }
+    const swContainer = self.document && navigator.serviceWorker;
+    if (swContainer) {
+      swContainer.addEventListener("message", propagateMessageLocally);
+    }
+  }
+  function propagateMessageLocally({ data }) {
+    if (data && data.type === STORAGE_MUTATED_DOM_EVENT_NAME) {
+      propagateLocally(data.changedParts);
+    }
+  }
+  DexiePromise.rejectionMapper = mapError;
+  setDebug(debug, dexieStackFrameFilter);
+
+  // node_modules/uuid/dist/esm-browser/rng.js
+  var getRandomValues;
+  var rnds8 = new Uint8Array(16);
+  function rng() {
+    if (!getRandomValues) {
+      getRandomValues = typeof crypto !== "undefined" && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
+      if (!getRandomValues) {
+        throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
+      }
+    }
+    return getRandomValues(rnds8);
+  }
+
+  // node_modules/uuid/dist/esm-browser/stringify.js
+  var byteToHex = [];
+  for (let i = 0; i < 256; ++i) {
+    byteToHex.push((i + 256).toString(16).slice(1));
+  }
+  function unsafeStringify(arr, offset2 = 0) {
+    return byteToHex[arr[offset2 + 0]] + byteToHex[arr[offset2 + 1]] + byteToHex[arr[offset2 + 2]] + byteToHex[arr[offset2 + 3]] + "-" + byteToHex[arr[offset2 + 4]] + byteToHex[arr[offset2 + 5]] + "-" + byteToHex[arr[offset2 + 6]] + byteToHex[arr[offset2 + 7]] + "-" + byteToHex[arr[offset2 + 8]] + byteToHex[arr[offset2 + 9]] + "-" + byteToHex[arr[offset2 + 10]] + byteToHex[arr[offset2 + 11]] + byteToHex[arr[offset2 + 12]] + byteToHex[arr[offset2 + 13]] + byteToHex[arr[offset2 + 14]] + byteToHex[arr[offset2 + 15]];
+  }
+
+  // node_modules/uuid/dist/esm-browser/native.js
+  var randomUUID = typeof crypto !== "undefined" && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+  var native_default = {
+    randomUUID
+  };
+
+  // node_modules/uuid/dist/esm-browser/v4.js
+  function v4(options, buf, offset2) {
+    if (native_default.randomUUID && !buf && !options) {
+      return native_default.randomUUID();
+    }
+    options = options || {};
+    const rnds = options.random || (options.rng || rng)();
+    rnds[6] = rnds[6] & 15 | 64;
+    rnds[8] = rnds[8] & 63 | 128;
+    if (buf) {
+      offset2 = offset2 || 0;
+      for (let i = 0; i < 16; ++i) {
+        buf[offset2 + i] = rnds[i];
+      }
+      return buf;
+    }
+    return unsafeStringify(rnds);
+  }
+  var v4_default = v4;
+
+  // src/db.ts
+  function createDb() {
+    const db = new Dexie$1("duelmeter");
+    db.version(2).stores({
+      results: "&id,first,win,myDeck,opDeck,point,timestamp,tournament",
+      myDecks: "&id,&name",
+      opDecks: "&id,&name"
+    });
+    return db;
+  }
+  var BaseRepository = class {
+    constructor(di) {
+      this.di = di;
+    }
+    get deps() {
+      const db = this.di.get("db");
+      const $reduce = this.di.get("$reduce");
+      return { db, $reduce };
+    }
+    get $reduce() {
+      return this.deps.$reduce;
+    }
+    get db() {
+      return this.deps.db;
+    }
+  };
+  var DuelResultRepository = class extends BaseRepository {
+    async load() {
+      const list = await this.db.results.toArray();
+      const items = list.filter((r) => r.id != null).map((r) => [r.id, r]);
+      this.$reduce({
+        duelResults: {
+          byId: {
+            $set: Object.fromEntries(items)
+          }
+        }
+      });
+    }
+    async add(result) {
+      const id = await this.db.results.add({
+        ...result,
+        id: v4_default()
+      });
+      const entry = { ...result, id };
+      this.$reduce({
+        duelResults: {
+          byId: { [id]: { $set: entry } }
+        }
+      });
+    }
+    async update(result) {
+      await this.db.results.update(result.id, result);
+      this.$reduce({
+        duelResults: {
+          byId: { [result.id]: { $set: result } }
+        }
+      });
+    }
+    async delete(id) {
+      await this.db.results.delete(id);
+      this.$reduce({
+        duelResults: {
+          byId: { $unset: [id] }
+        }
+      });
+    }
+  };
+  var DeckRepository = class extends BaseRepository {
+    constructor(di, tableName) {
+      super(di);
+      this.tableName = tableName;
+    }
+    async load() {
+      const list = await this.db[this.tableName].toArray();
+      this.$reduce({
+        [this.tableName]: {
+          byId: {
+            $set: list.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {})
+          }
+        }
+      });
+    }
+    async add(deck) {
+      const entry = { ...deck, id: v4_default() };
+      const id = await this.db[this.tableName].add(entry);
+      this.$reduce({
+        [this.tableName]: { byId: { [id]: { $set: entry } } }
+      });
+    }
+    async update(deck) {
+      await this.db[this.tableName].update(deck.id, deck);
+      this.$reduce({
+        [this.tableName]: { byId: { [deck.id]: { $set: deck } } }
+      });
+    }
+    async delete(id) {
+      await this.db[this.tableName].delete(id);
+      this.$reduce({
+        [this.tableName]: { byId: { $unset: [id] } }
+      });
+    }
+  };
 
   // src/deck.tsx
+  var import_react62 = __toESM(require_react());
   var DeckList = () => {
     const { myDecks, opDecks, deckModal, $di, $reduce } = useStore();
-    const [newDeck, setNewDeck] = import_react61.default.useState("");
-    const [decks, prefix, repo] = (0, import_react61.useMemo)(() => {
+    const [newDeck, setNewDeck] = import_react62.default.useState("");
+    const [decks, prefix, repo] = (0, import_react62.useMemo)(() => {
       if (deckModal === "my") {
         return [
           Object.values(myDecks.byId).sort((a, b) => a.updatedAt - b.updatedAt),
@@ -36647,7 +36691,7 @@
         ];
       }
     }, [deckModal, myDecks, opDecks]);
-    return /* @__PURE__ */ import_react61.default.createElement(
+    return /* @__PURE__ */ import_react62.default.createElement(
       Modal_default2,
       {
         show: deckModal != null,
@@ -36655,8 +36699,8 @@
           $reduce({ deckModal: { $set: void 0 } });
         }
       },
-      /* @__PURE__ */ import_react61.default.createElement(Modal_default2.Header, { closeButton: true }, /* @__PURE__ */ import_react61.default.createElement(Modal_default2.Title, null, prefix, "\u30C7\u30C3\u30AD\u3092\u7DE8\u96C6")),
-      /* @__PURE__ */ import_react61.default.createElement(Modal_default2.Body, null, /* @__PURE__ */ import_react61.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react61.default.createElement("thead", null, /* @__PURE__ */ import_react61.default.createElement("tr", null, /* @__PURE__ */ import_react61.default.createElement("th", null, "\u30C7\u30C3\u30AD\u540D"), /* @__PURE__ */ import_react61.default.createElement("th", null))), /* @__PURE__ */ import_react61.default.createElement("tbody", null, decks.map((deck) => /* @__PURE__ */ import_react61.default.createElement("tr", { key: deck.id }, /* @__PURE__ */ import_react61.default.createElement("td", null, deck.name), /* @__PURE__ */ import_react61.default.createElement("td", null, /* @__PURE__ */ import_react61.default.createElement(
+      /* @__PURE__ */ import_react62.default.createElement(Modal_default2.Header, { closeButton: true }, /* @__PURE__ */ import_react62.default.createElement(Modal_default2.Title, null, prefix, "\u30C7\u30C3\u30AD\u3092\u7DE8\u96C6")),
+      /* @__PURE__ */ import_react62.default.createElement(Modal_default2.Body, null, /* @__PURE__ */ import_react62.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react62.default.createElement("thead", null, /* @__PURE__ */ import_react62.default.createElement("tr", null, /* @__PURE__ */ import_react62.default.createElement("th", null, "\u30C7\u30C3\u30AD\u540D"), /* @__PURE__ */ import_react62.default.createElement("th", null))), /* @__PURE__ */ import_react62.default.createElement("tbody", null, decks.map((deck) => /* @__PURE__ */ import_react62.default.createElement("tr", { key: deck.id }, /* @__PURE__ */ import_react62.default.createElement("td", null, deck.name), /* @__PURE__ */ import_react62.default.createElement("td", null, /* @__PURE__ */ import_react62.default.createElement(
         Button_default2,
         {
           variant: "danger",
@@ -36665,7 +36709,7 @@
           }
         },
         "\u524A\u9664"
-      )))), /* @__PURE__ */ import_react61.default.createElement("tr", null, /* @__PURE__ */ import_react61.default.createElement("td", null, /* @__PURE__ */ import_react61.default.createElement(
+      )))), /* @__PURE__ */ import_react62.default.createElement("tr", null, /* @__PURE__ */ import_react62.default.createElement("td", null, /* @__PURE__ */ import_react62.default.createElement(
         Form_default.Control,
         {
           type: "text",
@@ -36674,7 +36718,7 @@
             setNewDeck(e.target.value);
           }
         }
-      )), /* @__PURE__ */ import_react61.default.createElement("td", null, /* @__PURE__ */ import_react61.default.createElement(
+      )), /* @__PURE__ */ import_react62.default.createElement("td", null, /* @__PURE__ */ import_react62.default.createElement(
         Button_default2,
         {
           disabled: newDeck === "",
@@ -36693,19 +36737,66 @@
   };
 
   // src/header.tsx
-  var import_react62 = __toESM(require_react());
+  var import_react63 = __toESM(require_react());
   var Header = () => {
-    return /* @__PURE__ */ import_react62.default.createElement(Navbar_default, { bg: "dark", variant: "dark", className: "mb-3" }, /* @__PURE__ */ import_react62.default.createElement(Container_default, null, /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Brand, { href: "#home" }, "Duel Meter"), /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Collapse, null, /* @__PURE__ */ import_react62.default.createElement(Navbar_default.Text, null, /* @__PURE__ */ import_react62.default.createElement("a", { href: "#login" }, "Login")))));
+    return /* @__PURE__ */ import_react63.default.createElement(Navbar_default, { bg: "dark", variant: "dark", className: "mb-3" }, /* @__PURE__ */ import_react63.default.createElement(Container_default, null, /* @__PURE__ */ import_react63.default.createElement(Navbar_default.Brand, { href: "#home" }, "Duel Meter"), /* @__PURE__ */ import_react63.default.createElement(Navbar_default.Collapse, null, /* @__PURE__ */ import_react63.default.createElement(Navbar_default.Text, null, /* @__PURE__ */ import_react63.default.createElement("a", { href: "#login" }, "Login")))));
   };
 
   // src/table.tsx
-  var import_react63 = __toESM(require_react());
-  var ResultTable = () => {
-    const { duelResults, $di, $reduce } = useStore();
-    const results = Object.values(duelResults.byId).sort(
-      (a, b) => b.timestamp - a.timestamp
+  var import_react65 = __toESM(require_react());
+
+  // src/util.ts
+  var import_immutability_helper = __toESM(require_immutability_helper());
+  var import_react64 = __toESM(require_react());
+  function useOrex(i, init) {
+    return (0, import_react64.useReducer)(
+      (state, action) => (0, import_immutability_helper.default)(state, action),
+      i,
+      init
     );
-    return /* @__PURE__ */ import_react63.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react63.default.createElement("thead", null, /* @__PURE__ */ import_react63.default.createElement("tr", null, /* @__PURE__ */ import_react63.default.createElement("th", null, "\u65E5\u6642"), /* @__PURE__ */ import_react63.default.createElement("th", null, "\u5148\u5F8C"), /* @__PURE__ */ import_react63.default.createElement("th", null, "\u52DD\u6557"), /* @__PURE__ */ import_react63.default.createElement("th", null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Toggle, { variant: "success", id: "dropdown-basic" }, /* @__PURE__ */ import_react63.default.createElement("span", null, "\u81EA\u5206\u306E\u30C7\u30C3\u30AD")), /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react63.default.createElement(
+  }
+  function usePatcher(state) {
+    return (0, import_react64.useReducer)(
+      (state2, action) => ({ ...state2, ...action }),
+      state
+    );
+  }
+  function useFilteredRuselts() {
+    const { duelResults, filter } = useStore();
+    return (0, import_react64.useMemo)(() => {
+      return Object.values(duelResults.byId).sort((a, b) => b.timestamp - a.timestamp).filter((v) => {
+        if (filter.startDatetime && v.timestamp < new Date(filter.startDatetime).getTime()) {
+          return false;
+        }
+        if (filter.endDatetime && v.timestamp > new Date(filter.endDatetime).getTime()) {
+          return false;
+        }
+        if (filter.tournament && !(v.tournament ?? "").match(filter.tournament)) {
+          return false;
+        }
+        if (filter.myDeck && v.myDeck !== filter.myDeck) {
+          return false;
+        }
+        if (filter.opDeck && v.opDeck !== filter.opDeck) {
+          return false;
+        }
+        return true;
+      });
+    }, [
+      duelResults.byId,
+      filter.startDatetime,
+      filter.endDatetime,
+      filter.tournament,
+      filter.myDeck,
+      filter.opDeck
+    ]);
+  }
+
+  // src/table.tsx
+  var ResultTable = () => {
+    const { $di, $reduce } = useStore();
+    const results = useFilteredRuselts();
+    return /* @__PURE__ */ import_react65.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react65.default.createElement("thead", null, /* @__PURE__ */ import_react65.default.createElement("tr", null, /* @__PURE__ */ import_react65.default.createElement("th", null, "\u65E5\u6642"), /* @__PURE__ */ import_react65.default.createElement("th", null, "\u5927\u4F1A"), /* @__PURE__ */ import_react65.default.createElement("th", null, "\u5148\u5F8C"), /* @__PURE__ */ import_react65.default.createElement("th", null, "\u52DD\u6557"), /* @__PURE__ */ import_react65.default.createElement("th", null, /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2.Toggle, { variant: "success", id: "dropdown-basic" }, /* @__PURE__ */ import_react65.default.createElement("span", null, "\u81EA\u5206\u306E\u30C7\u30C3\u30AD")), /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react65.default.createElement(
       Dropdown_default2.Item,
       {
         onClick: () => {
@@ -36713,7 +36804,7 @@
         }
       },
       "\u7DE8\u96C6"
-    )))), /* @__PURE__ */ import_react63.default.createElement("th", null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Toggle, { variant: "success", id: "dropdown-basic" }, /* @__PURE__ */ import_react63.default.createElement("span", null, "\u76F8\u624B\u306E\u30C7\u30C3\u30AD")), /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react63.default.createElement(
+    )))), /* @__PURE__ */ import_react65.default.createElement("th", null, /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2.Toggle, { variant: "success", id: "dropdown-basic" }, /* @__PURE__ */ import_react65.default.createElement("span", null, "\u76F8\u624B\u306E\u30C7\u30C3\u30AD")), /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react65.default.createElement(
       Dropdown_default2.Item,
       {
         onClick: () => {
@@ -36721,7 +36812,7 @@
         }
       },
       "\u7DE8\u96C6"
-    )))), /* @__PURE__ */ import_react63.default.createElement("th", null, "\u30DD\u30A4\u30F3\u30C8"), /* @__PURE__ */ import_react63.default.createElement("th", null))), /* @__PURE__ */ import_react63.default.createElement("tbody", null, /* @__PURE__ */ import_react63.default.createElement(
+    )))), /* @__PURE__ */ import_react65.default.createElement("th", null, "\u30DD\u30A4\u30F3\u30C8"), /* @__PURE__ */ import_react65.default.createElement("th", null))), /* @__PURE__ */ import_react65.default.createElement("tbody", null, /* @__PURE__ */ import_react65.default.createElement(
       InputForm,
       {
         onSave: async (part) => {
@@ -36732,17 +36823,18 @@
         }
       }
     ), results.map((result) => {
-      return /* @__PURE__ */ import_react63.default.createElement(ResultRow, { key: result.id, result });
+      return /* @__PURE__ */ import_react65.default.createElement(ResultRow, { key: result.id, result });
     })));
   };
   var ResultRow = ({ result }) => {
     const { $di } = useStore();
-    const [edit, setEdit] = import_react63.default.useState(false);
+    const [edit, setEdit] = import_react65.default.useState(false);
     if (edit) {
-      return /* @__PURE__ */ import_react63.default.createElement(
+      return /* @__PURE__ */ import_react65.default.createElement(
         InputForm,
         {
           result,
+          editDatetime: true,
           onSave: async (part) => {
             $di.get("duelResultRepo").update({ ...result, ...part }).then(() => {
               setEdit(false);
@@ -36751,7 +36843,7 @@
         }
       );
     }
-    return /* @__PURE__ */ import_react63.default.createElement("tr", { key: result.id }, /* @__PURE__ */ import_react63.default.createElement("td", null, new Date(result.timestamp).toLocaleString()), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement("span", null, result.first ? "\u5148\u884C" : "\u5F8C\u653B")), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement("span", { style: result.win ? { color: "blue" } : { color: "red" } }, result.win ? "\u52DD\u3061" : "\u8CA0\u3051")), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+    return /* @__PURE__ */ import_react65.default.createElement("tr", { key: result.id }, /* @__PURE__ */ import_react65.default.createElement("td", null, new Date(result.timestamp).toLocaleString()), /* @__PURE__ */ import_react65.default.createElement("td", null, result.tournament ?? ""), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement("span", null, result.first ? "\u5148\u884C" : "\u5F8C\u653B")), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement("span", { style: result.win ? { color: "blue" } : { color: "red" } }, result.win ? "\u52DD\u3061" : "\u8CA0\u3051")), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
       "div",
       {
         style: {
@@ -36760,7 +36852,7 @@
         }
       },
       result.myDeck
-    )), /* @__PURE__ */ import_react63.default.createElement("td", null, result.opDeck), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement("span", { style: { color: result.point > 0 ? "blue" : "red" } }, result.point)), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Toggle, { variant: "secondary" }, /* @__PURE__ */ import_react63.default.createElement("span", null, "...")), /* @__PURE__ */ import_react63.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react63.default.createElement(
+    )), /* @__PURE__ */ import_react65.default.createElement("td", null, result.opDeck), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement("span", { style: { color: result.point > 0 ? "blue" : "red" } }, result.point)), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2, null, /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2.Toggle, { variant: "secondary" }, /* @__PURE__ */ import_react65.default.createElement("span", null, "...")), /* @__PURE__ */ import_react65.default.createElement(Dropdown_default2.Menu, null, /* @__PURE__ */ import_react65.default.createElement(
       Dropdown_default2.Item,
       {
         onClick: () => {
@@ -36768,7 +36860,7 @@
         }
       },
       "\u7DE8\u96C6"
-    ), /* @__PURE__ */ import_react63.default.createElement(
+    ), /* @__PURE__ */ import_react65.default.createElement(
       Dropdown_default2.Item,
       {
         onClick: () => {
@@ -36781,27 +36873,44 @@
     )))));
   };
   var kDefaultDeckName = "\u305D\u306E\u4ED6";
-  var InputForm = ({ result, onSave }) => {
+  var InputForm = ({ result, editDatetime, onSave }) => {
     const { myDecks, opDecks, $di } = useStore();
-    const [state, dispatch] = (0, import_react63.useReducer)(
-      (state2, action) => {
-        return { ...state2, ...action };
-      },
-      {
-        point: 1e3,
-        win: true,
-        first: true,
-        myDeck: kDefaultDeckName,
-        opDeck: kDefaultDeckName
-      }
-    );
-    import_react63.default.useEffect(() => {
+    const [state, dispatch] = usePatcher({
+      point: 1e3,
+      win: true,
+      first: true,
+      timestamp: (/* @__PURE__ */ new Date()).getTime(),
+      myDeck: kDefaultDeckName,
+      opDeck: kDefaultDeckName,
+      tournament: ""
+    });
+    import_react65.default.useEffect(() => {
       if (result) {
-        const { point, win, first, myDeck, opDeck } = result;
-        dispatch({ point, win, first, myDeck, opDeck });
+        const { point, win, first, myDeck, opDeck, timestamp } = result;
+        dispatch({ point, win, first, myDeck, opDeck, timestamp });
       }
     }, [result]);
-    return /* @__PURE__ */ import_react63.default.createElement("tr", null, /* @__PURE__ */ import_react63.default.createElement("td", null), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+    return /* @__PURE__ */ import_react65.default.createElement("tr", null, /* @__PURE__ */ import_react65.default.createElement("td", null, editDatetime && /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, /* @__PURE__ */ import_react65.default.createElement(
+      Form_default.Control,
+      {
+        type: "datetime-local",
+        value: new Date(state.timestamp).toISOString().slice(0, -8),
+        onChange: (e) => {
+          dispatch({ timestamp: new Date(e.target.value).getTime() });
+        }
+      }
+    ))), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
+      Form_default.Control,
+      {
+        type: "text",
+        placeholder: "\u5927\u4F1A\u540D",
+        "aria-label": "\u5927\u4F1A\u540D",
+        value: state.tournament,
+        onChange: (e) => {
+          dispatch({ tournament: e.target.value });
+        }
+      }
+    )), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
       Form_default.Select,
       {
         id: "select-first",
@@ -36810,9 +36919,9 @@
           dispatch({ first: e.target.value === "\u5148\u884C" });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "\u5148\u884C" }, "\u5148\u884C"),
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "\u5F8C\u653B" }, "\u5F8C\u653B")
-    )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+      /* @__PURE__ */ import_react65.default.createElement("option", { value: "\u5148\u884C" }, "\u5148\u884C"),
+      /* @__PURE__ */ import_react65.default.createElement("option", { value: "\u5F8C\u653B" }, "\u5F8C\u653B")
+    )), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
       Form_default.Select,
       {
         id: "select-win",
@@ -36825,9 +36934,9 @@
           });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "win" }, "\u52DD\u3061"),
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: "lose" }, "\u6557\u3051")
-    )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+      /* @__PURE__ */ import_react65.default.createElement("option", { value: "win" }, "\u52DD\u3061"),
+      /* @__PURE__ */ import_react65.default.createElement("option", { value: "lose" }, "\u6557\u3051")
+    )), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
       Form_default.Select,
       {
         value: state.myDeck,
@@ -36835,9 +36944,9 @@
           dispatch({ myDeck: e.target.value });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: kDefaultDeckName }, kDefaultDeckName),
-      Object.values(myDecks.byId).map((deck) => /* @__PURE__ */ import_react63.default.createElement("option", { key: deck.name, value: deck.name }, deck.name))
-    )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+      /* @__PURE__ */ import_react65.default.createElement("option", { value: kDefaultDeckName }, kDefaultDeckName),
+      Object.values(myDecks.byId).map((deck) => /* @__PURE__ */ import_react65.default.createElement("option", { key: deck.name, value: deck.name }, deck.name))
+    )), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
       Form_default.Select,
       {
         value: state.opDeck,
@@ -36845,9 +36954,9 @@
           dispatch({ opDeck: e.target.value });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("option", { value: kDefaultDeckName }, kDefaultDeckName),
-      Object.values(opDecks.byId).map((deck) => /* @__PURE__ */ import_react63.default.createElement("option", { key: deck.name, value: deck.name }, deck.name))
-    )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+      /* @__PURE__ */ import_react65.default.createElement("option", { value: kDefaultDeckName }, kDefaultDeckName),
+      Object.values(opDecks.byId).map((deck) => /* @__PURE__ */ import_react65.default.createElement("option", { key: deck.name, value: deck.name }, deck.name))
+    )), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
       Form_default.Control,
       {
         type: "number",
@@ -36858,7 +36967,7 @@
           dispatch({ point: parseInt(e.target.value) });
         }
       }
-    )), /* @__PURE__ */ import_react63.default.createElement("td", null, /* @__PURE__ */ import_react63.default.createElement(
+    )), /* @__PURE__ */ import_react65.default.createElement("td", null, /* @__PURE__ */ import_react65.default.createElement(
       Button_default2,
       {
         disabled: state.first == null || state.win == null || state.point == null,
@@ -36868,49 +36977,147 @@
           });
         }
       },
-      /* @__PURE__ */ import_react63.default.createElement("span", null, "\u4FDD\u5B58")
+      /* @__PURE__ */ import_react65.default.createElement("span", null, "\u4FDD\u5B58")
     )));
   };
 
-  // src/stats.tsx
-  var import_react64 = __toESM(require_react());
-  var Stats = () => {
-    const { duelResults } = useStore();
-    const results = Object.values(duelResults.byId).sort(
-      (a2, b) => b.timestamp - a2.timestamp
-    );
-    const a = (0, import_react64.useMemo)(() => {
-      const totalCnt = results.length;
-      const winCnt = results.filter((r) => r.win).length;
-      const winRate = winCnt / totalCnt;
-      const duelsFirst = results.filter((r) => r.first);
-      const duelsSecond = results.filter((r) => !r.first);
-      const winRateFirst = duelsFirst.filter((r) => r.win).length / duelsFirst.length;
-      const winRateSecond = duelsSecond.filter((r) => r.win).length / duelsSecond.length;
-      return { winRate, winRateFirst, winRateSecond };
-    }, [results]);
-    return /* @__PURE__ */ import_react64.default.createElement(Container_default, null, /* @__PURE__ */ import_react64.default.createElement(Row_default, { className: "mb-3" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u958B\u59CB\u65E5" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "date" }))), /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u958B\u59CB\u6642\u523B" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "time" })))), /* @__PURE__ */ import_react64.default.createElement(Row_default, { className: "mb-3" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u7D42\u4E86\u65E5" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "date" }))), /* @__PURE__ */ import_react64.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react64.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u7D42\u4E86\u6642\u523B" }, /* @__PURE__ */ import_react64.default.createElement(Form_default.Control, { type: "time" })))), /* @__PURE__ */ import_react64.default.createElement(Table_default, { striped: true, bordered: true }, /* @__PURE__ */ import_react64.default.createElement("tbody", null, /* @__PURE__ */ import_react64.default.createElement("tr", null, /* @__PURE__ */ import_react64.default.createElement("td", null, "\u52DD\u7387"), /* @__PURE__ */ import_react64.default.createElement("td", null, a.winRate.toFixed(3))), /* @__PURE__ */ import_react64.default.createElement("tr", null, /* @__PURE__ */ import_react64.default.createElement("td", null, "\u5148\u653B\u52DD\u7387"), /* @__PURE__ */ import_react64.default.createElement("td", null, a.winRateFirst.toFixed(3))), /* @__PURE__ */ import_react64.default.createElement("tr", null, /* @__PURE__ */ import_react64.default.createElement("td", null, "\u5F8C\u653B\u52DD\u7387"), /* @__PURE__ */ import_react64.default.createElement("td", null, a.winRateSecond.toFixed(3))))));
+  // src/search-form.tsx
+  var import_react66 = __toESM(require_react());
+  var SearchForm = ({}) => {
+    const { filter, myDecks, opDecks, $reduce } = useStore();
+    return /* @__PURE__ */ import_react66.default.createElement(Row_default, { className: "mb-3" }, /* @__PURE__ */ import_react66.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react66.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u958B\u59CB\u65E5" }, /* @__PURE__ */ import_react66.default.createElement(
+      Form_default.Control,
+      {
+        type: "datetime-local",
+        value: filter?.startDatetime ?? "",
+        onChange: (e) => {
+          $reduce({
+            filter: {
+              startDatetime: { $set: e.target.value }
+            }
+          });
+        }
+      }
+    ))), /* @__PURE__ */ import_react66.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react66.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u7D42\u4E86\u65E5" }, /* @__PURE__ */ import_react66.default.createElement(
+      Form_default.Control,
+      {
+        type: "datetime-local",
+        value: filter?.endDatetime ?? "",
+        onChange: (e) => {
+          $reduce({
+            filter: {
+              endDatetime: { $set: e.target.value }
+            }
+          });
+        }
+      }
+    ))), /* @__PURE__ */ import_react66.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react66.default.createElement(FloatingLabel_default, { controlId: "floatingInput", label: "\u5927\u4F1A\u540D" }, /* @__PURE__ */ import_react66.default.createElement(
+      Form_default.Control,
+      {
+        type: "text",
+        value: filter?.tournament ?? "",
+        onChange: (e) => {
+          $reduce({
+            filter: {
+              tournament: { $set: e.target.value }
+            }
+          });
+        }
+      }
+    ))), /* @__PURE__ */ import_react66.default.createElement(
+      DeckFilter,
+      {
+        label: "\u81EA\u5206\u306E\u30C7\u30C3\u30AD",
+        decks: Object.values(myDecks.byId),
+        value: filter?.myDeck ?? "",
+        onChange: (v) => {
+          $reduce({
+            filter: {
+              myDeck: { $set: v }
+            }
+          });
+        }
+      }
+    ), /* @__PURE__ */ import_react66.default.createElement(
+      DeckFilter,
+      {
+        label: "\u76F8\u624B\u306E\u30C7\u30C3\u30AD",
+        decks: Object.values(opDecks.byId),
+        value: filter?.opDeck ?? "",
+        onChange: (v) => {
+          $reduce({
+            filter: {
+              opDeck: { $set: v }
+            }
+          });
+        }
+      }
+    ), /* @__PURE__ */ import_react66.default.createElement(Col_default, null, /* @__PURE__ */ import_react66.default.createElement(
+      Button_default2,
+      {
+        variant: "secondary",
+        onClick: () => {
+          $reduce({
+            filter: { $set: {} }
+          });
+        }
+      },
+      "\u30AF\u30EA\u30A2"
+    )));
+  };
+  var DeckFilter = ({
+    label,
+    decks,
+    value,
+    onChange
+  }) => {
+    const [mode, setMode] = import_react66.default.useState("select");
+    return /* @__PURE__ */ import_react66.default.createElement(Form_default.Group, { as: Col_default }, /* @__PURE__ */ import_react66.default.createElement(InputGroup_default, null, /* @__PURE__ */ import_react66.default.createElement(FloatingLabel_default, { controlId: "floatingInputOp", label }, mode === "select" ? /* @__PURE__ */ import_react66.default.createElement(
+      Form_default.Select,
+      {
+        value,
+        onChange: (e) => {
+          onChange(e.target.value);
+        }
+      },
+      /* @__PURE__ */ import_react66.default.createElement("option", { value: "" }, "\u5168\u3066"),
+      decks.map((deck) => /* @__PURE__ */ import_react66.default.createElement("option", { key: deck.name, value: deck.name }, deck.name))
+    ) : /* @__PURE__ */ import_react66.default.createElement(
+      Form_default.Control,
+      {
+        type: "text",
+        placeholder: "\u30C7\u30C3\u30AD\u540D",
+        "aria-label": "\u30C7\u30C3\u30AD\u540D",
+        value,
+        onChange: (e) => {
+          onChange(e.target.value);
+        }
+      }
+    )), /* @__PURE__ */ import_react66.default.createElement(
+      Button_default2,
+      {
+        variant: "secondary",
+        onClick: () => setMode(mode === "select" ? "input" : "select")
+      },
+      /* @__PURE__ */ import_react66.default.createElement("i", { className: "bi bi-plus" })
+    )));
   };
 
   // src/app.tsx
   var App = ({}) => {
-    const [props2, $reduce] = (0, import_react65.useReducer)(
-      (state, action) => {
-        return (0, import_immutability_helper.default)(state, action);
+    const [props2, $reduce] = useOrex({}, () => ({
+      filter: {},
+      duelResults: {
+        byId: {}
       },
-      {
-        duelResults: {
-          byId: {}
-        },
-        myDecks: {
-          byId: {}
-        },
-        opDecks: {
-          byId: {}
-        }
+      myDecks: {
+        byId: {}
+      },
+      opDecks: {
+        byId: {}
       }
-    );
-    const $di = import_react65.default.useMemo(() => {
+    }));
+    const $di = import_react67.default.useMemo(() => {
       const di = new import_dino.DI();
       di.set("db", createDb());
       di.set("myDeckRepo", new DeckRepository(di, "myDecks"));
@@ -36919,7 +37126,7 @@
       di.set("$reduce", $reduce);
       return di;
     }, [$reduce]);
-    (0, import_react65.useEffect)(() => {
+    (0, import_react67.useEffect)(() => {
       Promise.all([
         $di.get("duelResultRepo").load(),
         $di.get("myDeckRepo").load(),
@@ -36927,11 +37134,11 @@
       ]).then(() => {
       });
     }, []);
-    return /* @__PURE__ */ import_react65.default.createElement(Context2.Provider, { value: { ...props2, $di, $reduce } }, /* @__PURE__ */ import_react65.default.createElement(Header, null), /* @__PURE__ */ import_react65.default.createElement(Container_default, null, /* @__PURE__ */ import_react65.default.createElement(Row_default, null, /* @__PURE__ */ import_react65.default.createElement(Col_default, { xs: 9 }, /* @__PURE__ */ import_react65.default.createElement(ResultTable, null)), /* @__PURE__ */ import_react65.default.createElement(Col_default, { xs: 3 }, /* @__PURE__ */ import_react65.default.createElement(Stats, null)))), /* @__PURE__ */ import_react65.default.createElement(DeckList, null));
+    return /* @__PURE__ */ import_react67.default.createElement(Context2.Provider, { value: { ...props2, $di, $reduce } }, /* @__PURE__ */ import_react67.default.createElement(Header, null), /* @__PURE__ */ import_react67.default.createElement(Container_default, null, /* @__PURE__ */ import_react67.default.createElement(SearchForm, null), /* @__PURE__ */ import_react67.default.createElement(Row_default, null, /* @__PURE__ */ import_react67.default.createElement(Col_default, null, /* @__PURE__ */ import_react67.default.createElement(ResultTable, null)))), /* @__PURE__ */ import_react67.default.createElement(DeckList, null));
   };
-  var Context2 = import_react65.default.createContext(null);
+  var Context2 = import_react67.default.createContext(null);
   function useStore() {
-    const ctx = import_react65.default.useContext(Context2);
+    const ctx = import_react67.default.useContext(Context2);
     if (!ctx) {
       throw new Error("useStore must be used within a StoreProvider.");
     }
@@ -36942,7 +37149,7 @@
   addEventListener("DOMContentLoaded", () => {
     const root = document.getElementById("root");
     if (root) {
-      (0, import_client.createRoot)(root).render(/* @__PURE__ */ import_react66.default.createElement(App, null));
+      (0, import_client.createRoot)(root).render(/* @__PURE__ */ import_react68.default.createElement(App, null));
     }
   });
 })();
