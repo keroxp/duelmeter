@@ -1,16 +1,8 @@
-import React, { FC, useMemo, useReducer } from "react";
-import {
-  Button,
-  Col,
-  Dropdown,
-  FloatingLabel,
-  Form,
-  Row,
-  Table,
-} from "react-bootstrap";
+import React, { FC } from "react";
+import { Button, Dropdown, Form, Table } from "react-bootstrap";
 import { useStore } from "./app";
 import { DuelResult } from "./db";
-import { useFilteredRuselts, useOrex, usePatcher } from "./util";
+import { useFilteredRuselts, usePatcher } from "./util";
 
 export const ResultTable = () => {
   const { $di, $reduce } = useStore();
@@ -85,7 +77,7 @@ const ResultRow: FC<{ result: DuelResult }> = ({ result }) => {
         result={result}
         editDatetime={true}
         onSave={async (part) => {
-          $di
+          return $di
             .get("duelResultRepo")
             .update({ ...result, ...part })
             .then(() => {
@@ -94,7 +86,16 @@ const ResultRow: FC<{ result: DuelResult }> = ({ result }) => {
         }}
       />
     );
+  } else {
+    return <EditRow result={result} onSetEdit={setEdit} />;
   }
+};
+
+const EditRow: FC<{
+  result: DuelResult;
+  onSetEdit: (edit: boolean) => void;
+}> = ({ result, onSetEdit }) => {
+  const { $di } = useStore();
   return (
     <tr key={result.id}>
       <td>{new Date(result.timestamp).toLocaleString()}</td>
@@ -129,7 +130,7 @@ const ResultRow: FC<{ result: DuelResult }> = ({ result }) => {
           <Dropdown.Menu>
             <Dropdown.Item
               onClick={() => {
-                setEdit(true);
+                onSetEdit(true);
               }}
             >
               編集
@@ -160,22 +161,18 @@ export const InputForm: FC<{
   editDatetime?: boolean;
   onSave(part: EditDuelResult): Promise<void>;
 }> = ({ result, editDatetime, onSave }) => {
-  const { myDecks, opDecks, $di } = useStore();
-  const [state, dispatch] = usePatcher<EditDuelResult>({
-    point: 1000,
-    win: true,
-    first: true,
-    timestamp: new Date().getTime(),
-    myDeck: kDefaultDeckName,
-    opDeck: kDefaultDeckName,
-    tournament: "",
-  });
-  React.useEffect(() => {
-    if (result) {
-      const { point, win, first, myDeck, opDeck, timestamp } = result;
-      dispatch({ point, win, first, myDeck, opDeck, timestamp });
+  const { myDecks, opDecks } = useStore();
+  const [state, dispatch] = usePatcher<EditDuelResult>(
+    result ?? {
+      point: 1000,
+      win: true,
+      first: true,
+      timestamp: new Date().getTime(),
+      myDeck: kDefaultDeckName,
+      opDeck: kDefaultDeckName,
+      tournament: "",
     }
-  }, [result]);
+  );
   return (
     <tr>
       <td>
@@ -279,7 +276,12 @@ export const InputForm: FC<{
           }
           onClick={() => {
             onSave(state).then(() => {
-              dispatch({ point: 1000, win: true, first: true, opDeck: "" });
+              dispatch({
+                point: 1000,
+                win: true,
+                first: true,
+                opDeck: kDefaultDeckName,
+              });
             });
           }}
         >
